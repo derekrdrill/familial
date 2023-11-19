@@ -3,7 +3,7 @@ import tw from 'twin.macro';
 import styled from '@emotion/styled';
 import { Grid, Typography } from '@mui/material';
 
-const ComingSoon = () => (
+export const ComingSoon = () => (
   <>
     <Grid item xs={12}>
       <Typography sx={{ typography: { xs: 'h3', md: 'h1' } }} textAlign='center' variant='h1'>
@@ -27,8 +27,6 @@ const ComingSoon = () => (
     </ComingSoonTextContainer>
   </>
 );
-
-export default ComingSoon;
 
 export const ComingSoonImage = styled.img([tw`h-96`, tw`w-96`]);
 export const ComingSoonTextContainer = styled(Grid)([tw`pt-6`]);
