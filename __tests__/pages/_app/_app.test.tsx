@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 
-import App from './index';
+import App from '../../../pages/_app/index';
 
 describe('App unit tests', () => {
   it('renders as expected', () => {
