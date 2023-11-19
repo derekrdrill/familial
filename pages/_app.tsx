@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createGlobalStyle } from 'styled-components';
+import { GlobalStyles } from 'twin.macro';
 
 import GlobalProvider from '../context/GlobalProvider';
 
@@ -19,7 +20,8 @@ const App = ({ Component, pageProps }) => {
   return (
     <React.StrictMode>
       <GlobalProvider>
-        <GlobalStyle $isSidebarOpen={isSidebarOpen} />
+        <GlobalStyles />
+        {/* <GlobalStyle $isSidebarOpen={isSidebarOpen} /> */}
         <Overlay isSidebarOpen={isSidebarOpen} isQuickViewOpen={isMenuOpen} />
         {/* <Header /> */}
         {/* <MenuIcon isMenuIconActive={isSidebarOpen} setIsMenuIconActive={setIsSidebarOpen} /> */}
