@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuIcon unit tests renders as expected 1`] = `
+<div
+  className="MuiGrid-root MuiGrid-container sc-beqWaB hqNeBg css-1l77w8w-MuiGrid-root"
+  onClick={[Function]}
+>
+  <div
+    className="MuiGrid-root MuiGrid-item sc-gueYoa iJeIQz menu-icon-line-top css-13i4rnv-MuiGrid-root"
+  />
+  <div
+    className="MuiGrid-root MuiGrid-item sc-gueYoa iJeIQz menu-icon-line-middle css-13i4rnv-MuiGrid-root"
+  />
+  <div
+    className="MuiGrid-root MuiGrid-item sc-gueYoa ldzNCW menu-icon-line-bottom css-13i4rnv-MuiGrid-root"
+  />
+</div>
+`;

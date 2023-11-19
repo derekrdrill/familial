@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Body unit tests renders as expected 1`] = `
+<div
+  className="MuiGrid-root MuiGrid-container sc-beqWaB fFwJLz css-b6t4rf-MuiGrid-root"
+>
+  <div>
+    TEST
+  </div>
+</div>
+`;

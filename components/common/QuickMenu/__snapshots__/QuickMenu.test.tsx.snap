@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QuickMenu unit tests renders as expected 1`] = `
+<div
+  className="MuiGrid-root sc-beqWaB ffbzSg css-1r9h9rv-MuiGrid-root"
+>
+  <div>
+    TEST
+  </div>
+</div>
+`;

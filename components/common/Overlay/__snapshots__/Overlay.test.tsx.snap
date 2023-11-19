@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Overlay unit tests renders as expected 1`] = `
+<div
+  className="MuiGrid-root sc-beqWaB WkIvD css-1sm8red-MuiGrid-root"
+/>
+`;
