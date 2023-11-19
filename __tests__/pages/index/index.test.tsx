@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as renderer from 'react-test-renderer';
 
-import Index from '../../../pages/index/index';
+import Index from '../../../pages/index';
 
 describe('Index unit tests', () => {
   it('renders as expected', () => {
