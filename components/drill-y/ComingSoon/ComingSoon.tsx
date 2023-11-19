@@ -4,17 +4,19 @@ import { Grid, Typography } from '@mui/material';
 
 const ComingSoon = () => (
   <Grid container justifyContent='center'>
-    <Typography textAlign='center' sx={{ typography: { xs: 'h3', md: 'h1' } }}>
+    <Typography sx={{ typography: { xs: 'h3', md: 'h1' } }} textAlign='center' variant='h1'>
       ⚠️ Nothing to see here.... yet ⚠️
     </Typography>
     <Grid container justifyContent='center'>
       <ComingSoonImage src='/bitmojiPainting.png' />
     </Grid>
     <Grid container justifyContent='center'>
-      <Typography sx={{ typography: { xs: 'h4', md: 'h3' } }}>Rest assured...</Typography>
+      <Typography sx={{ typography: { xs: 'h4', md: 'h3' } }} variant='h2'>
+        Rest assured...
+      </Typography>
     </Grid>
     <ComingSoonTextContainer container justifyContent='center'>
-      <Typography sx={{ typography: { xs: 'h5', md: 'h4' } }} variant='h4'>
+      <Typography sx={{ typography: { xs: 'h5', md: 'h4' } }} variant='h3'>
         Some very important people are working hard to deploy this site 🚀
       </Typography>
     </ComingSoonTextContainer>
