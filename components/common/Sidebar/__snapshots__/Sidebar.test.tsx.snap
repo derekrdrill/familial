@@ -1,8 +1,91 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sidebar unit tests renders as expected 1`] = `
+.c3 {
+  background-color: #6a017f!important;
+  border-color: inherit!important;
+  border-radius: 75px!important;
+  box-shadow: none!important;
+  color: #FFFFFF!important;
+  font-family: 'Josefin Sans',sans-serif!important;
+  font-weight: 600!important;
+  font-size: 12px!important;
+  margin-top: 4px!important;
+  padding-bottom: 4px!important;
+  padding-left: 20px!important;
+  padding-right: 20px!important;
+  padding-top: 6px!important;
+  width: 100%!important;
+}
+
+.c3:hover {
+  background-color: #a501c6!important;
+  color: #FFFFFF!important;
+}
+
+.c4 {
+  background-color: inherit!important;
+  border-color: #6a017f!important;
+  border-radius: 75px!important;
+  box-shadow: none!important;
+  color: #6a017f!important;
+  font-family: 'Josefin Sans',sans-serif!important;
+  font-weight: 600!important;
+  font-size: 12px!important;
+  margin-top: 4px!important;
+  padding-bottom: 4px!important;
+  padding-left: 20px!important;
+  padding-right: 20px!important;
+  padding-top: 6px!important;
+  width: 100%!important;
+}
+
+.c4:hover {
+  background-color: #a501c6!important;
+  color: #FFFFFF!important;
+}
+
+.c0 {
+  background-color: #f5f5f5;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  min-height: 100%;
+  padding: 150px 200px 10px 30px;
+  position: fixed;
+  top: 0;
+  transform: translateX(-100%);
+  transition: transform 500ms ease-in;
+  width: 400px;
+  z-index: 5;
+}
+
+.c2 {
+  background-image: linear-gradient(#212121, #212121);
+  background-position-x: 100%;
+  background-position-y: 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 0.1em;
+  color: black;
+  cursor: pointer;
+  font-family: 'Josefin Sans',sans-serif!important;
+  font-weight: 600!important;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-size 0.2s ease-in-out;
+}
+
+.c2:hover {
+  background-position-x: 0%;
+  background-size: 100% 0.1em;
+}
+
+.c1 {
+  text-decoration: none;
+}
+
 <div
-  className="MuiGrid-root sc-grXZZQ hLtMzH css-1ii0ocg-MuiGrid-root"
+  className="MuiGrid-root c0 css-1ii0ocg-MuiGrid-root"
 >
   <div
     className="MuiGrid-root MuiGrid-container css-1jzi3sl-MuiGrid-root"
@@ -11,14 +94,14 @@ exports[`Sidebar unit tests renders as expected 1`] = `
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
     >
       <a
-        className="sc-hLclGa gXbkBb"
+        className="c1"
         href="/menu"
         onClick={[Function]}
         onMouseEnter={[Function]}
         onTouchStart={[Function]}
       >
         <h1
-          className="sc-dkjKgF eGzxfi"
+          className="c2"
         >
           Menu
         </h1>
@@ -37,7 +120,7 @@ exports[`Sidebar unit tests renders as expected 1`] = `
       onTouchStart={[Function]}
     >
       <h1
-        className="sc-dkjKgF eGzxfi"
+        className="c2"
       >
         Rewards
       </h1>
@@ -55,7 +138,7 @@ exports[`Sidebar unit tests renders as expected 1`] = `
       onTouchStart={[Function]}
     >
       <h1
-        className="sc-dkjKgF eGzxfi"
+        className="c2"
       >
         Retail
       </h1>
@@ -79,7 +162,7 @@ exports[`Sidebar unit tests renders as expected 1`] = `
           onTouchStart={[Function]}
         >
           <button
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium sc-bcPKhP gNvhEL css-sghohy-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium c3 css-sghohy-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onContextMenu={[Function]}
@@ -115,7 +198,7 @@ exports[`Sidebar unit tests renders as expected 1`] = `
           onTouchStart={[Function]}
         >
           <button
-            className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium sc-bcPKhP kJkSXw css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium c4 css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onContextMenu={[Function]}

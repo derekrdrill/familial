@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Grid } from '@mui/material';
 import Link from 'next/link';
 
-export const SidebarRoot = styled(Grid)<{ $isSidebarOpen: boolean }>(({ $isSidebarOpen }) => ({
+export const SidebarRoot = styled(Grid)<{ $isSidebarOpen?: boolean }>(({ $isSidebarOpen }) => ({
   backgroundColor: '#f5f5f5',
   bottom: 0,
   height: '100%',

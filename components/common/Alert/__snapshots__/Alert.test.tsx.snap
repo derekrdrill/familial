@@ -1,8 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Alert unit tests renders as expected 1`] = `
+.c0 {
+  display: none!important;
+  opacity: 0;
+  position: fixed;
+  top: 125px;
+  transition: all 350ms ease-in;
+  z-index: 6;
+}
+
 <div
-  className="MuiGrid-root MuiGrid-container sc-bcPKhP cuCFMM css-11lq3yg-MuiGrid-root"
+  className="MuiGrid-root MuiGrid-container c0 css-11lq3yg-MuiGrid-root"
 >
   <div
     className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1 MuiGrid-grid-sm-2 MuiGrid-grid-md-4 css-y734yy-MuiGrid-root"

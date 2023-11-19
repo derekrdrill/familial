@@ -1,8 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`QuickMenu unit tests renders as expected 1`] = `
+.c0 {
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 2px -2px gray;
+  left: 0;
+  height: 400px;
+  min-width: 100%;
+  position: fixed;
+  top: 123px;
+  transform: none;
+  transition: transform 300ms linear;
+  width: 100%;
+  z-index: 2;
+}
+
 <div
-  className="MuiGrid-root sc-bcPKhP cLMiHe css-1r9h9rv-MuiGrid-root"
+  className="MuiGrid-root c0 css-1r9h9rv-MuiGrid-root"
 >
   <div>
     TEST

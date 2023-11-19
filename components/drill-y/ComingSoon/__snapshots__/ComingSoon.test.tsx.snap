@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ComingSoon unit tests renders as expected 1`] = `
+[
+  <div
+    className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-13i4rnv-MuiGrid-root"
+  >
+    <h1
+      className="MuiTypography-root MuiTypography-h1 css-yj93s3-MuiTypography-root"
+    >
+      ⚠️ Nothing to see here.... yet ⚠️
+    </h1>
+  </div>,
+  <div
+    className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-13i4rnv-MuiGrid-root"
+  >
+    <div
+      className="MuiGrid-root MuiGrid-container css-1lym95h-MuiGrid-root"
+    >
+      <img
+        className="css-7m2hxb-ComingSoonImage e1yfwaok1"
+        src="/bitmojiPainting.png"
+      />
+    </div>
+  </div>,
+  <div
+    className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-13i4rnv-MuiGrid-root"
+  >
+    <h2
+      className="MuiTypography-root MuiTypography-h2 css-5td3k1-MuiTypography-root"
+    >
+      Rest assured...
+    </h2>
+  </div>,
+  <div
+    className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 e1yfwaok0 css-1fb3tvj-MuiGrid-root-ComingSoonTextContainer"
+  >
+    <h3
+      className="MuiTypography-root MuiTypography-h3 css-12yrm2y-MuiTypography-root"
+    >
+      Some very important people are working hard to deploy this site 🚀
+    </h3>
+  </div>,
+]
+`;
