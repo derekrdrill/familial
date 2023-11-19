@@ -1,35 +1,32 @@
 import React from 'react';
-import styled from 'styled-components';
+import tw from 'twin.macro';
+import styled from '@emotion/styled';
 import { Grid, Typography } from '@mui/material';
 
-const ComingSoon = () => (
-  <Grid container justifyContent='center'>
-    <Typography sx={{ typography: { xs: 'h3', md: 'h1' } }} textAlign='center' variant='h1'>
-      ⚠️ Nothing to see here.... yet ⚠️
-    </Typography>
-    <Grid container justifyContent='center'>
-      <ComingSoonImage src='/bitmojiPainting.png' />
+export const ComingSoon = () => (
+  <>
+    <Grid item xs={12}>
+      <Typography sx={{ typography: { xs: 'h3', md: 'h1' } }} textAlign='center' variant='h1'>
+        ⚠️ Nothing to see here.... yet ⚠️
+      </Typography>
     </Grid>
-    <Grid container justifyContent='center'>
-      <Typography sx={{ typography: { xs: 'h4', md: 'h3' } }} variant='h2'>
+    <Grid item xs={12}>
+      <Grid container justifyContent='center'>
+        <ComingSoonImage src='/bitmojiPainting.png' />
+      </Grid>
+    </Grid>
+    <Grid item xs={12}>
+      <Typography sx={{ typography: { xs: 'h4', md: 'h3' } }} textAlign='center' variant='h2'>
         Rest assured...
       </Typography>
     </Grid>
-    <ComingSoonTextContainer container justifyContent='center'>
-      <Typography sx={{ typography: { xs: 'h5', md: 'h4' } }} variant='h3'>
+    <ComingSoonTextContainer item xs={12}>
+      <Typography sx={{ typography: { xs: 'h5', md: 'h4' } }} textAlign='center' variant='h3'>
         Some very important people are working hard to deploy this site 🚀
       </Typography>
     </ComingSoonTextContainer>
-  </Grid>
+  </>
 );
 
-export default ComingSoon;
-
-export const ComingSoonImage = styled.img({
-  height: 400,
-  width: 400,
-});
-
-export const ComingSoonTextContainer = styled(Grid)({
-  padding: 24,
-});
+export const ComingSoonImage = styled.img([tw`h-96`, tw`w-96`]);
+export const ComingSoonTextContainer = styled(Grid)([tw`pt-6`]);
