@@ -1,7 +1,11 @@
 {
   "clearMocks": true,
   "collectCoverage": true,
-  "collectCoverageFrom": ["src/**/*.{ts,tsx}", "!src/index.tsx"],
+  "collectCoverageFrom": [
+    "components/**/*.{ts,tsx}",
+    "context/**/*.{ts,tsx}",
+    "pages/**/*.{ts,tsx}"
+  ],
   "coverageDirectory": "coverage",
   "coverageThreshold": {
     "global": {
