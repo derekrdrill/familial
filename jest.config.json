@@ -1,7 +1,7 @@
 {
   "clearMocks": true,
   "collectCoverage": true,
-  "collectCoverageFrom": ["src/**/*.{ts,tsx}", "!src/index.tsx", "!src/routes/routes.tsx"],
+  "collectCoverageFrom": ["src/**/*.{ts,tsx}", "!src/index.tsx"],
   "coverageDirectory": "coverage",
   "coverageThreshold": {
     "global": {

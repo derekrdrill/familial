@@ -2,6 +2,6 @@
 
 exports[`Overlay unit tests renders as expected 1`] = `
 <div
-  className="MuiGrid-root sc-beqWaB WkIvD css-1sm8red-MuiGrid-root"
+  className="MuiGrid-root sc-bcPKhP jTkIuN css-1sm8red-MuiGrid-root"
 />
 `;

@@ -2,7 +2,7 @@
 
 exports[`Sidebar unit tests renders as expected 1`] = `
 <div
-  className="MuiGrid-root sc-gueYoa gGODpB css-1ii0ocg-MuiGrid-root"
+  className="MuiGrid-root sc-grXZZQ hLtMzH css-1ii0ocg-MuiGrid-root"
 >
   <div
     className="MuiGrid-root MuiGrid-container css-1jzi3sl-MuiGrid-root"
@@ -10,27 +10,52 @@ exports[`Sidebar unit tests renders as expected 1`] = `
     <div
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
     >
-      <h1
-        className="sc-dmqHEX dkFvWg"
+      <a
+        className="sc-hLclGa gXbkBb"
+        href="/menu"
         onClick={[Function]}
+        onMouseEnter={[Function]}
+        onTouchStart={[Function]}
       >
-        Menu
-      </h1>
+        <h1
+          className="sc-dkjKgF eGzxfi"
+        >
+          Menu
+        </h1>
+      </a>
     </div>
     <div
+      aria-label={null}
+      aria-labelledby={null}
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+      data-mui-internal-clone-element={true}
+      onBlur={[Function]}
+      onFocus={[Function]}
+      onMouseLeave={[Function]}
+      onMouseOver={[Function]}
+      onTouchEnd={[Function]}
+      onTouchStart={[Function]}
     >
       <h1
-        className="sc-dmqHEX dkFvWg"
+        className="sc-dkjKgF eGzxfi"
       >
         Rewards
       </h1>
     </div>
     <div
+      aria-label={null}
+      aria-labelledby={null}
       className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+      data-mui-internal-clone-element={true}
+      onBlur={[Function]}
+      onFocus={[Function]}
+      onMouseLeave={[Function]}
+      onMouseOver={[Function]}
+      onTouchEnd={[Function]}
+      onTouchStart={[Function]}
     >
       <h1
-        className="sc-dmqHEX dkFvWg"
+        className="sc-dkjKgF eGzxfi"
       >
         Retail
       </h1>
@@ -42,10 +67,19 @@ exports[`Sidebar unit tests renders as expected 1`] = `
         className="MuiGrid-root MuiGrid-container css-1jzi3sl-MuiGrid-root"
       >
         <div
+          aria-label={null}
+          aria-labelledby={null}
           className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+          data-mui-internal-clone-element={true}
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onMouseLeave={[Function]}
+          onMouseOver={[Function]}
+          onTouchEnd={[Function]}
+          onTouchStart={[Function]}
         >
           <button
-            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium sc-beqWaB iSwvnH css-sghohy-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium sc-bcPKhP gNvhEL css-sghohy-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onContextMenu={[Function]}
@@ -63,13 +97,25 @@ exports[`Sidebar unit tests renders as expected 1`] = `
             type="button"
           >
             Join Rewards
+            <span
+              className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
           </button>
         </div>
         <div
+          aria-label={null}
+          aria-labelledby={null}
           className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-1idn90j-MuiGrid-root"
+          data-mui-internal-clone-element={true}
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onMouseLeave={[Function]}
+          onMouseOver={[Function]}
+          onTouchEnd={[Function]}
+          onTouchStart={[Function]}
         >
           <button
-            className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium sc-beqWaB iTzwqY css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
+            className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium sc-bcPKhP kJkSXw css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
             disabled={false}
             onBlur={[Function]}
             onContextMenu={[Function]}
@@ -87,6 +133,9 @@ exports[`Sidebar unit tests renders as expected 1`] = `
             type="button"
           >
             Sign In
+            <span
+              className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
           </button>
         </div>
       </div>

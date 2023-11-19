@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
 
 import { HeaderLogo, HeaderMenuText, HeaderRoot, HeaderSearchIcon, HeaderTop } from './style';
@@ -7,8 +6,6 @@ import { HeaderLogo, HeaderMenuText, HeaderRoot, HeaderSearchIcon, HeaderTop } f
 import Link from 'next/link';
 
 const Header = () => {
-  const router = useRouter();
-
   return (
     <HeaderRoot>
       <HeaderTop

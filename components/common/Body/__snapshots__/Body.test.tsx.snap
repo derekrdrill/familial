@@ -2,7 +2,7 @@
 
 exports[`Body unit tests renders as expected 1`] = `
 <div
-  className="MuiGrid-root MuiGrid-container sc-beqWaB fFwJLz css-b6t4rf-MuiGrid-root"
+  className="MuiGrid-root MuiGrid-container sc-bcPKhP bkQShh css-b6t4rf-MuiGrid-root"
 >
   <div>
     TEST
