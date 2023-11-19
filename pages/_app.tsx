@@ -22,8 +22,8 @@ const App = ({ Component, pageProps }) => {
         <GlobalStyle $isSidebarOpen={isSidebarOpen} />
         <Overlay isSidebarOpen={isSidebarOpen} isQuickViewOpen={isMenuOpen} />
         {/* <Header /> */}
-        <MenuIcon isMenuIconActive={isSidebarOpen} setIsMenuIconActive={setIsSidebarOpen} />
-        <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+        {/* <MenuIcon isMenuIconActive={isSidebarOpen} setIsMenuIconActive={setIsSidebarOpen} /> */}
+        {/* <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} /> */}
         <Alert />
         <Modal />
         <Body>
