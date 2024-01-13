@@ -37,26 +37,3 @@ const App = ({ Component, pageProps }) => {
 };
 
 export default App;
-
-// export const getInitialProps = async () => {
-//   try {
-//     console.log('CONNECTING TO MONGO');
-//     await conn();
-//     console.log('CONNECTED TO MONGO');
-
-//     console.log('FETCHING DOCUMENTS');
-//     const albums = await Albums.find();
-//     console.log('FETCHED DOCUMENTS');
-
-//     return {
-//       props: {
-//         albums: JSON.parse(JSON.stringify(albums)),
-//       },
-//     };
-//   } catch (error) {
-//     console.log(error);
-//     return {
-//       notFound: true,
-//     };
-//   }
-// };

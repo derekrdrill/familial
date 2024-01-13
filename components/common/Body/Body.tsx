@@ -13,13 +13,8 @@ export default Body;
 
 export const getServerSideProps = async () => {
   try {
-    console.log('CONNECTING TO MONGO');
     await conn();
-    console.log('CONNECTED TO MONGO');
-
-    console.log('FETCHING DOCUMENTS');
     const albums = await Albums.find();
-    console.log('FETCHED DOCUMENTS');
 
     return {
       props: {

@@ -17,16 +17,5 @@ export default async function POST(req: Request) {
     access: 'public',
   });
 
-  // console.log(photos);
-  // console.log(blob);
-  // const photosWithBlobURL = { ...photos, ...{ url: blob.url } };
-  // console.log(photosWithBlobURL);
-
-  // // try {
-  // //   Photos.insertMany(photos);
-  // // } catch (error) {
-  // //   console.log(error);
-  // // }
-
   return NextResponse.json(blob);
 }
