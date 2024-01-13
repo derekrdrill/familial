@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { createGlobalStyle } from 'styled-components';
 import { GlobalStyles } from 'twin.macro';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 import GlobalProvider from '../context/GlobalProvider';
 
@@ -21,7 +22,6 @@ const App = ({ Component, pageProps }) => {
     <React.StrictMode>
       <GlobalProvider>
         <GlobalStyles />
-        {/* <GlobalStyle $isSidebarOpen={isSidebarOpen} /> */}
         <Overlay isSidebarOpen={isSidebarOpen} isQuickViewOpen={isMenuOpen} />
         {/* <Header /> */}
         {/* <MenuIcon isMenuIconActive={isSidebarOpen} setIsMenuIconActive={setIsSidebarOpen} /> */}
@@ -37,18 +37,3 @@ const App = ({ Component, pageProps }) => {
 };
 
 export default App;
-
-export const GlobalStyle = createGlobalStyle<{ $isSidebarOpen: boolean }>(({ $isSidebarOpen }) => [
-  $isSidebarOpen && {
-    body: {
-      overflowY: 'hidden',
-      position: 'fixed',
-    },
-  },
-  {
-    'html, body': {
-      padding: 0,
-      margin: 0,
-    },
-  },
-]);

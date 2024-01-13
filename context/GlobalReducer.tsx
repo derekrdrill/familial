@@ -1,31 +1,37 @@
 import { GlobalStateType } from './GlobalState';
 
 export enum GlobalReducerActionEnum {
-  SET_MODAL_ITEM = 'SET_MODAL_ITEM',
+  SET_ALBUMS = 'SET_ALBUMS',
   SET_ALERT_ITEM = 'SET_ALERT_ITEM',
+  SET_MODAL_ITEM = 'SET_MODAL_ITEM',
 }
 
 export type GlobalReducerAction = {
-  type: GlobalReducerActionEnum;
   payload: GlobalStateType;
+  type: GlobalReducerActionEnum;
 };
 
 const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
   const {
-    payload: { alertItem, modalItem },
+    payload: { albums, alertItem, modalItem },
     type,
   } = action;
 
   switch (type) {
-    case GlobalReducerActionEnum.SET_MODAL_ITEM:
+    case GlobalReducerActionEnum.SET_ALBUMS:
       return {
         ...state,
-        modalItem: modalItem,
+        albums: albums,
       };
     case GlobalReducerActionEnum.SET_ALERT_ITEM:
       return {
         ...state,
         alertItem: alertItem,
+      };
+    case GlobalReducerActionEnum.SET_MODAL_ITEM:
+      return {
+        ...state,
+        modalItem: modalItem,
       };
     default:
       return state;
