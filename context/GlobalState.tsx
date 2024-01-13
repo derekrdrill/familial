@@ -1,13 +1,14 @@
-import { AlertItem } from './types/AlertItem';
-import { ModalItem } from './types/ModalItem';
+import { Albums, AlertItem, ModalItem } from './types';
 
 export type GlobalStateType = {
+  albums?: Albums[];
   modalItem?: ModalItem;
   alertItem?: AlertItem;
   authenticatedUser?: object | null;
 };
 
 const GlobalState: GlobalStateType = {
+  albums: undefined,
   authenticatedUser: null,
   modalItem: {
     isModalOpen: false,
