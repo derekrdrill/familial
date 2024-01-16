@@ -1,35 +1,44 @@
 import * as React from 'react';
-import { Button, Grid, Modal as ModalComponent, Typography } from '@mui/material';
+import { Button, CircularProgress, Grid, Modal as ModalComponent, Typography } from '@mui/material';
 
 import GlobalContext from '../../../context/GlobalContext';
+import { GlobalReducerActionEnum } from '../../../context/GlobalReducer';
 
 import { setModalItem } from './actions/ModalActions';
 
-import { ModalContainer, ModalRootContainer, ModalRow } from './style';
+import { ModalButton, ModalContainer, ModalRootContainer, ModalRow } from './style';
 
 const Modal = () => {
   const {
     state: {
       modalItem: {
+        cancelButtonColor,
+        cancelButtonText,
+        cancelButtonVariant,
+        handleSubmit,
+        isCancelHidden,
+        isExitHidden,
         isModalOpen,
         modalBody,
         modalTitle,
-        handleSubmit,
         submitButtonColor,
+        submitButtonLoadingDelay,
         submitButtonText,
-        isCancelHidden,
         submitButtonVariant,
+        submitSuccessMessage,
       },
     },
     dispatch,
   } = React.useContext(GlobalContext);
 
+  const [isModalLoading, setIsModalLoading] = React.useState<boolean>(false);
+
   return (
     <ModalComponent open={isModalOpen}>
       <ModalRootContainer container>
-        <Grid item xs={3} />
-        <Grid item xs={6}>
-          <ModalContainer container>
+        <Grid item xs={1} md={3} lg={4} />
+        <Grid item xs={10} md={6} lg={4}>
+          <ModalContainer container rowGap={4}>
             <Grid item xs={12}>
               <ModalRow container>
                 <Grid item xs={11}>
@@ -37,15 +46,16 @@ const Modal = () => {
                 </Grid>
                 <Grid item xs={1}>
                   <Grid container justifyContent='flex-end'>
-                    {!isCancelHidden && (
+                    {!isExitHidden && (
                       <Button
                         color='error'
-                        variant='contained'
+                        disabled={isModalLoading}
                         onClick={
                           /* istanbul ignore next */
                           () => dispatch(setModalItem(null, false, null, ''))
                         }
                         size='small'
+                        variant='outlined'
                       >
                         x
                       </Button>
@@ -61,35 +71,60 @@ const Modal = () => {
               <ModalRow columnSpacing={2} container isBottom justifyContent='flex-end'>
                 <Grid item>
                   {!isCancelHidden && (
-                    <Button
-                      color='info'
-                      variant='contained'
+                    <ModalButton
+                      color={cancelButtonColor ?? 'info'}
+                      disabled={isModalLoading}
                       onClick={
                         /* istanbul ignore next */
                         () => dispatch(setModalItem(null, false, null, ''))
                       }
+                      variant={cancelButtonVariant ?? 'outlined'}
                     >
-                      Cancel
-                    </Button>
+                      {cancelButtonText ?? 'Cancel'}
+                    </ModalButton>
                   )}
                 </Grid>
                 <Grid item>
-                  <Button
-                    color={submitButtonColor}
-                    variant={submitButtonVariant}
+                  <ModalButton
+                    color={submitButtonColor ?? 'primary'}
                     onClick={
                       /* istanbul ignore next */
-                      () => handleSubmit()
+                      async () => {
+                        setIsModalLoading(true);
+                        await handleSubmit();
+                        setTimeout(() => {
+                          setIsModalLoading(false);
+
+                          dispatch({
+                            type: GlobalReducerActionEnum.RESET_MODAL_ITEM,
+                            payload: {},
+                          });
+
+                          if (submitSuccessMessage) {
+                            dispatch({
+                              type: GlobalReducerActionEnum.SET_ALERT_ITEM,
+                              payload: {
+                                alertItem: {
+                                  isAlertOpen: true,
+                                  alertMessage: submitSuccessMessage,
+                                  alertSeverity: 'success',
+                                },
+                              },
+                            });
+                          }
+                        }, submitButtonLoadingDelay ?? 0);
+                      }
                     }
+                    variant={submitButtonVariant ?? 'contained'}
                   >
-                    {submitButtonText}
-                  </Button>
+                    {isModalLoading ? <CircularProgress /> : submitButtonText ?? 'Submit'}
+                  </ModalButton>
                 </Grid>
               </ModalRow>
             </Grid>
           </ModalContainer>
         </Grid>
-        <Grid item xs={3} />
+        <Grid item xs={1} md={3} lg={4} />
       </ModalRootContainer>
     </ModalComponent>
   );

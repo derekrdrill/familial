@@ -1,6 +1,7 @@
-import { GlobalStateType } from './GlobalState';
+import GlobalState, { GlobalStateType } from './GlobalState';
 
 export enum GlobalReducerActionEnum {
+  RESET_MODAL_ITEM = 'RESET_MODAL_ITEM',
   SET_ALBUMS = 'SET_ALBUMS',
   SET_ALERT_ITEM = 'SET_ALERT_ITEM',
   SET_MODAL_ITEM = 'SET_MODAL_ITEM',
@@ -18,6 +19,11 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
   } = action;
 
   switch (type) {
+    case GlobalReducerActionEnum.RESET_MODAL_ITEM:
+      return {
+        ...state,
+        modalItem: GlobalState.modalItem,
+      };
     case GlobalReducerActionEnum.SET_ALBUMS:
       return {
         ...state,
@@ -27,6 +33,11 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         alertItem: alertItem,
+      };
+    case GlobalReducerActionEnum.SET_MODAL_ITEM:
+      return {
+        ...state,
+        modalItem: modalItem,
       };
     case GlobalReducerActionEnum.SET_MODAL_ITEM:
       return {

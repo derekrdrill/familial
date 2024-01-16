@@ -67,12 +67,16 @@ export const PhotoUploader = () => {
             onImageRemove={onImageRemove}
             photoList={photoList}
             photoUploadData={photoUploadData}
+            setPhotoList={setPhotoList}
+            setPhotoUploadData={setPhotoUploadData}
           />
           <PhotoUploaderPhotosListMobile
             handleInputChange={handleInputChange}
             onImageRemove={onImageRemove}
             photoList={photoList}
             photoUploadData={photoUploadData}
+            setPhotoList={setPhotoList}
+            setPhotoUploadData={setPhotoUploadData}
           />
         </>
       )}

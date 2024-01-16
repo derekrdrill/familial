@@ -11,10 +11,10 @@ const GlobalState: GlobalStateType = {
   albums: undefined,
   authenticatedUser: null,
   modalItem: {
-    isModalOpen: false,
-    modalTitle: null,
-    modalBody: null,
     handleSubmit: null,
+    isModalOpen: false,
+    modalBody: null,
+    modalTitle: '',
     submitButtonColor: 'primary',
     submitButtonText: 'Submit',
   },
