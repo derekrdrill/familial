@@ -10,7 +10,7 @@ type MenuIconProps = {
 const MenuIcon = ({ isMenuIconActive, setIsMenuIconActive }: MenuIconProps) => (
   <MenuIconContainer
     container
-    display={{ xs: 'block', lg: 'none' }}
+    display={{ xs: 'block', md: 'none' }}
     onClick={
       /* istanbul ignore next */
       () => setIsMenuIconActive(!isMenuIconActive)
