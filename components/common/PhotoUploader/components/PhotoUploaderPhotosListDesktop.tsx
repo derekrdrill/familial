@@ -101,48 +101,46 @@ export const PhotoUploaderPhotosListDesktop = ({
                   ))}
                   <MenuItem
                     onClick={() => {
-                      const newAlbumName = (document.getElementById('album') as HTMLInputElement)
-                        ?.value;
-
                       dispatch({
                         type: GlobalReducerActionEnum.SET_MODAL_ITEM,
                         payload: {
                           modalItem: {
                             handleSubmit: async () => {
-                              const isNewAlbumNameInCurrentAlbums = albums?.some(
-                                album => album.albumName === newAlbumName,
-                              );
+                              // const isNewAlbumNameInCurrentAlbums = albums?.some(
+                              //   album => album.albumName === newAlbumName,
+                              // );
+                              const newAlbumName = (
+                                document.getElementById('album') as HTMLInputElement
+                              )?.value;
 
-                              if (isNewAlbumNameInCurrentAlbums) {
-                                await fetch('api/album', {
-                                  method: 'POST',
-                                  body: newAlbumName,
-                                })
-                                  .then(async res => {
-                                    const newAlbums = await res.json();
+                              await fetch('api/album', {
+                                method: 'POST',
+                                body: newAlbumName,
+                              })
+                                .then(async res => {
+                                  const newAlbums = await res.json();
 
-                                    dispatch({
-                                      type: GlobalReducerActionEnum.SET_ALBUMS,
-                                      payload: { albums: newAlbums },
-                                    });
-
-                                    setPhotoUploadData(
-                                      photoUploadData.map((photoUpload, photoUploadIndex) =>
-                                        photoUploadIndex === imageIndex
-                                          ? {
-                                              ...photoUpload,
-                                              ...{
-                                                albumName: newAlbumName,
-                                              },
-                                            }
-                                          : photoUpload,
-                                      ),
-                                    );
-                                  })
-                                  .catch(e => {
-                                    console.log(e);
+                                  dispatch({
+                                    type: GlobalReducerActionEnum.SET_ALBUMS,
+                                    payload: { albums: newAlbums },
                                   });
-                              }
+
+                                  setPhotoUploadData(
+                                    photoUploadData.map((photoUpload, photoUploadIndex) =>
+                                      photoUploadIndex === imageIndex
+                                        ? {
+                                            ...photoUpload,
+                                            ...{
+                                              albumName: newAlbumName,
+                                            },
+                                          }
+                                        : photoUpload,
+                                    ),
+                                  );
+                                })
+                                .catch(e => {
+                                  console.log(e);
+                                });
                             },
                             isExitHidden: true,
                             isModalOpen: true,
