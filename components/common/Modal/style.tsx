@@ -21,7 +21,7 @@ export const ModalRow = styled(Grid)<{ isBottom?: boolean; isBody?: boolean }>(
 );
 
 export const ModalButton = styled(Button)<{ color?: string }>(({ color }) => ({
-  borderRadius: 30,
+  borderRadius: '30px !important',
   height: 50,
   width: 100,
 }));
