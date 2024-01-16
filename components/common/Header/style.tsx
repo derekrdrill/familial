@@ -38,6 +38,6 @@ export const HeaderMenuButton = styled(IconButton)({
 
 export const HeaderMenuLink = styled(Link)({
   ':hover': {
-    backgroundColor: '#F4E6FF',
+    backgroundColor: '#F4E6FF !important',
   },
 });
