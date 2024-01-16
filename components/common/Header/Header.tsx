@@ -1,55 +1,97 @@
 import * as React from 'react';
-import { useRouter } from 'next/router';
-import { Grid } from '@mui/material';
-
-import { HeaderLogo, HeaderMenuText, HeaderRoot, HeaderSearchIcon, HeaderTop } from './style';
-
 import Link from 'next/link';
+import { Grid, IconButton } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EventNoteTwoToneIcon from '@mui/icons-material/EventNoteTwoTone';
+import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
+import SearchIcon from '@mui/icons-material/Search';
+
+import {
+  HeaderLogo,
+  HeaderMenuButton,
+  HeaderMenuLink,
+  HeaderRoot,
+  HeaderSearchField,
+  HeaderTop,
+} from './style';
 
 const Header = () => {
-  const router = useRouter();
+  const [isSearchIconShown, setIsSearchIconShown] = React.useState<boolean>(true);
+  const [searchField, setSearchField] = React.useState<string>('');
 
   return (
     <HeaderRoot>
-      <HeaderTop
-        container
-        justifyContent='space-around'
-        sx={{ paddingLeft: { xs: '15px', sm: '20px' }, paddingRight: { xs: '15px', sm: '20px' } }}
-      >
-        <Grid item xs={4} lg={1} xl={2} sx={{ paddingTop: '40px' }} />
-        <Grid item xs={4} lg={1} xl={2}>
-          <Grid container display={{ lg: 'none' }}>
-            <Grid item xs={12}>
-              <Grid container justifyContent='center'>
+      <HeaderTop container>
+        <Grid item xs={4} display={{ xs: 'inline-block', md: 'none' }} />
+        <Grid item xs={4} lg={3}>
+          <Grid container>
+            <Grid
+              item
+              xs={12}
+              md={2}
+              display={{ xs: 'inline-block', md: isSearchIconShown ? 'inline-block' : 'none' }}
+            >
+              <Grid container justifyContent={{ xs: 'center', md: 'flex-start' }}>
                 <Link href='/'>
-                  <HeaderLogo src='/donutsImg.png' />
+                  <HeaderLogo src='/favicon.ico' />
                 </Link>
               </Grid>
             </Grid>
+            <Grid xs={isSearchIconShown ? 10 : 12} display={{ xs: 'none', md: 'inline-block' }}>
+              <HeaderSearchField
+                color='secondary'
+                fullWidth
+                onBlur={() => setIsSearchIconShown(true)}
+                onChange={e => setSearchField(e.currentTarget.value)}
+                onFocus={() => setIsSearchIconShown(false)}
+                placeholder='Search drill-y'
+                size='small'
+                value={searchField}
+                variant='outlined'
+                InputProps={{
+                  startAdornment: isSearchIconShown ? (
+                    <SearchIcon color='disabled' />
+                  ) : (
+                    <IconButton>
+                      <ArrowBackIcon />
+                    </IconButton>
+                  ),
+                }}
+              />
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item md={1} xl={2} display={{ xs: 'none', lg: 'inline-block' }} />
+        <Grid item xs={1} display={{ xs: 'none', lg: 'inline-block' }} />
+        <Grid item xs={4} display={{ xs: 'none', md: 'inline-block' }}>
+          <Grid container justifyContent='space-around'>
+            <HeaderMenuLink href='/'>
+              <HeaderMenuButton>
+                <HomeTwoToneIcon />
+              </HeaderMenuButton>
+            </HeaderMenuLink>
+            <HeaderMenuLink href='/photo-uploader'>
+              <HeaderMenuButton>
+                <PhotoSizeSelectActualTwoToneIcon />
+              </HeaderMenuButton>
+            </HeaderMenuLink>
+            <HeaderMenuLink href='/'>
+              <HeaderMenuButton>
+                <EventNoteTwoToneIcon />
+              </HeaderMenuButton>
+            </HeaderMenuLink>
+          </Grid>
+        </Grid>
+        <Grid item xs={1} display={{ xs: 'none', md: 'inline-block' }} />
+        <Grid item xs={4} md={3}>
+          <Grid container justifyContent='flex-end'>
+            <IconButton>
+              <AccountCircleIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
       </HeaderTop>
-      <Grid
-        container
-        sx={{ paddingLeft: { xs: '15px', sm: '20px' }, paddingRight: { xs: '15px', sm: '20px' } }}
-      >
-        <Grid item xs={12}>
-          <Grid container justifyContent={{ xs: 'space-around', lg: 'space-between' }}>
-            <Grid item display={{ xs: 'none', lg: 'inline-flex' }}>
-              <Link href='/'>{/* <HeaderLogo src='/donutsImg.png' /> */}</Link>
-            </Grid>
-            <Grid item>
-              <Grid
-                columnSpacing={10}
-                container
-                justifyContent='space-around'
-                sx={{ marginTop: 1.5 }}
-              ></Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
     </HeaderRoot>
   );
 };
