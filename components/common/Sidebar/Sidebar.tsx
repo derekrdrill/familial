@@ -35,7 +35,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
           </SidebarMenuLink>
         </Grid>
         <Grid item xs={12}>
-          <SidebarMenuLink href='/photo-uploader'>
+          <SidebarMenuLink href='/photos'>
             <SidebarMenuText variant='h4'>
               <Grid container justifyContent='space-between'>
                 Photos

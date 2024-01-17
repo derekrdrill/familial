@@ -155,8 +155,7 @@ export const PhotoUploaderActionButtons = ({
 
 export const PhotoUploadActionButtonsGrid = styled(Grid)([
   tw`bg-white`,
-  tw`shadow-lg`,
   tw`sticky`,
-  tw`top-0`,
+  tw`top-12`,
   tw`z-[2]`,
 ]);
