@@ -71,7 +71,7 @@ const Header = () => {
                 <HomeTwoToneIcon />
               </HeaderMenuButton>
             </HeaderMenuLink>
-            <HeaderMenuLink href='/photo-uploader'>
+            <HeaderMenuLink href='/photos'>
               <HeaderMenuButton>
                 <PhotoSizeSelectActualTwoToneIcon />
               </HeaderMenuButton>

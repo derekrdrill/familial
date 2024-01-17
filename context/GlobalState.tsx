@@ -1,14 +1,20 @@
-import { Albums, AlertItem, ModalItem } from './types';
+import { Albums, AlertItem, ModalItem, Photos } from './types';
 
 export type GlobalStateType = {
   albums?: Albums[];
-  modalItem?: ModalItem;
   alertItem?: AlertItem;
   authenticatedUser?: object | null;
+  photos?: Photos[];
+  modalItem?: ModalItem;
 };
 
 const GlobalState: GlobalStateType = {
   albums: undefined,
+  alertItem: {
+    alertMessage: null,
+    alertSeverity: 'success',
+    isAlertOpen: false,
+  },
   authenticatedUser: null,
   modalItem: {
     handleSubmit: null,
@@ -18,11 +24,7 @@ const GlobalState: GlobalStateType = {
     submitButtonColor: 'primary',
     submitButtonText: 'Submit',
   },
-  alertItem: {
-    alertMessage: null,
-    alertSeverity: 'success',
-    isAlertOpen: false,
-  },
+  photos: undefined,
 };
 
 export default GlobalState;
