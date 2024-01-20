@@ -1,5 +1,4 @@
 import React from 'react';
-import { ImageListType as PhotoListType } from 'react-images-uploading';
 import Slider from 'react-slick';
 import tw from 'twin.macro';
 import { Button, Checkbox, Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material';
@@ -9,27 +8,17 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
-import { PhotoUploadData } from '../types/PhotoUploaderData';
-
 type PhotoUploaderPhotosListDesktopProps = {
   handleInputChange: Function;
   onImageRemove: Function;
-  photoList: PhotoListType;
-  photoUploadData: PhotoUploadData[];
-  setPhotoList: React.Dispatch<React.SetStateAction<PhotoListType>>;
-  setPhotoUploadData: React.Dispatch<React.SetStateAction<PhotoUploadData[]>>;
 };
 
 export const PhotoUploaderPhotosListDesktop = ({
   handleInputChange,
   onImageRemove,
-  photoList,
-  photoUploadData,
-  setPhotoList,
-  setPhotoUploadData,
 }: PhotoUploaderPhotosListDesktopProps) => {
   const {
-    state: { albums },
+    state: { albums, photoList, photoUploadData, selectedPhotoAlbum },
     dispatch,
   } = React.useContext(GlobalContext);
 
@@ -43,37 +32,43 @@ export const PhotoUploaderPhotosListDesktop = ({
       <Grid
         item
         xs={1}
-        display={{ xs: 'none', md: photoList.length > 3 ? 'inline-block' : 'none' }}
+        display={{
+          xs: 'none',
+          md: photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
+        }}
       >
         <Grid
           container
           justifyContent='flex-end'
-          display={photoList.length > 4 ? 'inline-flex' : 'none'}
+          display={photoList?.length && photoList.length > 4 ? 'inline-flex' : 'none'}
         >
           <IconButton onClick={handlePrevSlide} tw='mt-40'>
             <SkipPreviousIcon />
           </IconButton>
         </Grid>
       </Grid>
-      <Grid item xs={12} md={photoList.length > 3 && 10}>
+      <Grid item xs={12} md={photoList?.length && photoList.length > 3 && 10}>
         <Grid container display={{ xs: 'none', md: 'inline-block' }}>
           <Slider dots infinite={false} ref={photosSliderRef} slidesToShow={4} slidesToScroll={1}>
-            {photoList.map((image, imageIndex) => (
+            {photoList?.map((image, imageIndex) => (
               <Grid key={image.file?.name} container tw='px-4'>
                 <Checkbox
                   checked={!!photoList[imageIndex].checked}
                   onChange={() =>
-                    setPhotoList(
-                      photoList.map((imageCheck, imageCheckIndex) =>
-                        imageCheckIndex === imageIndex
-                          ? { ...imageCheck, ...{ checked: !imageCheck.checked } }
-                          : imageCheck,
-                      ),
-                    )
+                    dispatch({
+                      type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+                      payload: {
+                        photoList: photoList.map((imageCheck, imageCheckIndex) =>
+                          imageCheckIndex === imageIndex
+                            ? { ...imageCheck, ...{ checked: !imageCheck.checked } }
+                            : imageCheck,
+                        ),
+                      },
+                    })
                   }
                 />
                 <Grid item xs={12} tw='h-32'>
-                  <img src={image['dataURL']} width='120' />
+                  <img src={image['dataURL']} tw='h-full object-cover' width='120' />
                 </Grid>
                 <TextField
                   id='title'
@@ -85,12 +80,16 @@ export const PhotoUploaderPhotosListDesktop = ({
                   tw='my-1'
                 />
                 <TextField
+                  disabled={!!selectedPhotoAlbum}
                   fullWidth
                   label='Album'
                   select
                   size='small'
                   onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
-                  value={photoUploadData[imageIndex]?.albumName ?? ''}
+                  value={
+                    selectedPhotoAlbum?.albumName ??
+                    (photoUploadData ? photoUploadData[imageIndex]?.albumName : '')
+                  }
                   variant='outlined'
                   tw='my-1'
                 >
@@ -125,18 +124,22 @@ export const PhotoUploaderPhotosListDesktop = ({
                                     payload: { albums: newAlbums },
                                   });
 
-                                  setPhotoUploadData(
-                                    photoUploadData.map((photoUpload, photoUploadIndex) =>
-                                      photoUploadIndex === imageIndex
-                                        ? {
-                                            ...photoUpload,
-                                            ...{
-                                              albumName: newAlbumName,
-                                            },
-                                          }
-                                        : photoUpload,
-                                    ),
-                                  );
+                                  dispatch({
+                                    type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
+                                    payload: {
+                                      photoUploadData: photoUploadData?.map(
+                                        (photoUpload, photoUploadIndex) =>
+                                          photoUploadIndex === imageIndex
+                                            ? {
+                                                ...photoUpload,
+                                                ...{
+                                                  albumName: newAlbumName,
+                                                },
+                                              }
+                                            : photoUpload,
+                                      ),
+                                    },
+                                  });
                                 })
                                 .catch(e => {
                                   console.log(e);
@@ -217,9 +220,15 @@ export const PhotoUploaderPhotosListDesktop = ({
       <Grid
         item
         xs={1}
-        display={{ xs: 'none', md: photoList.length > 3 ? 'inline-block' : 'none' }}
+        display={{
+          xs: 'none',
+          md: photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
+        }}
       >
-        <Grid container display={photoList.length > 4 ? 'inline-block' : 'none'}>
+        <Grid
+          container
+          display={photoList?.length && photoList.length > 4 ? 'inline-block' : 'none'}
+        >
           <IconButton onClick={handleNextSlide} tw='mt-40'>
             <SkipNextIcon />
           </IconButton>

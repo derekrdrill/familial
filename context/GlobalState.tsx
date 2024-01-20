@@ -1,11 +1,15 @@
-import { Albums, AlertItem, ModalItem, Photos } from './types';
+import { ImageListType as PhotoListType } from 'react-images-uploading';
+import { Albums, AlertItem, ModalItem, PhotoUploadData, Photos, SelectedPhotoAlbum } from './types';
 
 export type GlobalStateType = {
   albums?: Albums[];
   alertItem?: AlertItem;
   authenticatedUser?: object | null;
-  photos?: Photos[];
   modalItem?: ModalItem;
+  photoList?: PhotoListType;
+  photoUploadData?: PhotoUploadData[];
+  photos?: Photos[];
+  selectedPhotoAlbum?: SelectedPhotoAlbum;
 };
 
 const GlobalState: GlobalStateType = {
@@ -24,7 +28,10 @@ const GlobalState: GlobalStateType = {
     submitButtonColor: 'primary',
     submitButtonText: 'Submit',
   },
+  photoList: [],
   photos: undefined,
+  photoUploadData: [],
+  selectedPhotoAlbum: undefined,
 };
 
 export default GlobalState;

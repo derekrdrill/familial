@@ -2,39 +2,28 @@ import React from 'react';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
 import { Button, Checkbox, Grid, MenuItem, TextField, Typography } from '@mui/material';
-import { ImageListType as PhotoListType } from 'react-images-uploading';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
-import { PhotoUploadData } from '../types/PhotoUploaderData';
-
 type PhotoUploaderPhotosListMobileProps = {
   handleInputChange: Function;
   onImageRemove: Function;
-  photoList: PhotoListType;
-  photoUploadData: PhotoUploadData[];
-  setPhotoList: React.Dispatch<React.SetStateAction<PhotoListType>>;
-  setPhotoUploadData: React.Dispatch<React.SetStateAction<PhotoUploadData[]>>;
 };
 
 export const PhotoUploaderPhotosListMobile = ({
   handleInputChange,
   onImageRemove,
-  photoList,
-  photoUploadData,
-  setPhotoList,
-  setPhotoUploadData,
 }: PhotoUploaderPhotosListMobileProps) => {
   const {
-    state: { albums },
+    state: { albums, photoList, photoUploadData, selectedPhotoAlbum },
     dispatch,
   } = React.useContext(GlobalContext);
 
   return (
     <Grid container display={{ xs: 'inline-block', md: 'none' }}>
-      {photoList.map((image, imageIndex) => (
+      {photoList?.map((image, imageIndex) => (
         <Grid key={image.file?.name} item xs={12}>
           <PhotoUploadPhotosListItemMobileGrid
             key={`${image.file?.name} ${image.file?.lastModified}`}
@@ -48,13 +37,16 @@ export const PhotoUploaderPhotosListMobile = ({
                 <Checkbox
                   checked={!!photoList[imageIndex].checked}
                   onChange={() =>
-                    setPhotoList(
-                      photoList.map((imageCheck, imageCheckIndex) =>
-                        imageCheckIndex === imageIndex
-                          ? { ...imageCheck, ...{ checked: !imageCheck.checked } }
-                          : imageCheck,
-                      ),
-                    )
+                    dispatch({
+                      type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+                      payload: {
+                        photoList: photoList.map((imageCheck, imageCheckIndex) =>
+                          imageCheckIndex === imageIndex
+                            ? { ...imageCheck, ...{ checked: !imageCheck.checked } }
+                            : imageCheck,
+                        ),
+                      },
+                    })
                   }
                 />
                 <Button
@@ -104,12 +96,16 @@ export const PhotoUploaderPhotosListMobile = ({
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  disabled={!!selectedPhotoAlbum}
                   fullWidth
                   label='Album'
                   select
                   size='small'
                   onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
-                  value={photoUploadData[imageIndex]?.albumName ?? ''}
+                  value={
+                    selectedPhotoAlbum?.albumName ??
+                    (photoUploadData ? photoUploadData[imageIndex]?.albumName : '')
+                  }
                   variant='outlined'
                   tw='my-1'
                 >
@@ -145,18 +141,22 @@ export const PhotoUploaderPhotosListMobile = ({
                                     payload: { albums: newAlbums },
                                   });
 
-                                  setPhotoUploadData(
-                                    photoUploadData.map((photoUpload, photoUploadIndex) =>
-                                      photoUploadIndex === imageIndex
-                                        ? {
-                                            ...photoUpload,
-                                            ...{
-                                              albumName: newAlbumName,
-                                            },
-                                          }
-                                        : photoUpload,
-                                    ),
-                                  );
+                                  dispatch({
+                                    type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
+                                    payload: {
+                                      photoUploadData: photoUploadData?.map(
+                                        (photoUpload, photoUploadIndex) =>
+                                          photoUploadIndex === imageIndex
+                                            ? {
+                                                ...photoUpload,
+                                                ...{
+                                                  albumName: newAlbumName,
+                                                },
+                                              }
+                                            : photoUpload,
+                                      ),
+                                    },
+                                  });
                                 })
                                 .catch(e => {
                                   console.log(e);

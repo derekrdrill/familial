@@ -3,8 +3,12 @@ import styled from '@emotion/styled';
 import tw from 'twin.macro';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Grid, Typography } from '@mui/material';
+import { CircularProgress, IconButton } from '@mui/material';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+
+import GlobalContext from '../../../../context/GlobalContext';
 import { Photos } from '../../../../context/types';
+import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
 type PhotoCoverProps = {
   photoListItem: {
@@ -13,52 +17,62 @@ type PhotoCoverProps = {
     title?: string;
     url?: string;
   };
-  photoSubtitle?: string;
-  photoTitle: string;
+  photoTitle?: string;
   photoURL: string;
-  setSelectedAlbum: React.Dispatch<
-    React.SetStateAction<{ albumName?: string; photos?: Photos[] | undefined } | null>
-  >;
+  photosView: 'grid' | 'list';
 };
 
 export const PhotoCover = ({
   photoTitle,
   photoListItem,
-  photoSubtitle,
   photoURL,
-  setSelectedAlbum,
+  photosView,
 }: PhotoCoverProps) => {
   const router = useRouter();
 
+  const {
+    dispatch,
+    state: { selectedPhotoAlbum },
+  } = React.useContext(GlobalContext);
+
+  const [isPhotoLoading, setIsPhotoLoading] = React.useState<boolean>(true);
+
   return (
-    <Grid key={photoTitle} item xs={12} sm={6} md={3} xl={2}>
+    <>
+      {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
       <PhotoCoverRoot
         alt='album-cover'
-        height={300}
+        height={0}
         onClick={() => {
-          setSelectedAlbum(photoListItem);
+          if (!selectedPhotoAlbum) {
+            dispatch({
+              type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
+              payload: { selectedPhotoAlbum: photoListItem },
+            });
 
-          router.push(
-            {
-              pathname: '/photos',
-              query: {
-                album: photoTitle,
+            router.push(
+              {
+                pathname: '/photos',
+                query: {
+                  album: photoTitle,
+                },
               },
-            },
-            undefined,
-            { shallow: true },
-          );
+              undefined,
+              { shallow: true },
+            );
+          }
         }}
+        onLoad={() => setIsPhotoLoading(false)}
+        sizes='100vw'
         src={photoURL}
-        width={300}
+        width={0}
+        $photosView={photosView}
       />
-      <Typography variant='h6'>{photoTitle}</Typography>
-      {photoSubtitle && <Typography variant='subtitle1'>{photoSubtitle}</Typography>}
-    </Grid>
+    </>
   );
 };
 
-export const PhotoCoverRoot = styled(Image)([
+export const PhotoCoverRoot = styled(Image)<{ $photosView: 'grid' | 'list' }>(({ $photosView }) => [
   tw`border-2`,
   tw`border-gray-100`,
   tw`border-solid`,
@@ -66,4 +80,11 @@ export const PhotoCoverRoot = styled(Image)([
   tw`hover:opacity-100`,
   tw`opacity-80`,
   tw`rounded-2xl`,
+  $photosView === 'grid' && tw`h-48`,
+  $photosView === 'grid' && tw`object-cover`,
+  $photosView === 'grid' && tw`w-full`,
+  $photosView === 'list' && tw`h-full`,
+  $photosView === 'list' && tw`w-[550px]`,
 ]);
+
+export const PhotoCoverEditPhotoButton = styled(IconButton)<{}>(() => []);

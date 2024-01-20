@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EventNoteTwoToneIcon from '@mui/icons-material/EventNoteTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
+import PhotoLibraryTwoToneIcon from '@mui/icons-material/PhotoLibraryTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 
 import {
@@ -39,7 +39,11 @@ const Header = () => {
                 </Link>
               </Grid>
             </Grid>
-            <Grid xs={isSearchIconShown ? 10 : 12} display={{ xs: 'none', md: 'inline-block' }}>
+            <Grid
+              item
+              xs={isSearchIconShown ? 10 : 12}
+              display={{ xs: 'none', md: 'inline-block' }}
+            >
               <HeaderSearchField
                 color='secondary'
                 fullWidth
@@ -73,7 +77,7 @@ const Header = () => {
             </HeaderMenuLink>
             <HeaderMenuLink href='/photos'>
               <HeaderMenuButton>
-                <PhotoSizeSelectActualTwoToneIcon />
+                <PhotoLibraryTwoToneIcon />
               </HeaderMenuButton>
             </HeaderMenuLink>
             <HeaderMenuLink href='/'>

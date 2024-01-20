@@ -5,6 +5,9 @@ export enum GlobalReducerActionEnum {
   SET_ALERT_ITEM = 'SET_ALERT_ITEM',
   SET_MODAL_ITEM = 'SET_MODAL_ITEM',
   SET_PHOTOS = 'SET_PHOTOS',
+  SET_PHOTO_LIST = 'SET_PHOTO_LIST',
+  SET_PHOTO_UPLOAD_DATA = 'SET_PHOTO_UPLOAD_DATA',
+  SET_SELECTED_PHOTO_ALBUM = 'SET_SELECTED_PHOTO_ALBUM',
   RESET_MODAL_ITEM = 'RESET_MODAL_ITEM',
 }
 
@@ -15,7 +18,15 @@ export type GlobalReducerAction = {
 
 const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
   const {
-    payload: { albums, alertItem, modalItem, photos },
+    payload: {
+      albums,
+      alertItem,
+      modalItem,
+      photoList,
+      photos,
+      photoUploadData,
+      selectedPhotoAlbum,
+    },
     type,
   } = action;
 
@@ -29,11 +40,6 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         albums: albums,
-      };
-    case GlobalReducerActionEnum.SET_PHOTOS:
-      return {
-        ...state,
-        photos: photos,
       };
     case GlobalReducerActionEnum.SET_ALERT_ITEM:
       return {
@@ -49,6 +55,26 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         modalItem: modalItem,
+      };
+    case GlobalReducerActionEnum.SET_PHOTO_LIST:
+      return {
+        ...state,
+        photoList: photoList,
+      };
+    case GlobalReducerActionEnum.SET_PHOTOS:
+      return {
+        ...state,
+        photos: photos,
+      };
+    case GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA:
+      return {
+        ...state,
+        photoUploadData: photoUploadData,
+      };
+    case GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM:
+      return {
+        ...state,
+        selectedPhotoAlbum: selectedPhotoAlbum,
       };
     default:
       return state;
