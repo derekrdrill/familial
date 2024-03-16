@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { Grid, TextField } from '@mui/material';
-import EventNoteTwoToneIcon from '@mui/icons-material/EventNoteTwoTone';
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
-import SearchIcon from '@mui/icons-material/Search';
+import { Grid } from '@mui/material';
 
 import ActionButton from '../ActionButton/ActionButton';
+import ComingSoon from '../../drill-y/ComingSoon/ComingSoon';
+import Tooltip from '../Tooltip/Tooltip';
 
 import { SidebarMenuLink, SidebarRoot, SidebarMenuText } from './style';
 
@@ -16,43 +14,52 @@ type SidebarProps = {
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
   return (
-    <SidebarRoot display={{ xs: 'block', md: 'none' }} $isSidebarOpen={isSidebarOpen}>
-      <Grid container rowSpacing={6}>
-        <TextField
-          color='secondary'
-          fullWidth
-          placeholder='Search drill-y'
-          InputProps={{ startAdornment: <SearchIcon color='disabled' /> }}
-        />
+    <SidebarRoot display={{ xs: 'block', lg: 'none' }} $isSidebarOpen={isSidebarOpen}>
+      <Grid container rowSpacing={2}>
         <Grid item xs={12}>
-          <SidebarMenuLink href='/'>
-            <SidebarMenuText variant='h4'>
-              <Grid container justifyContent='space-between'>
-                Home
-                <HomeTwoToneIcon />
-              </Grid>
-            </SidebarMenuText>
+          <SidebarMenuLink href='/menu'>
+            <SidebarMenuText>Menu</SidebarMenuText>
           </SidebarMenuLink>
         </Grid>
+        <Tooltip tooltipTitle={<ComingSoon />} tooltipPlacement='right'>
+          <Grid item xs={12}>
+            <SidebarMenuText>Rewards</SidebarMenuText>
+          </Grid>
+        </Tooltip>
+        <Tooltip tooltipTitle={<ComingSoon />} tooltipPlacement='right'>
+          <Grid item xs={12}>
+            <SidebarMenuText>Retail</SidebarMenuText>
+          </Grid>
+        </Tooltip>
         <Grid item xs={12}>
-          <SidebarMenuLink href='/photos'>
-            <SidebarMenuText variant='h4'>
-              <Grid container justifyContent='space-between'>
-                Photos
-                <PhotoSizeSelectActualTwoToneIcon />
+          <Grid container rowSpacing={2}>
+            <Tooltip tooltipTitle={<ComingSoon />} tooltipPlacement='right'>
+              <Grid item xs={12}>
+                <ActionButton
+                  buttonColor='#6a017f'
+                  buttonHoverColor='#a501c6'
+                  buttonWidth={'100%'}
+                  size='large'
+                  variant='contained'
+                >
+                  Join Rewards
+                </ActionButton>
               </Grid>
-            </SidebarMenuText>
-          </SidebarMenuLink>
-        </Grid>
-        <Grid item xs={12}>
-          <SidebarMenuLink href='/'>
-            <SidebarMenuText variant='h4'>
-              <Grid container justifyContent='space-between'>
-                Events
-                <EventNoteTwoToneIcon />
+            </Tooltip>
+            <Tooltip tooltipTitle={<ComingSoon />} tooltipPlacement='right'>
+              <Grid item xs={12}>
+                <ActionButton
+                  buttonColor='#6a017f'
+                  buttonHoverColor='#a501c6'
+                  buttonWidth={'100%'}
+                  size='large'
+                  variant='outlined'
+                >
+                  Sign In
+                </ActionButton>
               </Grid>
-            </SidebarMenuText>
-          </SidebarMenuLink>
+            </Tooltip>
+          </Grid>
         </Grid>
       </Grid>
     </SidebarRoot>

@@ -6,19 +6,21 @@ import { OverlayRoot } from './styles';
 export const getOverlayDisplay = (isOverlayVisible: boolean) =>
   isOverlayVisible ? 'block' : 'none';
 
-export const getZIndex = (isSidebarOpen: boolean) => (isSidebarOpen ? 4 : 1);
+export const getZIndexSmall = (isSidebarOpen: boolean) => (isSidebarOpen ? 4 : 1);
+export const getZIndexLarge = (isQuickViewOpen: boolean) => (isQuickViewOpen ? 1 : 4);
 
-type OverlayProps = {
+interface OverlayProps extends GridProps {
+  isQuickViewOpen: boolean;
   isSidebarOpen: boolean;
-};
+}
 
-const Overlay = ({ isSidebarOpen }: GridProps & OverlayProps) => (
+const Overlay = ({ isSidebarOpen, isQuickViewOpen }: OverlayProps) => (
   <OverlayRoot
     display={{
       xs: getOverlayDisplay(isSidebarOpen),
-      md: 'none',
+      lg: getOverlayDisplay(isQuickViewOpen),
     }}
-    sx={{ zIndex: getZIndex(isSidebarOpen) }}
+    sx={{ zIndex: { xs: getZIndexSmall(isSidebarOpen), lg: getZIndexLarge(isQuickViewOpen) } }}
   />
 );
 
