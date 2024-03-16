@@ -33,21 +33,21 @@ const Alert = () => {
       $isAlertHidden={!alertItem?.isAlertOpen}
       $isAlertFading={isAlertFading}
     >
-      <Grid container justifyContent='flex-end'>
-        <Grid item xs={10} sm={8} md={4} tw='mr-4'>
-          <AlertComponent
-            onClose={
-              /* istanbul ignore next */
-              async () => {
-                dispatch(await setAlertItem(alertItem?.alertMessage, false));
-              }
+      <Grid item xs={1} sm={2} md={4} />
+      <Grid item xs={10} sm={8} md={4}>
+        <AlertComponent
+          onClose={
+            /* istanbul ignore next */
+            async () => {
+              dispatch(await setAlertItem(alertItem?.alertMessage, false));
             }
-            severity={alertItem?.alertSeverity}
-          >
-            {alertItem?.alertMessage}
-          </AlertComponent>
-        </Grid>
+          }
+          severity={alertItem?.alertSeverity}
+        >
+          {alertItem?.alertMessage}
+        </AlertComponent>
       </Grid>
+      <Grid item xs={1} sm={2} md={4} />
     </AlertContainer>
   );
 };

@@ -1,5 +1,5 @@
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
-import { AlertItem } from '../../../../context/types';
+import { AlertItem } from '../../../../context/types/AlertItem';
 
 export type SetAlertItemParams = {
   type: GlobalReducerActionEnum.SET_ALERT_ITEM;
@@ -7,7 +7,7 @@ export type SetAlertItemParams = {
 };
 
 export const setAlertItem = async (
-  alertMessage: string | null | undefined,
+  alertMessage: string,
   isAlertOpen: boolean,
   alertSeverity?: 'success' | 'error' | 'warning',
 ): Promise<SetAlertItemParams> => ({
