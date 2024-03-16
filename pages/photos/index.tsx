@@ -35,8 +35,8 @@ export default PhotosIndex;
 export const getServerSideProps = async () => {
   try {
     await conn();
-    const albums = await AlbumsData.find();
-    const photos = await PhotosData.find();
+    const albums = await AlbumsData.find().sort({ albumName: 1 });
+    const photos = await PhotosData.find().sort({ uploadedAt: -1 });
 
     return {
       props: {

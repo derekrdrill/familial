@@ -23,17 +23,17 @@ export const PhotoUploaderUploadArea = ({
 }: PhotoUploaderUploadAreaProps) => (
   <PhotoUploadAreaRoot
     container
+    onClick={onImageUpload}
     style={{
       backgroundColor: isDragging ? '#ddebe4' : 'inherit',
     }}
     {...dragProps}
   >
-    <Grid container justifyContent='center' tw='m-4'>
-      <DriveFolderUploadIcon />
+    <Grid container justifyContent='center'>
       <Grid container display={{ xs: 'none', sm: 'inline-block' }}>
-        <Grid container justifyContent='center' tw='my-4'>
+        <Grid container justifyContent='center'>
           <Typography color='#B3B3B3' typography='h6' variant='caption'>
-            Drag and drop files here
+            <PhotoUploadAreaIcon /> Drag and drop files here
           </Typography>
         </Grid>
         <Grid container>
@@ -54,8 +54,8 @@ export const PhotoUploaderUploadArea = ({
           <Grid item xs={12} sm={2} />
         </Grid>
       </Grid>
-      <Button color='info' onClick={onImageUpload} size='small' variant='outlined' tw='my-4'>
-        Click here to add images
+      <Button color='info' size='small' variant='text' tw='my-4 normal-case'>
+        <Typography variant='subtitle1'>Click here to add images</Typography>
       </Button>
     </Grid>
   </PhotoUploadAreaRoot>
@@ -64,8 +64,12 @@ export const PhotoUploaderUploadArea = ({
 export const PhotoUploadAreaRoot = styled(Grid)([
   tw`border-2`,
   tw`border-dashed`,
-  tw`max-h-60`,
-  tw`mx-6`,
-  tw`my-6`,
+  tw`max-h-40`,
+  tw`mb-12`,
+  tw`mt-6`,
   tw`p-8`,
+  tw`sm:mx-6`,
+  tw`md:mx-24`,
 ]);
+
+export const PhotoUploadAreaIcon = styled(DriveFolderUploadIcon)([tw`-translate-y-0.5`]);

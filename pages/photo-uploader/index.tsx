@@ -30,7 +30,7 @@ export default PhotoUploaderIndex;
 export const getServerSideProps = async () => {
   try {
     await conn();
-    const albums = await Albums.find();
+    const albums = await Albums.find().sort({ albumName: 1 });
 
     return {
       props: {

@@ -5,15 +5,14 @@ import { ImageListType as PhotoListType } from 'react-images-uploading';
 import tw from 'twin.macro';
 
 import GlobalContext from '../../../../context/GlobalContext';
-import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
+import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
 import { PhotoUploadData } from '../types/PhotoUploaderData';
 
 export const handlePhotoUpload = async (
   photoList: PhotoListType,
-  photoUploadData: PhotoUploadData[],
-  setPhotoList: React.Dispatch<React.SetStateAction<PhotoListType>>,
-  setPhotoUploadData: React.Dispatch<React.SetStateAction<PhotoUploadData[]>>,
+  photoUploadData: PhotoUploadData[] | undefined,
+  dispatch: React.Dispatch<GlobalReducerAction>,
 ) => {
   photoList.forEach(async (photo, photoKey) => {
     await fetch('/api/photo-uploader/blob', {
@@ -24,15 +23,23 @@ export const handlePhotoUpload = async (
       if (res.status === 200) {
         const { url } = await res.json();
 
-        await fetch('api/photo-uploader', {
-          method: 'POST',
-          body: JSON.stringify({ ...photoUploadData[photoKey], ...{ url: url } }),
-        }).then(res => {
-          if (res.status === 200) {
-            setPhotoList([]);
-            setPhotoUploadData([]);
-          }
-        });
+        if (photoUploadData) {
+          await fetch('api/photo-uploader', {
+            method: 'POST',
+            body: JSON.stringify({ ...photoUploadData[photoKey], ...{ url: url } }),
+          }).then(res => {
+            if (res.status === 200) {
+              dispatch({
+                type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+                payload: { photoList: [] },
+              });
+              dispatch({
+                type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
+                payload: { photoUploadData: [] },
+              });
+            }
+          });
+        }
       }
     });
   });
@@ -41,121 +48,142 @@ export const handlePhotoUpload = async (
 type PhotoUploaderActionButtonsProps = {
   isAbleToSubmitUpload: boolean;
   onImageRemoveAll: () => void;
-  photoList: PhotoListType;
-  photoUploadData: PhotoUploadData[];
-  setPhotoList: React.Dispatch<React.SetStateAction<PhotoListType>>;
-  setPhotoUploadData: React.Dispatch<React.SetStateAction<PhotoUploadData[]>>;
 };
 
 export const PhotoUploaderActionButtons = ({
   isAbleToSubmitUpload,
   onImageRemoveAll,
-  photoList,
-  photoUploadData,
-  setPhotoList,
-  setPhotoUploadData,
 }: PhotoUploaderActionButtonsProps) => {
-  const { dispatch } = React.useContext(GlobalContext);
+  const {
+    dispatch,
+    state: { photoList, photoUploadData, selectedPhotoAlbum },
+  } = React.useContext(GlobalContext);
 
-  const hasEveryPhotosSelected = photoList.every(photo => photo.checked);
-  const hasSomePhotosSelected = photoList.some(photo => photo.checked);
+  const hasEveryPhotosSelected = photoList?.every(photo => photo.checked);
+  const hasSomePhotosSelected = photoList?.some(photo => photo.checked);
 
   return (
-    !!photoList.length && (
-      <PhotoUploadActionButtonsGrid
+    !!photoList?.length && (
+      <PhotoUploadActionButtonsContainer
         container
-        justifyContent='flex-end'
         sx={{ paddingTop: 2, paddingBottom: 2 }}
+        $isPhotoAlbumSelected={!!selectedPhotoAlbum}
       >
-        <Button
-          color='info'
-          onClick={() =>
-            setPhotoList(
-              photoList.map(photo => ({ ...photo, ...{ checked: !hasEveryPhotosSelected } })),
-            )
-          }
-          size='small'
-          variant='outlined'
-          tw='mr-2'
-        >
-          {`${hasEveryPhotosSelected ? 'UN' : ''}CHECK ALL PHOTOS`}
-        </Button>
-        <Button
-          color='error'
-          disabled={!hasSomePhotosSelected}
-          onClick={() =>
-            dispatch({
-              type: GlobalReducerActionEnum.SET_MODAL_ITEM,
-              payload: {
-                modalItem: {
-                  isExitHidden: true,
-                  isModalOpen: true,
-                  handleSubmit: () =>
-                    hasEveryPhotosSelected
-                      ? onImageRemoveAll()
-                      : setPhotoList(photoList.filter(photo => !photo.checked)),
-                  modalBody:
-                    // (
-                    //   <Grid container>
-                    //     <Grid item xs={2} />
-                    //     <Grid item xs={8}>
-                    //       <Grid container justifyContent='center'>
-                    //         <img src={image['dataURL']} width='120' />
-                    //       </Grid>
-                    //     </Grid>
-                    //     <Grid item xs={2} />
-                    //   </Grid>
-                    // )
-                    '',
-                  modalTitle: 'Are you sure you want to remove the selected images?',
-                  submitButtonColor: 'error',
-                  submitButtonText: 'Remove',
+        {!!selectedPhotoAlbum && (
+          <Grid item>
+            <Typography variant='h5'>
+              Adding photo(s) to: <b>{selectedPhotoAlbum?.albumName}</b>
+            </Typography>
+          </Grid>
+        )}
+        <Grid item>
+          <Button
+            color='info'
+            onClick={() =>
+              dispatch({
+                type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+                payload: {
+                  photoList: photoList.map(photo => ({
+                    ...photo,
+                    ...{ checked: !hasEveryPhotosSelected },
+                  })),
                 },
-              },
-            })
-          }
-          size='small'
-          variant='outlined'
-          tw='mr-2'
-        >
-          {`REMOVE ${hasEveryPhotosSelected ? 'ALL' : ''} PHOTOS`}
-        </Button>
-        <Button
-          color='success'
-          disabled={!isAbleToSubmitUpload}
-          onClick={() =>
-            dispatch({
-              type: GlobalReducerActionEnum.SET_MODAL_ITEM,
-              payload: {
-                modalItem: {
-                  handleSubmit: async () =>
-                    handlePhotoUpload(photoList, photoUploadData, setPhotoList, setPhotoUploadData),
-                  isExitHidden: true,
-                  isModalOpen: true,
-                  modalBody: (
-                    <Typography variant='body1'>
-                      Submitting will post your new photos to drill-y!
-                    </Typography>
-                  ),
-                  modalTitle: 'Confirm submit',
-                  submitButtonLoadingDelay: 2000,
-                  submitSuccessMessage: 'Photo upload complete!',
+              })
+            }
+            size='small'
+            variant='outlined'
+            tw='mr-2 normal-case'
+          >
+            {`${hasEveryPhotosSelected ? 'Unc' : 'C'}heck all photos`}
+          </Button>
+          <Button
+            color='error'
+            disabled={!hasSomePhotosSelected}
+            onClick={() =>
+              dispatch({
+                type: GlobalReducerActionEnum.SET_MODAL_ITEM,
+                payload: {
+                  modalItem: {
+                    isExitHidden: true,
+                    isModalOpen: true,
+                    handleSubmit: () =>
+                      hasEveryPhotosSelected
+                        ? onImageRemoveAll()
+                        : dispatch({
+                            type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+                            payload: {
+                              photoList: photoList.filter(photo => !photo.checked),
+                            },
+                          }),
+                    modalBody:
+                      // (
+                      //   <Grid container>
+                      //     <Grid item xs={2} />
+                      //     <Grid item xs={8}>
+                      //       <Grid container justifyContent='center'>
+                      //         <img src={image['dataURL']} width='120' />
+                      //       </Grid>
+                      //     </Grid>
+                      //     <Grid item xs={2} />
+                      //   </Grid>
+                      // )
+                      '',
+                    modalTitle: 'Are you sure you want to remove the selected images?',
+                    submitButtonColor: 'error',
+                    submitButtonText: 'Remove',
+                  },
                 },
-              },
-            })
-          }
-          variant='outlined'
-        >
-          UPLOAD NEW PHOTOS
-        </Button>
-      </PhotoUploadActionButtonsGrid>
+              })
+            }
+            size='small'
+            variant='outlined'
+            tw='mr-2 normal-case'
+          >
+            {`Remove ${hasEveryPhotosSelected ? 'all' : ''} photos`}
+          </Button>
+          <Button
+            color='success'
+            disabled={!isAbleToSubmitUpload}
+            onClick={() =>
+              dispatch({
+                type: GlobalReducerActionEnum.SET_MODAL_ITEM,
+                payload: {
+                  modalItem: {
+                    handleSubmit: async () =>
+                      handlePhotoUpload(photoList, photoUploadData, dispatch),
+                    isExitHidden: true,
+                    isModalOpen: true,
+                    modalBody: (
+                      <Typography variant='body1'>
+                        Submitting will post your new photos to drill-y!
+                      </Typography>
+                    ),
+                    modalTitle: 'Confirm submit',
+                    submitButtonLoadingDelay: 2000,
+                    submitSuccessMessage: 'Photo upload complete!',
+                  },
+                },
+              })
+            }
+            size='small'
+            tw='normal-case'
+            variant='outlined'
+          >
+            Upload new photos
+          </Button>
+        </Grid>
+      </PhotoUploadActionButtonsContainer>
     )
   );
 };
 
-export const PhotoUploadActionButtonsGrid = styled(Grid)([
-  tw`bg-white`,
-  tw`sticky`,
-  tw`top-12`,
-  tw`z-[2]`,
-]);
+export const PhotoUploadActionButtonsContainer = styled(Grid)<{ $isPhotoAlbumSelected: boolean }>(
+  ({ $isPhotoAlbumSelected }) => [
+    tw`bg-white`,
+    tw`sticky`,
+    tw`top-12`,
+    tw`z-[2]`,
+    tw`justify-end`,
+    $isPhotoAlbumSelected && tw`justify-between`,
+  ],
+);
