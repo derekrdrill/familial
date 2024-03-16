@@ -6,7 +6,8 @@ export const MenuIconContainer = styled(Grid)<{
 }>(({ $isMenuIconActive }) => ({
   '&:hover': {
     '.menu-icon-line': {
-      backgroundColor: '#a501c6',
+      backgroundColor: 'black',
+      // backgroundColor: '#a501c6',
     },
     '.menu-icon-line-top': {
       transform: $isMenuIconActive
@@ -34,9 +35,9 @@ export const MenuIconContainer = styled(Grid)<{
     width: $isMenuIconActive ? 30 : 58,
   },
   cursor: 'pointer',
-  left: 20,
+  left: 8,
   position: 'fixed',
-  top: 40,
+  top: 8,
   transition: 'all 150ms linear',
   width: '58px !important',
   zIndex: 6,
@@ -45,7 +46,8 @@ export const MenuIconContainer = styled(Grid)<{
 export const MenuIconLine = styled(Grid)<{
   $isBottom?: boolean;
 }>(({ $isBottom }) => ({
-  backgroundColor: '#6a017f',
+  // backgroundColor: '#6a017f',
+  backgroundColor: '#424242',
   borderRadius: 5,
   height: 5,
   marginBottom: !$isBottom ? '10px !important' : '0px !important',
