@@ -15,6 +15,7 @@ import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';
 
 import { PhotoCover } from '../Photos';
+import PhotoAlbumsBackButton from './components/PhotoAlbumsBackButton';
 import PhotoUploader from '../../common/PhotoUploader';
 import { Photos as PhotosType } from '../../../context/types';
 
@@ -122,6 +123,7 @@ export const Photos = () => {
 
   return (
     <Grid container tw='p-8'>
+      <PhotoAlbumsBackButton />
       <PhotoUploader />
       <PhotosMainContainer container>
         <Grid item xs={12} tw='pb-10'>
