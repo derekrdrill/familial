@@ -10,6 +10,13 @@ export type GlobalStateType = {
   photoUploadData?: PhotoUploadData[];
   photos?: Photos[];
   selectedPhotoAlbum?: SelectedPhotoAlbum;
+  selectedPhoto?: {
+    _id?: string;
+    albumName?: string;
+    photos?: Photos[] | undefined;
+    title?: string;
+    url?: string;
+  };
 };
 
 const GlobalState: GlobalStateType = {
@@ -32,6 +39,7 @@ const GlobalState: GlobalStateType = {
   photos: undefined,
   photoUploadData: [],
   selectedPhotoAlbum: undefined,
+  selectedPhoto: undefined,
 };
 
 export default GlobalState;
