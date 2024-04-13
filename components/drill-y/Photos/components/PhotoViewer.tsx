@@ -28,11 +28,12 @@ export const PhotoViewer = ({ isPhotoViewerOpen }: PhotoViewerTypes) => {
     <Modal open={isPhotoViewerOpen}>
       <>
         {selectedPhoto?.url && (
-          <div tw='flex justify-between'>
-            <div tw='bg-[#00000099] w-3/4'>
+          <div tw='md:flex md:justify-between'>
+            <div tw='bg-[#00000099] w-full md:w-3/4'>
               <div tw='flex justify-center mt-[6%]'>
                 <div tw='absolute left-2 top-2'>
                   <Button
+                    tw='mt-8 md:m-0'
                     color='secondary'
                     fullWidth
                     onClick={() => {
@@ -49,13 +50,28 @@ export const PhotoViewer = ({ isPhotoViewerOpen }: PhotoViewerTypes) => {
                       minHeight: '30px',
                     }}
                   >
-                    <Typography variant='h6'>&#10539;</Typography>
+                    <Typography component='span' variant='h5'>
+                      &#10539;
+                    </Typography>
                   </Button>
                 </div>
-                <Image alt='selected-image' height={600} src={selectedPhoto?.url} width={500} />
+                <Image
+                  tw='md:inline-block hidden'
+                  alt='selected-image'
+                  height={600}
+                  src={selectedPhoto?.url}
+                  width={500}
+                />
+                <Image
+                  tw='inline-block md:hidden'
+                  alt='selected-image'
+                  height={300}
+                  src={selectedPhoto?.url}
+                  width={300}
+                />
               </div>
             </div>
-            <div tw='bg-white h-screen w-1/4'>
+            <div tw='bg-white h-screen w-full md:w-1/4'>
               <div tw='m-8'>
                 <Typography component='h1' variant='h5'>
                   {selectedPhoto?.title}
