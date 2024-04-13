@@ -14,10 +14,9 @@ import ImageUploading, { ImageListType as PhotoListType } from 'react-images-upl
 import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';
 
-import { PhotoCover } from '../Photos';
-import PhotoAlbumsBackButton from './components/PhotoAlbumsBackButton';
+import { PhotoAlbumsBackButton, PhotoCover, PhotoViewer } from '../Photos';
 import PhotoUploader from '../../common/PhotoUploader';
-import { Photos as PhotosType } from '../../../context/types';
+import { Photos as PhotosType, Albums as AlbumsType } from '../../../context/types';
 
 const handlePhotoUploadingChange = (
   photoListData: PhotoListType,
@@ -34,14 +33,18 @@ export const handleSetSelectedAlbums = (
   photos: PhotosType[] | undefined,
   router: NextRouter,
   dispatch: React.Dispatch<GlobalReducerAction>,
+  albums?: AlbumsType[],
 ) => {
   if (router.asPath.includes('?album=')) {
+    const selectedAlbum = albums?.find(album => album._id === router.query.album);
+    const selectedAlbumName = selectedAlbum?.albumName;
+
     dispatch({
       type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
       payload: {
         selectedPhotoAlbum: {
-          albumName: router.query.album as string,
-          photos: photos?.filter(photo => photo.albumName === router.query.album),
+          albumName: selectedAlbumName,
+          photos: photos?.filter(photo => photo.albumName === selectedAlbumName),
         },
       },
     });
@@ -63,20 +66,28 @@ export const Photos = () => {
     state: { photos, albums, photoList, photoUploadData, selectedPhotoAlbum },
   } = React.useContext(GlobalContext);
 
+  const [isPhotoViewerOpen, setIsPhotoViewerOpen] = React.useState<boolean>(false);
+  // const [photoBeingViewed, setPhotoBeingViewed] = React.useState<boolean>(false)
   const [photoListData, setPhotoListData] = React.useState<
-    { albumName: string; photos: PhotosType[] | undefined }[] | undefined
+    | {
+        _id: string | undefined;
+        albumName: string;
+        photos: PhotosType[] | undefined;
+      }[]
+    | undefined
   >(undefined);
   const [photosView, setPhotosView] = React.useState<'grid' | 'list'>('grid');
 
   React.useEffect(() => {
     setPhotoListData(
       albums?.map(album => ({
+        _id: album._id,
         albumName: album.albumName,
         photos: photos?.filter(photo => photo.albumName === album.albumName),
       })),
     );
 
-    handleSetSelectedAlbums(photos, router, dispatch);
+    handleSetSelectedAlbums(photos, router, dispatch, albums);
 
     if (!photoUploadData) {
       dispatch({ type: GlobalReducerActionEnum.SET_PHOTO_LIST, payload: { photoList: [] } });
@@ -88,13 +99,15 @@ export const Photos = () => {
   }, [albums]);
 
   React.useEffect(() => {
-    handleSetSelectedAlbums(photos, router, dispatch);
+    handleSetSelectedAlbums(photos, router, dispatch, albums);
 
     dispatch({ type: GlobalReducerActionEnum.SET_PHOTO_LIST, payload: { photoList: [] } });
     dispatch({
       type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
       payload: { photoUploadData: [] },
     });
+
+    setIsPhotoViewerOpen(!!router.query.photo);
   }, [router]);
 
   React.useEffect(() => {
@@ -125,6 +138,7 @@ export const Photos = () => {
     <Grid container tw='p-8'>
       <PhotoAlbumsBackButton />
       <PhotoUploader />
+      <PhotoViewer isPhotoViewerOpen={isPhotoViewerOpen} />
       <PhotosMainContainer container>
         <Grid item xs={12} tw='pb-10'>
           <Grid container justifyContent='space-between'>
@@ -280,6 +294,7 @@ export const Photos = () => {
                   >
                     <PhotoCover
                       key={photoListItem._id}
+                      photoID={photoListItem._id}
                       photoListItem={photoListItem}
                       photoURL={photoListItem.url}
                       photosView={photosView}
@@ -297,6 +312,7 @@ export const Photos = () => {
                         <PhotoCover
                           key={photoListItem.albumName}
                           photoListItem={photoListItem}
+                          photoID={photoListItem._id}
                           photoTitle={photoListItem.albumName}
                           photoURL={photoListItem.photos[0].url}
                           photosView={!selectedPhotoAlbum ? 'grid' : photosView}

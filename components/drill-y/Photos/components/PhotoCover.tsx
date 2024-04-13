@@ -12,17 +12,20 @@ import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
 type PhotoCoverProps = {
   photoListItem: {
+    _id?: string;
     albumName?: string;
     photos?: Photos[] | undefined;
     title?: string;
     url?: string;
   };
+  photoID?: string;
   photoTitle?: string;
   photoURL: string;
   photosView: 'grid' | 'list';
 };
 
 export const PhotoCover = ({
+  photoID,
   photoTitle,
   photoListItem,
   photoURL,
@@ -54,12 +57,24 @@ export const PhotoCover = ({
               {
                 pathname: '/photos',
                 query: {
-                  album: photoTitle,
+                  album: photoID,
                 },
               },
               undefined,
               { shallow: true },
             );
+          } else {
+            dispatch({
+              type: GlobalReducerActionEnum.SET_SELECTED_PHOTO,
+              payload: { selectedPhoto: photoListItem },
+            });
+
+            router.replace({
+              query: {
+                album: router.query.album,
+                photo: photoID,
+              },
+            });
           }
         }}
         onLoad={() => setIsPhotoLoading(false)}

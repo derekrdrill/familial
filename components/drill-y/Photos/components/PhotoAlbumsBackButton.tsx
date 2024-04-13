@@ -5,9 +5,7 @@ import 'twin.macro';
 import { Button, Grid } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
-type PhotoAlbumsBackButtonProps = {};
-
-const PhotoAlbumsBackButton = ({}: PhotoAlbumsBackButtonProps) => {
+export const PhotoAlbumsBackButton = () => {
   const router = useRouter();
   const isPhotoAlbumOpened = !!router.query.album;
 
@@ -28,5 +26,3 @@ const PhotoAlbumsBackButton = ({}: PhotoAlbumsBackButtonProps) => {
     )
   );
 };
-
-export default PhotoAlbumsBackButton;
