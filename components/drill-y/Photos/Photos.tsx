@@ -67,7 +67,6 @@ export const Photos = () => {
   } = React.useContext(GlobalContext);
 
   const [isPhotoViewerOpen, setIsPhotoViewerOpen] = React.useState<boolean>(false);
-  // const [photoBeingViewed, setPhotoBeingViewed] = React.useState<boolean>(false)
   const [photoListData, setPhotoListData] = React.useState<
     | {
         _id: string | undefined;
@@ -135,7 +134,7 @@ export const Photos = () => {
   }, [selectedPhotoAlbum]);
 
   return (
-    <Grid container tw='p-8'>
+    <Grid container tw='md:p-8 p-2'>
       <PhotoAlbumsBackButton />
       <PhotoUploader />
       <PhotoViewer isPhotoViewerOpen={isPhotoViewerOpen} />
@@ -307,7 +306,7 @@ export const Photos = () => {
               photoListData?.map(
                 photoListItem =>
                   !!photoListItem?.photos?.length && (
-                    <Grid item xs={6} sm={4} md={3} lg={2} xl={1}>
+                    <Grid item xs={6} sm={4} md={3} lg={2}>
                       <Grid container style={{ height: '80%' }}>
                         <PhotoCover
                           key={photoListItem.albumName}
