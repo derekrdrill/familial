@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import mongoose from 'mongoose';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
@@ -35,10 +36,19 @@ type AlbumIDIndexProps = {
 };
 
 const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) => {
+  const router = useRouter();
+
   const {
     dispatch,
     state: { photoList, photosView },
   } = React.useContext(GlobalContext);
+
+  React.useEffect(() => {
+    dispatch({
+      type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
+      payload: { selectedPhotoAlbum: albumsData.find(album => album._id === router.query.albumID) },
+    });
+  }, [albumsData]);
 
   return (
     <PhotosLayout
@@ -62,7 +72,6 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
                 sm={photosView === 'list' ? 12 : 4}
                 md={photosView === 'list' ? 12 : 3}
                 lg={photosView === 'list' ? 12 : 2}
-                xl={photosView === 'list' ? 12 : 1}
                 $photosView={photosView}
               >
                 <PhotoAlbumsAddTextContainer
@@ -86,7 +95,6 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
             sm={photosView === 'list' ? 12 : 4}
             md={photosView === 'list' ? 12 : 3}
             lg={photosView === 'list' ? 12 : 2}
-            xl={photosView === 'list' ? 12 : 1}
             tw='flex justify-center'
           >
             <Grid container>

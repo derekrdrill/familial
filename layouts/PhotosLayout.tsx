@@ -75,7 +75,7 @@ const PhotosLayout = ({
                             document.getElementById('album') as HTMLInputElement
                           )?.value;
 
-                          await fetch('api/album', {
+                          await fetch('/api/album/add', {
                             method: 'POST',
                             body: newAlbumName,
                           })
@@ -103,7 +103,16 @@ const PhotosLayout = ({
                           />
                         ),
                         modalTitle: 'Add new album',
-                        submitSuccessMessage: `New album has been added!`,
+                        submitSuccessMessage: (
+                          <>
+                            <Typography component='h1' variant='subtitle1'>
+                              New album added!
+                            </Typography>
+                            <Typography component='h2' variant='subtitle2'>
+                              Album will not appear here until photos are added
+                            </Typography>
+                          </>
+                        ),
                       },
                     },
                   });

@@ -12,5 +12,5 @@ export type ModalItem = {
   submitButtonText?: string;
   submitButtonVariant?: 'contained' | 'outlined' | 'text';
   submitButtonLoadingDelay?: number;
-  submitSuccessMessage?: string;
+  submitSuccessMessage?: string | React.ReactNode;
 };

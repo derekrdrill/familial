@@ -14,7 +14,7 @@ import {
 export const PhotoUploader = () => {
   const {
     dispatch,
-    state: { photoList, photoUploadData },
+    state: { photoList, photoUploadData, selectedPhotoAlbum },
   } = React.useContext(GlobalContext);
   const [isAbleToSubmitUpload, setIsAbleToSubmitUpload] = React.useState<boolean>(false);
 
@@ -49,7 +49,7 @@ export const PhotoUploader = () => {
         type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
         payload: {
           photoUploadData: photoList.map((photo, photoIndex) => ({
-            albumName: photoUploadData[photoIndex]?.albumName,
+            albumName: selectedPhotoAlbum?.albumName ?? photoUploadData[photoIndex]?.albumName,
             description: photoUploadData[photoIndex]?.description,
             title: photoUploadData[photoIndex]?.title,
             uploadedAt: new Date(),

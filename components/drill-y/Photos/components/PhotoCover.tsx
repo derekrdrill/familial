@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import tw from 'twin.macro';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Button, CircularProgress, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Button, CircularProgress, Grid, TextField, Typography } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteForever from '@mui/icons-material/DeleteForever';
 
@@ -50,7 +50,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
     >
       {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
       <div tw='relative mx-2 translate-y-10 z-10'>
-        <Button
+        <PhotoCoverImageControlButton
           color='inherit'
           onClick={e => {
             e.stopPropagation();
@@ -77,7 +77,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                           console.log(e);
                         });
                     } else {
-                      await fetch('api/album/delete', {
+                      await fetch('/api/album/delete', {
                         method: 'DELETE',
                         body: photoListItem.albumName,
                       })
@@ -128,17 +128,11 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
             });
           }}
           variant='outlined'
-          style={{
-            maxWidth: '30px',
-            maxHeight: '30px',
-            minWidth: '30px',
-            minHeight: '30px',
-          }}
-          tw='text-red-600 bg-red-200 hover:bg-red-300'
+          $isDelete
         >
           <DeleteForever />
-        </Button>
-        <Button
+        </PhotoCoverImageControlButton>
+        <PhotoCoverImageControlButton
           color='inherit'
           onClick={e => {
             e.stopPropagation();
@@ -162,7 +156,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                       const newAlbumName = (document.getElementById('album') as HTMLInputElement)
                         ?.value;
 
-                      await fetch('api/album/update', {
+                      await fetch('/api/album/update', {
                         method: 'PUT',
                         body: JSON.stringify({
                           currentAlbumName: photoListItem.albumName,
@@ -202,16 +196,10 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
             });
           }}
           variant='outlined'
-          style={{
-            maxWidth: '30px',
-            maxHeight: '30px',
-            minWidth: '30px',
-            minHeight: '30px',
-          }}
-          tw='text-blue-500 bg-blue-200 hover:bg-blue-300'
+          $isEdit
         >
           <EditTwoToneIcon />
-        </Button>
+        </PhotoCoverImageControlButton>
       </div>
       <PhotoCoverImage
         alt='album-cover'
@@ -234,28 +222,41 @@ export const PhotoCoverRoot = styled.div<{ $photosView?: 'grid' | 'list' }>(({ $
   {
     ':hover': {
       button: [tw`visible`],
-      // img: [tw`hover:opacity-100`, tw`opacity-80`],
     },
     button: [tw`invisible`],
   },
 ]);
 
-export const PhotoCoverImage = styled(Image)<{ $photosView?: 'grid' | 'list' }>(
-  ({ $photosView }) => [
-    tw`border-2`,
-    tw`border-gray-100`,
-    tw`border-solid`,
-    tw`cursor-pointer`,
-    // tw`hover:opacity-100`,
-    // tw`opacity-80`,
-    tw`rounded-2xl`,
-    $photosView === 'grid' && tw`h-40`,
-    $photosView === 'grid' && tw`md:h-48`,
-    $photosView === 'grid' && tw`object-cover`,
-    $photosView === 'grid' && tw`w-full`,
-    $photosView === 'list' && tw`h-full`,
-    $photosView === 'list' && tw`w-[550px]`,
-  ],
-);
+export const PhotoCoverImage = styled(Image)<{ $photosView?: 'grid' | 'list' }>(({ $photosView }) => [
+  tw`border-2`,
+  tw`border-gray-100`,
+  tw`border-solid`,
+  tw`cursor-pointer`,
+  tw`rounded-2xl`,
+  $photosView === 'grid' && tw`h-40`,
+  $photosView === 'grid' && tw`md:h-48`,
+  $photosView === 'grid' && tw`object-cover`,
+  $photosView === 'grid' && tw`w-full`,
+  $photosView === 'list' && tw`h-full`,
+  $photosView === 'list' && tw`w-[550px]`,
+]);
 
-export const PhotoCoverEditPhotoButton = styled(IconButton)<{}>(() => []);
+export const PhotoCoverImageControlButton = styled(Button)<{
+  $isDelete?: boolean;
+  $isEdit?: boolean;
+}>(({ $isDelete, $isEdit }) => [
+  {
+    maxWidth: '30px',
+    maxHeight: '30px',
+    minWidth: '30px',
+    minHeight: '30px',
+  },
+  $isDelete && tw`text-red-600`,
+  $isDelete && tw`bg-red-200`,
+  $isDelete && tw`hover:bg-red-300`,
+  $isEdit && tw`text-blue-500`,
+  $isEdit && tw`bg-blue-200`,
+  $isEdit && tw`hover:bg-blue-300`,
+]);
+
+
