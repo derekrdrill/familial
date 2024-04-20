@@ -46,6 +46,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
           ...(router.query.albumID && { query: { p: photoListItem._id } }),
         });
       }}
+      $isPhotoLoading={isPhotoLoading}
       $photosView={photosView}
     >
       {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
@@ -214,11 +215,14 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
   );
 };
 
-export const PhotoCoverRoot = styled.div<{ $photosView?: 'grid' | 'list' }>(({ $photosView }) => [
+export const PhotoCoverRoot = styled.div<{
+  $isPhotoLoading?: boolean;
+  $photosView?: 'grid' | 'list';
+}>(({ $isPhotoLoading, $photosView }) => [
   tw`p-2`,
   tw`w-full`,
   tw`cursor-pointer`,
-  $photosView === 'list' && tw`md:mx-[25%] sm:mx-[10%]`,
+  $photosView === 'list' && !$isPhotoLoading && tw`md:mx-[25%] sm:mx-[10%]`,
   {
     ':hover': {
       button: [tw`visible`],
