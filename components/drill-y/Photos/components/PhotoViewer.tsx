@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import tw from 'twin.macro';
 import Image from 'next/image';
 import { Button, IconButton, Modal, TextField, Typography } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
@@ -8,26 +7,19 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
-import GlobalContext from '../../../../context/GlobalContext';
-
 type PhotoViewerTypes = {
   isPhotoViewerOpen: boolean;
+  photoTitle?: string;
+  photoURL?: string;
 };
 
-export const PhotoViewer = ({ isPhotoViewerOpen }: PhotoViewerTypes) => {
+export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoViewerTypes) => {
   const router = useRouter();
-  const {
-    state: { albums, selectedPhotoAlbum, selectedPhoto },
-  } = React.useContext(GlobalContext);
-
-  const selectedAlbumID = albums?.find(
-    album => album.albumName === selectedPhotoAlbum?.albumName,
-  )?._id;
 
   return (
     <Modal open={isPhotoViewerOpen}>
       <>
-        {selectedPhoto?.url && (
+        {photoURL && (
           <div tw='md:flex md:justify-between'>
             <div tw='bg-[#00000099] w-full md:w-3/4'>
               <div tw='flex justify-center mt-[6%]'>
@@ -38,7 +30,7 @@ export const PhotoViewer = ({ isPhotoViewerOpen }: PhotoViewerTypes) => {
                     fullWidth
                     onClick={() => {
                       router.replace({
-                        query: { album: selectedAlbumID },
+                        pathname: `/photos/${router.query.albumID}`,
                       });
                     }}
                     size='small'
@@ -59,14 +51,14 @@ export const PhotoViewer = ({ isPhotoViewerOpen }: PhotoViewerTypes) => {
                   tw='md:inline-block hidden'
                   alt='selected-image'
                   height={600}
-                  src={selectedPhoto?.url}
+                  src={photoURL}
                   width={500}
                 />
                 <Image
                   tw='inline-block md:hidden'
                   alt='selected-image'
                   height={300}
-                  src={selectedPhoto?.url}
+                  src={photoURL}
                   width={300}
                 />
               </div>
@@ -74,7 +66,7 @@ export const PhotoViewer = ({ isPhotoViewerOpen }: PhotoViewerTypes) => {
             <div tw='bg-white h-screen w-full md:w-1/4'>
               <div tw='m-8'>
                 <Typography component='h1' variant='h5'>
-                  {selectedPhoto?.title}
+                  {photoTitle}
                 </Typography>
                 <div tw='flex'>
                   <IconButton>

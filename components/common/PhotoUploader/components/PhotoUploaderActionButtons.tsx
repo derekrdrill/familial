@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { Button, Grid, Typography } from '@mui/material';
 import { ImageListType as PhotoListType } from 'react-images-uploading';
@@ -54,6 +55,7 @@ export const PhotoUploaderActionButtons = ({
   isAbleToSubmitUpload,
   onImageRemoveAll,
 }: PhotoUploaderActionButtonsProps) => {
+  const router = useRouter();
   const {
     dispatch,
     state: { photoList, photoUploadData, selectedPhotoAlbum },

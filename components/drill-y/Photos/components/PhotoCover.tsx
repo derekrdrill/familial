@@ -3,8 +3,9 @@ import styled from '@emotion/styled';
 import tw from 'twin.macro';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { CircularProgress, IconButton } from '@mui/material';
+import { Button, CircularProgress, Grid, IconButton, TextField, Typography } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteForever from '@mui/icons-material/DeleteForever';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { Photos } from '../../../../context/types';
@@ -18,90 +19,243 @@ type PhotoCoverProps = {
     title?: string;
     url?: string;
   };
-  photoID?: string;
-  photoTitle?: string;
   photoURL: string;
-  photosView: 'grid' | 'list';
 };
 
-export const PhotoCover = ({
-  photoID,
-  photoTitle,
-  photoListItem,
-  photoURL,
-  photosView,
-}: PhotoCoverProps) => {
+export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
   const router = useRouter();
 
   const {
     dispatch,
-    state: { selectedPhotoAlbum },
+    state: { photosView },
   } = React.useContext(GlobalContext);
 
   const [isPhotoLoading, setIsPhotoLoading] = React.useState<boolean>(true);
 
-  return (
-    <>
-      {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
-      <PhotoCoverRoot
-        alt='album-cover'
-        height={0}
-        onClick={() => {
-          if (!selectedPhotoAlbum) {
-            dispatch({
-              type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
-              payload: { selectedPhotoAlbum: photoListItem },
-            });
+  React.useEffect(() => {
+    dispatch({ type: GlobalReducerActionEnum.SET_PHOTOS_VIEW, payload: { photosView: 'grid' } });
+  }, []);
 
-            router.push(
-              {
-                pathname: '/photos',
-                query: {
-                  album: photoID,
+  return (
+    <PhotoCoverRoot
+      onClick={() => {
+        router.push({
+          pathname: router.query.albumID
+            ? `/photos/${router.query.albumID}`
+            : `/photos/${photoListItem._id}`,
+          ...(router.query.albumID && { query: { p: photoListItem._id } }),
+        });
+      }}
+      $photosView={photosView}
+    >
+      {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
+      <div tw='relative mx-2 translate-y-10 z-10'>
+        <Button
+          color='inherit'
+          onClick={e => {
+            e.stopPropagation();
+            dispatch({
+              type: GlobalReducerActionEnum.SET_MODAL_ITEM,
+              payload: {
+                modalItem: {
+                  handleSubmit: async () => {
+                    if (!!router.query.albumID) {
+                      await fetch('api/photo/delete', {
+                        method: 'DELETE',
+                        body: JSON.stringify(photoListItem),
+                      })
+                        .then(async res => {
+                          const newPhotos = await res.json();
+
+                          dispatch({
+                            type: GlobalReducerActionEnum.SET_PHOTOS,
+                            payload: { photos: newPhotos },
+                          });
+                        })
+                        .then(() => router.reload())
+                        .catch(e => {
+                          console.log(e);
+                        });
+                    } else {
+                      await fetch('api/album/delete', {
+                        method: 'DELETE',
+                        body: photoListItem.albumName,
+                      })
+                        .then(async res => {
+                          const newAlbums = await res.json();
+
+                          dispatch({
+                            type: GlobalReducerActionEnum.SET_ALBUMS,
+                            payload: { albums: newAlbums },
+                          });
+                        })
+                        .then(() => router.reload())
+                        .catch(e => {
+                          console.log(e);
+                        });
+                    }
+                  },
+                  isExitHidden: true,
+                  isModalOpen: true,
+                  modalBody: (
+                    <>
+                      <Typography variant='h6' component='p'>
+                        {`Are you sure you want to delete ${router.query.albumID ? `this photo from the ${photoListItem.albumName}` : `the ${photoListItem.albumName}`} album?`}
+                      </Typography>
+                      {router.query.albumID ? (
+                        <Grid container>
+                          <Grid item xs={1} />
+                          <Grid item xs={10}>
+                            <Grid container justifyContent='center'>
+                              <img src={photoListItem.url} width='120' />
+                            </Grid>
+                          </Grid>
+                          <Grid item xs={1} />
+                        </Grid>
+                      ) : (
+                        <Typography tw='mt-2' component='p' variant='body1'>
+                          Removing the album will delete all photos in the album
+                        </Typography>
+                      )}
+                    </>
+                  ),
+                  modalTitle: '',
+                  submitButtonColor: 'error',
+                  submitButtonText: 'Delete',
+                  submitSuccessMessage: `${router.query.albumID ? 'The photo' : photoListItem.albumName} has been deleted`,
                 },
               },
-              undefined,
-              { shallow: true },
-            );
-          } else {
-            dispatch({
-              type: GlobalReducerActionEnum.SET_SELECTED_PHOTO,
-              payload: { selectedPhoto: photoListItem },
             });
+          }}
+          variant='outlined'
+          style={{
+            maxWidth: '30px',
+            maxHeight: '30px',
+            minWidth: '30px',
+            minHeight: '30px',
+          }}
+          tw='text-red-600 bg-red-200 hover:bg-red-300'
+        >
+          <DeleteForever />
+        </Button>
+        <Button
+          color='inherit'
+          onClick={e => {
+            e.stopPropagation();
+            dispatch({
+              type: GlobalReducerActionEnum.SET_MODAL_ITEM,
+              payload: {
+                modalItem: {
+                  handleSubmit: async () => {
+                    if (!!router.query.albumID) {
+                      await fetch('api/photo/delete', {
+                        method: 'DELETE',
+                        body: JSON.stringify(photoListItem),
+                      })
+                        .then(async res => {
+                          router.reload();
+                        })
+                        .catch(e => {
+                          console.log(e);
+                        });
+                    } else {
+                      const newAlbumName = (document.getElementById('album') as HTMLInputElement)
+                        ?.value;
 
-            router.replace({
-              query: {
-                album: router.query.album,
-                photo: photoID,
+                      await fetch('api/album/update', {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                          currentAlbumName: photoListItem.albumName,
+                          newAlbumName: newAlbumName,
+                        }),
+                      })
+                        .then(async () => {
+                          router.reload();
+                        })
+                        .catch(e => {
+                          console.log(e);
+                        });
+                    }
+                  },
+                  isExitHidden: true,
+                  isModalOpen: true,
+                  modalBody: (
+                    <>
+                      <Typography component='h1' variant='h6'>
+                        Update the title
+                      </Typography>
+                      <TextField
+                        id='album'
+                        defaultValue={
+                          router.query.albumID ? photoListItem.title : photoListItem.albumName
+                        }
+                        fullWidth
+                      />
+                    </>
+                  ),
+                  modalTitle: '',
+                  submitButtonColor: 'info',
+                  submitButtonText: 'Update',
+                  // submitSuccessMessage: `${router.query.albumID ? 'The photo' : photoListItem.albumName} has been updated`,
+                },
               },
             });
-          }
-        }}
+          }}
+          variant='outlined'
+          style={{
+            maxWidth: '30px',
+            maxHeight: '30px',
+            minWidth: '30px',
+            minHeight: '30px',
+          }}
+          tw='text-blue-500 bg-blue-200 hover:bg-blue-300'
+        >
+          <EditTwoToneIcon />
+        </Button>
+      </div>
+      <PhotoCoverImage
+        alt='album-cover'
+        height={0}
         onLoad={() => setIsPhotoLoading(false)}
         sizes='100vw'
         src={photoURL}
         width={0}
         $photosView={photosView}
       />
-    </>
+    </PhotoCoverRoot>
   );
 };
 
-export const PhotoCoverRoot = styled(Image)<{ $photosView: 'grid' | 'list' }>(({ $photosView }) => [
-  tw`border-2`,
-  tw`border-gray-100`,
-  tw`border-solid`,
+export const PhotoCoverRoot = styled.div<{ $photosView?: 'grid' | 'list' }>(({ $photosView }) => [
+  tw`p-2`,
+  tw`w-full`,
   tw`cursor-pointer`,
-  tw`hover:opacity-100`,
-  tw`opacity-80`,
-  tw`rounded-2xl`,
-  $photosView === 'grid' && tw`h-40`,
-  $photosView === 'grid' && tw`md:h-48`,
-  $photosView === 'grid' && tw`lg:h-52`,
-  $photosView === 'grid' && tw`object-cover`,
-  $photosView === 'grid' && tw`w-full`,
-  $photosView === 'list' && tw`h-full`,
-  $photosView === 'list' && tw`w-[550px]`,
+  $photosView === 'list' && tw`md:mx-[25%] sm:mx-[10%]`,
+  {
+    ':hover': {
+      button: [tw`visible`],
+      // img: [tw`hover:opacity-100`, tw`opacity-80`],
+    },
+    button: [tw`invisible`],
+  },
 ]);
+
+export const PhotoCoverImage = styled(Image)<{ $photosView?: 'grid' | 'list' }>(
+  ({ $photosView }) => [
+    tw`border-2`,
+    tw`border-gray-100`,
+    tw`border-solid`,
+    tw`cursor-pointer`,
+    // tw`hover:opacity-100`,
+    // tw`opacity-80`,
+    tw`rounded-2xl`,
+    $photosView === 'grid' && tw`h-40`,
+    $photosView === 'grid' && tw`md:h-48`,
+    $photosView === 'grid' && tw`object-cover`,
+    $photosView === 'grid' && tw`w-full`,
+    $photosView === 'list' && tw`h-full`,
+    $photosView === 'list' && tw`w-[550px]`,
+  ],
+);
 
 export const PhotoCoverEditPhotoButton = styled(IconButton)<{}>(() => []);

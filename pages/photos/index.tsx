@@ -1,33 +1,38 @@
 import React from 'react';
 import { InferGetServerSidePropsType } from 'next';
+import { Grid, Typography } from '@mui/material';
 
-import GlobalContext from '../../context/GlobalContext';
-import { GlobalReducerActionEnum } from '../../context/GlobalReducer';
-import Photos from '../../components/drill-y/Photos';
+import PhotosLayout from '../../layouts/PhotosLayout';
+import { PhotoCover } from '../../components/drill-y/Photos';
 
 import conn from '../../data/connection';
 import { Albums as AlbumsData, Photos as PhotosData } from '../../data/models';
+import { Albums, Photos } from '../../context/types';
 
-const PhotosIndex = ({
-  albumsData,
-  photosData,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const {
-    state: { albums, photos },
-    dispatch,
-  } = React.useContext(GlobalContext);
+type PhotosIndexProps = {
+  albumsData: Albums[];
+  photosData: Photos[];
+};
 
-  React.useEffect(() => {
-    if (!albums) {
-      dispatch({ type: GlobalReducerActionEnum.SET_ALBUMS, payload: { albums: albumsData } });
-    }
-
-    if (!photos) {
-      dispatch({ type: GlobalReducerActionEnum.SET_PHOTOS, payload: { photos: photosData } });
-    }
-  }, []);
-
-  return <Photos />;
+const PhotosIndex = ({ albumsData, photosData }: PhotosIndexProps) => {
+  return (
+    <PhotosLayout albumsData={albumsData} photosData={photosData} photosLayoutTitle='Photo albums'>
+      <Grid container>
+        {albumsData?.map(
+          album =>
+            !!album?.photos?.length && (
+              <Grid key={album.albumName} item xs={6} sm={4} md={3} lg={2}>
+                <Grid container style={{ height: '80%' }} tw='mb-1'>
+                  <PhotoCover photoListItem={album} photoURL={album.photos[0].url} />
+                </Grid>
+                <Typography variant='subtitle1'>{album.albumName}</Typography>
+                <Typography variant='subtitle2'>{`${album.photos.length} photo${album.photos.length > 1 ? 's' : ''}`}</Typography>
+              </Grid>
+            ),
+        )}
+      </Grid>
+    </PhotosLayout>
+  );
 };
 
 export default PhotosIndex;
@@ -38,9 +43,15 @@ export const getServerSideProps = async () => {
     const albums = await AlbumsData.find().sort({ albumName: 1 });
     const photos = await PhotosData.find().sort({ uploadedAt: -1 });
 
+    const albumsMapped = albums.map(album => ({
+      _id: album._id.toString(),
+      albumName: album.albumName,
+      photos: photos.filter(photo => photo.albumName === album.albumName),
+    }));
+
     return {
       props: {
-        albumsData: JSON.parse(JSON.stringify(albums)),
+        albumsData: JSON.parse(JSON.stringify(albumsMapped)),
         photosData: JSON.parse(JSON.stringify(photos)),
       },
     };
