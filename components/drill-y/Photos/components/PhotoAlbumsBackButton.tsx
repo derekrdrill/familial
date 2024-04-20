@@ -1,17 +1,16 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import 'twin.macro';
-
 import { Button, Grid } from '@mui/material';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
 export const PhotoAlbumsBackButton = () => {
   const router = useRouter();
-  const isPhotoAlbumOpened = !!router.query.album;
+  const isPhotoAlbumOpened = !!router.query.albumID;
 
   return (
     isPhotoAlbumOpened && (
-      <Grid container>
+      <Grid container tw='mx-8 mb-6'>
         <Button
           onClick={() => {
             router.push('/photos');

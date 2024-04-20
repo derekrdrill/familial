@@ -1,4 +1,5 @@
 import React from 'react';
+import { NextRouter, useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { Button, Grid, Typography } from '@mui/material';
 import { ImageListType as PhotoListType } from 'react-images-uploading';
@@ -13,6 +14,7 @@ export const handlePhotoUpload = async (
   photoList: PhotoListType,
   photoUploadData: PhotoUploadData[] | undefined,
   dispatch: React.Dispatch<GlobalReducerAction>,
+  router: NextRouter,
 ) => {
   photoList.forEach(async (photo, photoKey) => {
     await fetch('/api/photo-uploader/blob', {
@@ -24,7 +26,7 @@ export const handlePhotoUpload = async (
         const { url } = await res.json();
 
         if (photoUploadData) {
-          await fetch('api/photo-uploader', {
+          await fetch('/api/photo-uploader', {
             method: 'POST',
             body: JSON.stringify({ ...photoUploadData[photoKey], ...{ url: url } }),
           }).then(res => {
@@ -37,6 +39,8 @@ export const handlePhotoUpload = async (
                 type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
                 payload: { photoUploadData: [] },
               });
+
+              router.reload();
             }
           });
         }
@@ -54,6 +58,7 @@ export const PhotoUploaderActionButtons = ({
   isAbleToSubmitUpload,
   onImageRemoveAll,
 }: PhotoUploaderActionButtonsProps) => {
+  const router = useRouter();
   const {
     dispatch,
     state: { photoList, photoUploadData, selectedPhotoAlbum },
@@ -150,7 +155,7 @@ export const PhotoUploaderActionButtons = ({
                 payload: {
                   modalItem: {
                     handleSubmit: async () =>
-                      handlePhotoUpload(photoList, photoUploadData, dispatch),
+                      handlePhotoUpload(photoList, photoUploadData, dispatch, router),
                     isExitHidden: true,
                     isModalOpen: true,
                     modalBody: (

@@ -9,6 +9,7 @@ export type GlobalStateType = {
   photoList?: PhotoListType;
   photoUploadData?: PhotoUploadData[];
   photos?: Photos[];
+  photosView?: 'grid' | 'list';
   selectedPhotoAlbum?: SelectedPhotoAlbum;
   selectedPhoto?: {
     _id?: string;
@@ -36,6 +37,7 @@ const GlobalState: GlobalStateType = {
     submitButtonText: 'Submit',
   },
   photoList: [],
+  photosView: 'grid',
   photos: undefined,
   photoUploadData: [],
   selectedPhotoAlbum: undefined,

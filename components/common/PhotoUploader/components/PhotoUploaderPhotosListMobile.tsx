@@ -129,7 +129,7 @@ export const PhotoUploaderPhotosListMobile = ({
                               // );
 
                               // if (isNewAlbumNameInCurrentAlbums) {
-                              await fetch('api/album', {
+                              await fetch('/api/album/add', {
                                 method: 'POST',
                                 body: newAlbumName,
                               })
@@ -150,7 +150,8 @@ export const PhotoUploaderPhotosListMobile = ({
                                             ? {
                                                 ...photoUpload,
                                                 ...{
-                                                  albumName: newAlbumName,
+                                                  albumName:
+                                                    selectedPhotoAlbum?.albumName ?? newAlbumName,
                                                 },
                                               }
                                             : photoUpload,

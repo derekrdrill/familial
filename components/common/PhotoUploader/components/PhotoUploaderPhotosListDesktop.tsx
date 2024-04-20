@@ -112,7 +112,7 @@ export const PhotoUploaderPhotosListDesktop = ({
                                 document.getElementById('album') as HTMLInputElement
                               )?.value;
 
-                              await fetch('api/album', {
+                              await fetch('/api/album/add', {
                                 method: 'POST',
                                 body: newAlbumName,
                               })
@@ -133,7 +133,8 @@ export const PhotoUploaderPhotosListDesktop = ({
                                             ? {
                                                 ...photoUpload,
                                                 ...{
-                                                  albumName: newAlbumName,
+                                                  albumName:
+                                                    selectedPhotoAlbum?.albumName ?? newAlbumName,
                                                 },
                                               }
                                             : photoUpload,
