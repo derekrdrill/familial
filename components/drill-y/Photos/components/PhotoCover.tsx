@@ -61,7 +61,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                 modalItem: {
                   handleSubmit: async () => {
                     if (!!router.query.albumID) {
-                      await fetch('api/photo/delete', {
+                      await fetch('/api/photo/delete', {
                         method: 'DELETE',
                         body: JSON.stringify(photoListItem),
                       })
@@ -143,7 +143,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                 modalItem: {
                   handleSubmit: async () => {
                     if (!!router.query.albumID) {
-                      await fetch('api/photo/delete', {
+                      await fetch('/api/photo/delete', {
                         method: 'DELETE',
                         body: JSON.stringify(photoListItem),
                       })
