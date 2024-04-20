@@ -2,12 +2,15 @@ import React from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { Grid, Typography } from '@mui/material';
 
+import GlobalContext from '../../context/GlobalContext';
+
 import PhotosLayout from '../../layouts/PhotosLayout';
 import { PhotoCover } from '../../components/drill-y/Photos';
 
 import conn from '../../data/connection';
 import { Albums as AlbumsData, Photos as PhotosData } from '../../data/models';
 import { Albums, Photos } from '../../context/types';
+import { GlobalReducerActionEnum } from '../../context/GlobalReducer';
 
 type PhotosIndexProps = {
   albumsData: Albums[];
@@ -15,6 +18,14 @@ type PhotosIndexProps = {
 };
 
 const PhotosIndex = ({ albumsData, photosData }: PhotosIndexProps) => {
+  const { dispatch } = React.useContext(GlobalContext);
+  React.useEffect(() => {
+    dispatch({
+      type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
+      payload: { selectedPhotoAlbum: undefined },
+    });
+  }, []);
+
   return (
     <PhotosLayout albumsData={albumsData} photosData={photosData} photosLayoutTitle='Photo albums'>
       <Grid container>
