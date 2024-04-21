@@ -111,7 +111,7 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
         {photosData?.map(photoListItem => (
           <>
             {photosView === 'list' && (
-              <Grid item sm={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+              <Grid item xs={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
             )}
             <Grid
               item
@@ -130,7 +130,7 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
               </Grid>
             </Grid>
             {photosView === 'list' && (
-              <Grid item sm={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+              <Grid item xs={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
             )}
           </>
         ))}
