@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import tw from 'twin.macro';
 import { Button, Grid } from '@mui/material';
 
 export const ModalRootContainer = styled(Grid)({
@@ -7,12 +8,16 @@ export const ModalRootContainer = styled(Grid)({
   height: 1000,
 });
 
-export const ModalContainer = styled(Grid)({
-  backgroundColor: '#FFFFFF !important',
-  borderRadius: 7,
-  padding: '20px 42px 30px 42px',
-});
-4;
+export const ModalContainer = styled(Grid)<{ $isDarkMode: boolean }>(({ $isDarkMode }) => [
+  tw`rounded-3xl`,
+  tw`bg-amber-50`,
+  tw`pt-8`,
+  tw`pb-12`,
+  tw`px-16`,
+  $isDarkMode && tw`bg-gray-700`,
+  !$isDarkMode && tw`bg-gray-50`,
+]);
+
 export const ModalRow = styled(Grid)<{ isBottom?: boolean; isBody?: boolean }>(
   ({ isBottom, isBody }) => ({
     margin: !isBottom ? '10px 0' : 0,
@@ -21,7 +26,7 @@ export const ModalRow = styled(Grid)<{ isBottom?: boolean; isBody?: boolean }>(
 );
 
 export const ModalButton = styled(Button)<{ color?: string }>(({ color }) => ({
-  borderRadius: '30px !important',
+  borderRadius: '25px !important',
   height: 50,
   width: 100,
 }));

@@ -46,8 +46,6 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
           ...(router.query.albumID && { query: { p: photoListItem._id } }),
         });
       }}
-      $isPhotoLoading={isPhotoLoading}
-      $photosView={photosView}
     >
       {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
       <div tw='relative mx-2 translate-y-10 z-10'>
@@ -209,20 +207,17 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
         sizes='100vw'
         src={photoURL}
         width={0}
+        $isLoading={isPhotoLoading}
         $photosView={photosView}
       />
     </PhotoCoverRoot>
   );
 };
 
-export const PhotoCoverRoot = styled.div<{
-  $isPhotoLoading?: boolean;
-  $photosView?: 'grid' | 'list';
-}>(({ $isPhotoLoading, $photosView }) => [
+export const PhotoCoverRoot = styled.div([
   tw`p-2`,
   tw`w-full`,
   tw`cursor-pointer`,
-  $photosView === 'list' && !$isPhotoLoading && tw`md:mx-[25%] sm:mx-[10%]`,
   {
     ':hover': {
       button: [tw`visible`],
@@ -231,18 +226,22 @@ export const PhotoCoverRoot = styled.div<{
   },
 ]);
 
-export const PhotoCoverImage = styled(Image)<{ $photosView?: 'grid' | 'list' }>(({ $photosView }) => [
-  tw`border-2`,
-  tw`border-gray-100`,
-  tw`border-solid`,
+export const PhotoCoverImage = styled(Image)<{
+  $isLoading: boolean;
+  $photosView?: 'grid' | 'list';
+}>(({ $isLoading, $photosView }) => [
   tw`cursor-pointer`,
   tw`rounded-2xl`,
+  !$isLoading && tw`border-2`,
+  !$isLoading && tw`border-gray-100`,
+  !$isLoading && tw`border-solid`,
   $photosView === 'grid' && tw`h-40`,
   $photosView === 'grid' && tw`md:h-48`,
   $photosView === 'grid' && tw`object-cover`,
   $photosView === 'grid' && tw`w-full`,
   $photosView === 'list' && tw`h-full`,
-  $photosView === 'list' && tw`w-[550px]`,
+  $photosView === 'list' && tw`w-fit`,
+  $photosView === 'list' && tw`inline-block`,
 ]);
 
 export const PhotoCoverImageControlButton = styled(Button)<{

@@ -3,30 +3,53 @@ import tw from 'twin.macro';
 import styled from '@emotion/styled';
 import { Grid, Typography } from '@mui/material';
 
-export const ComingSoon = () => (
-  <>
-    <Grid item xs={12}>
-      <Typography sx={{ typography: { xs: 'h3', md: 'h1' } }} textAlign='center' variant='h1'>
-        ⚠️ Nothing to see here.... yet ⚠️
-      </Typography>
-    </Grid>
-    <Grid item xs={12}>
-      <Grid container justifyContent='center'>
-        <ComingSoonImage src='/bitmojiPainting.png' />
+import GlobalContext from '../../../context/GlobalContext';
+import { DrillyTypography } from '../../../styles/globals';
+
+export const ComingSoon = () => {
+  const {
+    state: { isDarkMode },
+  } = React.useContext(GlobalContext);
+  return (
+    <>
+      <Grid item xs={12}>
+        <DrillyTypography
+          sx={{ typography: { xs: 'h3', md: 'h1' } }}
+          textAlign='center'
+          variant='h1'
+          $isDarkMode={isDarkMode}
+        >
+          ⚠️ Nothing to see here.... yet ⚠️
+        </DrillyTypography>
       </Grid>
-    </Grid>
-    <Grid item xs={12}>
-      <Typography sx={{ typography: { xs: 'h4', md: 'h3' } }} textAlign='center' variant='h2'>
-        Rest assured...
-      </Typography>
-    </Grid>
-    <ComingSoonTextContainer item xs={12}>
-      <Typography sx={{ typography: { xs: 'h5', md: 'h4' } }} textAlign='center' variant='h3'>
-        Some very important people are working hard to deploy this site 🚀
-      </Typography>
-    </ComingSoonTextContainer>
-  </>
-);
+      <Grid item xs={12}>
+        <Grid container justifyContent='center'>
+          <ComingSoonImage src='/bitmojiPainting.png' />
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <DrillyTypography
+          sx={{ typography: { xs: 'h4', md: 'h3' } }}
+          textAlign='center'
+          variant='h2'
+          $isDarkMode={isDarkMode}
+        >
+          Rest assured...
+        </DrillyTypography>
+      </Grid>
+      <ComingSoonTextContainer item xs={12}>
+        <DrillyTypography
+          sx={{ typography: { xs: 'h5', md: 'h4' } }}
+          textAlign='center'
+          variant='h3'
+          $isDarkMode={isDarkMode}
+        >
+          Some very important people are working hard to deploy this site 🚀
+        </DrillyTypography>
+      </ComingSoonTextContainer>
+    </>
+  );
+};
 
 export const ComingSoonImage = styled.img([tw`h-96`, tw`w-96`]);
 export const ComingSoonTextContainer = styled(Grid)([tw`pt-6`]);

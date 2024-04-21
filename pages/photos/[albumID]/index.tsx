@@ -3,20 +3,20 @@ import { useRouter } from 'next/router';
 import mongoose from 'mongoose';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
-import { Grid, Typography } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import ImageUploading, { ImageListType as PhotoListType } from 'react-images-uploading';
 import AddAPhotoTwoToneIcon from '@mui/icons-material/AddAPhotoTwoTone';
-
-import GlobalContext from '../../../context/GlobalContext';
-import PhotosLayout from '../../../layouts/PhotosLayout';
-
-import { PhotoCover } from '../../../components/drill-y/Photos';
-
-import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';
 
 import conn from '../../../data/connection';
 import { Albums as AlbumsData, Photos as PhotosData } from '../../../data/models';
 import { Albums, Photos as PhotosType } from '../../../context/types';
+
+import GlobalContext from '../../../context/GlobalContext';
+import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';
+
+import PhotosLayout from '../../../layouts/PhotosLayout';
+import { PhotoCover } from '../../../components/drill-y/Photos';
+import { DrillyTypography } from '../../../styles/globals';
 
 const handlePhotoUploadingChange = (
   photoListData: PhotoListType,
@@ -40,7 +40,7 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
 
   const {
     dispatch,
-    state: { photoList, photosView },
+    state: { isDarkMode, photoList, photosView },
   } = React.useContext(GlobalContext);
 
   React.useEffect(() => {
@@ -64,47 +64,61 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
             onChange={photoListData => handlePhotoUploadingChange(photoListData, dispatch)}
             value={photoList}
           >
-            {({ onImageUpload }) => (
-              <PhotoUploaderTile
-                item
-                onClick={onImageUpload}
-                xs={photosView === 'list' ? 12 : 6}
-                sm={photosView === 'list' ? 12 : 4}
-                md={photosView === 'list' ? 12 : 3}
-                lg={photosView === 'list' ? 12 : 2}
-                $photosView={photosView}
-              >
-                <PhotoAlbumsAddTextContainer
-                  container
+            {({ onImageUpload }) =>
+              photosView === 'list' ? (
+                <Button color='info' endIcon={<AddAPhotoTwoToneIcon />} fullWidth tw='mt-6'>
+                  Add to album
+                </Button>
+              ) : (
+                <PhotoUploaderTile
+                  item
+                  onClick={onImageUpload}
+                  xs={6}
+                  sm={4}
+                  md={3}
+                  xl={2}
                   $photosView={photosView}
-                  justifyContent={photosView === 'list' ? 'center' : 'flex-start'}
-                  tw='w-full'
                 >
-                  <Typography variant='subtitle2'>
-                    Add to album <AddAPhotoTwoToneIcon />
-                  </Typography>
-                </PhotoAlbumsAddTextContainer>
-              </PhotoUploaderTile>
-            )}
+                  <PhotoAlbumsAddTextContainer
+                    container
+                    tw='w-full'
+                    $isDarkMode={isDarkMode}
+                    $photosView={photosView}
+                  >
+                    <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
+                      Add to album <AddAPhotoTwoToneIcon />
+                    </DrillyTypography>
+                  </PhotoAlbumsAddTextContainer>
+                </PhotoUploaderTile>
+              )
+            }
           </ImageUploading>
         )}
         {photosData?.map(photoListItem => (
-          <Grid
-            item
-            xs={photosView === 'list' ? 12 : 6}
-            sm={photosView === 'list' ? 12 : 4}
-            md={photosView === 'list' ? 12 : 3}
-            lg={photosView === 'list' ? 12 : 2}
-            tw='flex justify-center'
-          >
-            <Grid container>
-              <PhotoCover
-                key={photoListItem._id}
-                photoListItem={photoListItem}
-                photoURL={photoListItem.url}
-              />
+          <>
+            {photosView === 'list' && (
+              <Grid item sm={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+            )}
+            <Grid
+              item
+              xs={photosView === 'list' ? 12 : 6}
+              sm={photosView === 'list' ? 10 : 4}
+              md={photosView === 'list' ? 6 : 3}
+              xl={photosView === 'list' ? 4 : 2}
+              tw='flex justify-center'
+            >
+              <Grid container>
+                <PhotoCover
+                  key={photoListItem._id}
+                  photoListItem={photoListItem}
+                  photoURL={photoListItem.url}
+                />
+              </Grid>
             </Grid>
-          </Grid>
+            {photosView === 'list' && (
+              <Grid item sm={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+            )}
+          </>
         ))}
       </Grid>
     </PhotosLayout>
@@ -113,32 +127,33 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
 
 export default AlbumIDIndex;
 
-export const PhotoAlbumsAddTextContainer = styled(Grid)<{ $photosView?: 'grid' | 'list' }>(
-  ({ $photosView }) => [
-    tw`bg-gray-200`,
-    tw`cursor-pointer`,
-    tw`h-full`,
-    tw`hover:opacity-80`,
-    tw`rounded-2xl`,
-    $photosView === 'grid' && tw`pt-3`,
-    $photosView === 'grid' && tw`pl-3`,
-    $photosView === 'list' && tw`pt-6`,
-    $photosView === 'list' && tw`pb-6`,
-  ],
-);
+export const PhotoAlbumsAddTextContainer = styled(Grid)<{
+  $isDarkMode?: boolean;
+  $photosView?: 'grid' | 'list';
+}>(({ $isDarkMode, $photosView }) => [
+  tw`cursor-pointer`,
+  tw`h-full`,
+  tw`hover:opacity-80`,
+  tw`rounded-2xl`,
+  !$isDarkMode && tw`bg-gray-200`,
+  $isDarkMode && tw`bg-gray-900`,
+  $photosView === 'grid' && tw`pt-3`,
+  $photosView === 'grid' && tw`pl-3`,
+  $photosView === 'list' && tw`pt-6`,
+  $photosView === 'list' && tw`pb-6`,
+]);
 
 export const PhotosMainContainer = styled(Grid)([tw`bg-gray-100`, tw`p-4`, tw`rounded-2xl`]);
 
-export const PhotoUploaderTile = styled(Grid)<{ $photosView?: 'grid' | 'list' }>(
-  ({ $photosView }) => [
-    tw`md:mx-2`,
-    tw`mt-8`,
-    tw`mb-2`,
-    $photosView === 'list' && tw`sm:mx-16`,
-    $photosView === 'list' && tw`md:mx-40`,
-    $photosView === 'list' && tw`lg:mx-48`,
-  ],
-);
+export const PhotoUploaderTile = styled(Grid)<{
+  $photosView?: 'grid' | 'list';
+}>(({ $photosView }) => [
+  tw`mt-8`,
+  tw`mb-2`,
+  $photosView === 'list' && tw`sm:mx-16`,
+  $photosView === 'list' && tw`md:mx-40`,
+  $photosView === 'list' && tw`lg:mx-48`,
+]);
 
 export const getServerSideProps = async context => {
   try {

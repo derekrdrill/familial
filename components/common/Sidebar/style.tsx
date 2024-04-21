@@ -2,20 +2,22 @@ import styled from 'styled-components';
 import { Grid, Typography } from '@mui/material';
 import Link from 'next/link';
 
-export const SidebarRoot = styled(Grid)<{ $isSidebarOpen: boolean }>(({ $isSidebarOpen }) => ({
-  backgroundColor: '#f5f5f5',
-  bottom: 0,
-  height: '100%',
-  left: 0,
-  minHeight: '100%',
-  padding: '150px 30px',
-  position: 'fixed',
-  top: 0,
-  transform: $isSidebarOpen ? 'none' : 'translateX(-100%)',
-  transition: 'transform 500ms ease-in',
-  width: 450,
-  zIndex: 5,
-}));
+export const SidebarRoot = styled(Grid)<{ $isSidebarOpen: boolean; $isDarkMode?: boolean }>(
+  ({ $isDarkMode, $isSidebarOpen }) => ({
+    backgroundColor: $isDarkMode ? 'darkgrey' : '#f5f5f5',
+    bottom: 0,
+    height: '100%',
+    left: 0,
+    minHeight: '100%',
+    padding: '150px 30px',
+    position: 'fixed',
+    top: 0,
+    transform: $isSidebarOpen ? 'none' : 'translateX(-100%)',
+    transition: 'transform 500ms ease-in',
+    width: 450,
+    zIndex: 5,
+  }),
+);
 
 export const SidebarMenuText = styled(Typography)({
   '&:hover': {

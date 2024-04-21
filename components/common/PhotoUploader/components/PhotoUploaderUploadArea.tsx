@@ -4,6 +4,7 @@ import tw from 'twin.macro';
 import { Button, Grid, Typography } from '@mui/material';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
+
 type PhotoUploaderUploadAreaProps = {
   dragProps: {
     onDrop: (e: any) => void;
@@ -43,7 +44,7 @@ export const PhotoUploaderUploadArea = ({
           </Grid>
           <Grid item xs={2}>
             <Grid container justifyContent='center'>
-              <Typography typography='body2' variant='caption'>
+              <Typography color='#B3B3B3' typography='body2' variant='caption'>
                 OR
               </Typography>
             </Grid>

@@ -8,6 +8,8 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
+import { DrillyTextField } from '../../../../styles/globals';
+
 type PhotoUploaderPhotosListDesktopProps = {
   handleInputChange: Function;
   onImageRemove: Function;
@@ -18,7 +20,7 @@ export const PhotoUploaderPhotosListDesktop = ({
   onImageRemove,
 }: PhotoUploaderPhotosListDesktopProps) => {
   const {
-    state: { albums, photoList, photoUploadData, selectedPhotoAlbum },
+    state: { albums, isDarkMode, photoList, photoUploadData, selectedPhotoAlbum },
     dispatch,
   } = React.useContext(GlobalContext);
 
@@ -67,10 +69,10 @@ export const PhotoUploaderPhotosListDesktop = ({
                     })
                   }
                 />
-                <Grid item xs={12} tw='h-32'>
+                <Grid item xs={12} tw='h-32 mb-3'>
                   <img src={image['dataURL']} tw='h-full object-cover' width='120' />
                 </Grid>
-                <TextField
+                <DrillyTextField
                   id='title'
                   fullWidth
                   label='Title'
@@ -78,9 +80,9 @@ export const PhotoUploaderPhotosListDesktop = ({
                   size='small'
                   variant='outlined'
                   tw='my-1'
+                  $isDarkMode={isDarkMode}
                 />
-                <TextField
-                  disabled={!!selectedPhotoAlbum}
+                <DrillyTextField
                   fullWidth
                   label='Album'
                   select
@@ -92,6 +94,7 @@ export const PhotoUploaderPhotosListDesktop = ({
                   }
                   variant='outlined'
                   tw='my-1'
+                  $isDarkMode={isDarkMode}
                 >
                   {albums?.map(album => (
                     <MenuItem key={album._id} id='albumName' value={album.albumName}>
@@ -149,12 +152,13 @@ export const PhotoUploaderPhotosListDesktop = ({
                             isExitHidden: true,
                             isModalOpen: true,
                             modalBody: (
-                              <TextField
+                              <DrillyTextField
                                 id='album'
                                 fullWidth
                                 placeholder='Enter album name'
                                 size='small'
                                 variant='outlined'
+                                $isDarkMode={isDarkMode}
                               />
                             ),
                             modalTitle: 'Add new album',
@@ -168,8 +172,8 @@ export const PhotoUploaderPhotosListDesktop = ({
                       Add album +
                     </Typography>
                   </MenuItem>
-                </TextField>
-                <TextField
+                </DrillyTextField>
+                <DrillyTextField
                   id='description'
                   fullWidth
                   label='Description (Optional)'
@@ -180,6 +184,7 @@ export const PhotoUploaderPhotosListDesktop = ({
                   variant='outlined'
                   size='small'
                   tw='my-1'
+                  $isDarkMode={isDarkMode}
                 />
                 <Button
                   color='error'
@@ -210,6 +215,7 @@ export const PhotoUploaderPhotosListDesktop = ({
                       },
                     })
                   }
+                  variant={isDarkMode ? 'outlined' : 'text'}
                 >
                   Remove
                 </Button>

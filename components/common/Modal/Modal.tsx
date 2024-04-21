@@ -11,6 +11,7 @@ import { ModalButton, ModalContainer, ModalRootContainer, ModalRow } from './sty
 const Modal = () => {
   const {
     state: {
+      isDarkMode,
       modalItem: {
         cancelButtonColor,
         cancelButtonText,
@@ -38,7 +39,7 @@ const Modal = () => {
       <ModalRootContainer container>
         <Grid item xs={1} md={3} lg={4} />
         <Grid item xs={10} md={6} lg={4}>
-          <ModalContainer container rowGap={4}>
+          <ModalContainer container rowGap={4} $isDarkMode={isDarkMode}>
             <Grid item xs={12}>
               <ModalRow container>
                 <Grid item xs={11}>

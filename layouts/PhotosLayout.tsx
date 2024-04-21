@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import AppsIcon from '@mui/icons-material/Apps';
 import ListIcon from '@mui/icons-material/List';
 import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
@@ -13,6 +13,8 @@ import PhotoUploader from '../components/common/PhotoUploader';
 import { PhotoAlbumsBackButton, PhotoViewer } from '../components/drill-y/Photos';
 import { Albums, Photos } from '../context/types';
 import { GlobalReducerActionEnum } from '../context/GlobalReducer';
+
+import { DrillyTypography } from '../styles/globals';
 
 type PhotosLayoutProps = {
   albumsData: Albums[];
@@ -33,7 +35,7 @@ const PhotosLayout = ({
 
   const {
     dispatch,
-    state: { photosView },
+    state: { isDarkMode, photosView },
   } = React.useContext(GlobalContext);
 
   React.useEffect(() => {
@@ -46,22 +48,27 @@ const PhotosLayout = ({
 
   return (
     <>
+      <PhotoAlbumsBackButton />
       <PhotoUploader />
       <PhotoViewer
         isPhotoViewerOpen={!!router.query.p}
         photoTitle={photosData?.find(photo => photo._id === router.query.p)?.title}
         photoURL={photosData?.find(photo => photo._id === router.query.p)?.url}
       />
-      <PhotoAlbumsBackButton />
-      <PhotosMainContainer>
+      <PhotosMainContainer $isDarkMode={isDarkMode}>
         <Grid item xs={12}>
           <Grid container justifyContent='space-between'>
-            <Grid item>
-              <Typography variant='h5'>{photosLayoutTitle}</Typography>
+            <PhotosLayoutTitleContainer item $isAlbumOpened={!!!router.query.albumID}>
+              <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
+                {photosLayoutTitle}
+              </DrillyTypography>
               {photoAlbumLength && (
-                <Typography variant='subtitle1'>{`${photoAlbumLength} photo${photoAlbumLength === 1 ? '' : 's'}`}</Typography>
+                <DrillyTypography
+                  variant='subtitle1'
+                  $isDarkMode={isDarkMode}
+                >{`${photoAlbumLength} photo${photoAlbumLength === 1 ? '' : 's'}`}</DrillyTypography>
               )}
-            </Grid>
+            </PhotosLayoutTitleContainer>
             {!photoAlbumLength && (
               <Button
                 color='info'
@@ -105,12 +112,12 @@ const PhotosLayout = ({
                         modalTitle: 'Add new album',
                         submitSuccessMessage: (
                           <>
-                            <Typography component='h1' variant='subtitle1'>
+                            <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
                               New album added!
-                            </Typography>
-                            <Typography component='h2' variant='subtitle2'>
+                            </DrillyTypography>
+                            <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
                               Album will not appear here until photos are added
-                            </Typography>
+                            </DrillyTypography>
                           </>
                         ),
                       },
@@ -119,7 +126,7 @@ const PhotosLayout = ({
                 }}
                 startIcon={<PhotoSizeSelectActualTwoToneIcon />}
                 tw='mt-2 normal-case'
-                variant='text'
+                variant={isDarkMode ? 'outlined' : 'text'}
               >
                 Add album
               </Button>
@@ -170,8 +177,16 @@ const PhotosLayout = ({
 
 export default PhotosLayout;
 
-export const PhotosMainContainer = styled(Grid)([
-  tw`bg-gray-100`,
+export const PhotosLayoutTitleContainer = styled(Grid)<{ $isAlbumOpened: boolean }>(
+  ({ $isAlbumOpened }) => [
+    $isAlbumOpened && tw`flex`,
+    $isAlbumOpened && tw`[align-items: flex-end]`,
+  ],
+);
+
+export const PhotosMainContainer = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`bg-gray-100`,
+  $isDarkMode && tw`bg-transparent`,
   tw`mx-2`,
   tw`md:mx-8`,
   tw`p-4`,
