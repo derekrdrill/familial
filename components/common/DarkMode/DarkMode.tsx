@@ -18,12 +18,18 @@ const DarkMode = (props: DarkModeProps) => {
 
   return (
     <DarkModeRoot
-      onClick={() =>
+      onClick={() => {
+        if (isDarkMode) {
+          localStorage.removeItem('isDarkMode');
+        } else {
+          localStorage.setItem('isDarkMode', (!isDarkMode).toString());
+        }
+
         dispatch({
           type: GlobalReducerActionEnum.SET_DARK_MODE,
           payload: { isDarkMode: !isDarkMode },
-        })
-      }
+        });
+      }}
       $isDarkMode={isDarkMode}
     >
       {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}

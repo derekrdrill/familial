@@ -13,6 +13,7 @@ import MenuIcon from '../components/common/MenuIcon/MenuIcon';
 import Modal from '../components/common/Modal/Modal';
 import Overlay from '../components/common/Overlay/Overlay';
 import Sidebar from '../components/common/Sidebar/Sidebar';
+import { GlobalReducerActionEnum } from '../context/GlobalReducer';
 
 type AppProps = {
   Component: NextComponentType<NextPageContext, any, any>;
@@ -23,6 +24,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
 
   const {
+    dispatch,
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
@@ -30,6 +32,11 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
 
   React.useEffect(() => {
     setIsSidebarOpen(false);
+
+    dispatch({
+      type: GlobalReducerActionEnum.SET_DARK_MODE,
+      payload: { isDarkMode: !!localStorage.getItem('isDarkMode') },
+    });
   }, [router]);
 
   return (

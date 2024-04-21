@@ -66,10 +66,24 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
           >
             {({ onImageUpload }) =>
               photosView === 'list' ? (
-                <Button color='info' endIcon={<AddAPhotoTwoToneIcon />} fullWidth tw='mt-6'>
+                // <Grid item xs={12}>
+                //   <Grid container>
+                //     <Grid item sm={1} md={3} xl={4} />
+                //     <Grid item xs={12} sm={10} md={6} xl={4}>
+                <Button
+                  color='info'
+                  endIcon={<AddAPhotoTwoToneIcon />}
+                  fullWidth
+                  variant={isDarkMode ? 'outlined' : 'contained'}
+                  tw='mt-6 hover:shadow-none shadow-none'
+                >
                   Add to album
                 </Button>
               ) : (
+                //     </Grid>
+                //     <Grid item sm={1} md={3} xl={4} />
+                //   </Grid>
+                // </Grid>
                 <PhotoUploaderTile
                   item
                   onClick={onImageUpload}
