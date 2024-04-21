@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
-import { Button, Checkbox, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Button, Checkbox, Grid, MenuItem, Typography } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
+
+import { DrillyTextField } from '../../../../styles/globals';
 
 type PhotoUploaderPhotosListMobileProps = {
   handleInputChange: Function;
@@ -17,7 +19,7 @@ export const PhotoUploaderPhotosListMobile = ({
   onImageRemove,
 }: PhotoUploaderPhotosListMobileProps) => {
   const {
-    state: { albums, photoList, photoUploadData, selectedPhotoAlbum },
+    state: { albums, isDarkMode, photoList, photoUploadData, selectedPhotoAlbum },
     dispatch,
   } = React.useContext(GlobalContext);
 
@@ -78,6 +80,7 @@ export const PhotoUploaderPhotosListMobile = ({
                       },
                     })
                   }
+                  variant={isDarkMode ? 'outlined' : 'text'}
                 >
                   <HighlightOffIcon />
                 </Button>
@@ -85,18 +88,18 @@ export const PhotoUploaderPhotosListMobile = ({
             </Grid>
             <Grid container rowSpacing={1}>
               <Grid item xs={12}>
-                <TextField
+                <DrillyTextField
                   id='title'
                   fullWidth
                   label='Title'
                   onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
                   size='small'
                   variant='outlined'
+                  $isDarkMode={isDarkMode}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  disabled={!!selectedPhotoAlbum}
+                <DrillyTextField
                   fullWidth
                   label='Album'
                   select
@@ -108,6 +111,7 @@ export const PhotoUploaderPhotosListMobile = ({
                   }
                   variant='outlined'
                   tw='my-1'
+                  $isDarkMode={isDarkMode}
                 >
                   {albums?.map(album => (
                     <MenuItem key={album._id} id='albumName' value={album.albumName}>
@@ -167,12 +171,13 @@ export const PhotoUploaderPhotosListMobile = ({
                             isExitHidden: true,
                             isModalOpen: true,
                             modalBody: (
-                              <TextField
+                              <DrillyTextField
                                 id='album'
                                 fullWidth
                                 placeholder='Enter album name'
                                 size='small'
                                 variant='outlined'
+                                $isDarkMode={isDarkMode}
                               />
                             ),
                             modalTitle: 'Add new album',
@@ -186,10 +191,10 @@ export const PhotoUploaderPhotosListMobile = ({
                       Add album +
                     </Typography>
                   </MenuItem>
-                </TextField>
+                </DrillyTextField>
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <DrillyTextField
                   id='description'
                   fullWidth
                   label='Description (Optional)'
@@ -199,6 +204,7 @@ export const PhotoUploaderPhotosListMobile = ({
                   onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
                   variant='outlined'
                   size='small'
+                  $isDarkMode={isDarkMode}
                 />
               </Grid>
             </Grid>

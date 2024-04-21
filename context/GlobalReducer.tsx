@@ -3,6 +3,7 @@ import GlobalState, { GlobalStateType } from './GlobalState';
 export enum GlobalReducerActionEnum {
   SET_ALBUMS = 'SET_ALBUMS',
   SET_ALERT_ITEM = 'SET_ALERT_ITEM',
+  SET_DARK_MODE = 'SET_DARK_MODE',
   SET_MODAL_ITEM = 'SET_MODAL_ITEM',
   SET_PHOTOS = 'SET_PHOTOS',
   SET_PHOTOS_VIEW = 'SET_PHOTOS_VIEW',
@@ -23,6 +24,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
     payload: {
       albums,
       alertItem,
+      isDarkMode,
       modalItem,
       photoList,
       photos,
@@ -50,10 +52,10 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
         ...state,
         alertItem: alertItem,
       };
-    case GlobalReducerActionEnum.SET_MODAL_ITEM:
+    case GlobalReducerActionEnum.SET_DARK_MODE:
       return {
         ...state,
-        modalItem: modalItem,
+        isDarkMode: isDarkMode,
       };
     case GlobalReducerActionEnum.SET_MODAL_ITEM:
       return {

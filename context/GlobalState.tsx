@@ -5,6 +5,7 @@ export type GlobalStateType = {
   albums?: Albums[];
   alertItem?: AlertItem;
   authenticatedUser?: object | null;
+  isDarkMode?: boolean;
   modalItem?: ModalItem;
   photoList?: PhotoListType;
   photoUploadData?: PhotoUploadData[];
@@ -28,6 +29,7 @@ const GlobalState: GlobalStateType = {
     isAlertOpen: false,
   },
   authenticatedUser: null,
+  isDarkMode: false,
   modalItem: {
     handleSubmit: null,
     isModalOpen: false,

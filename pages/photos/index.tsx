@@ -18,7 +18,10 @@ type PhotosIndexProps = {
 };
 
 const PhotosIndex = ({ albumsData, photosData }: PhotosIndexProps) => {
-  const { dispatch } = React.useContext(GlobalContext);
+  const {
+    dispatch,
+    state: { isDarkMode },
+  } = React.useContext(GlobalContext);
   React.useEffect(() => {
     dispatch({
       type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
@@ -36,8 +39,13 @@ const PhotosIndex = ({ albumsData, photosData }: PhotosIndexProps) => {
                 <Grid container style={{ height: '80%' }} tw='mb-1'>
                   <PhotoCover photoListItem={album} photoURL={album.photos[0].url} />
                 </Grid>
-                <Typography variant='subtitle1'>{album.albumName}</Typography>
-                <Typography variant='subtitle2'>{`${album.photos.length} photo${album.photos.length > 1 ? 's' : ''}`}</Typography>
+                <Typography color={isDarkMode ? 'white' : 'inherit'} variant='subtitle1'>
+                  {album.albumName}
+                </Typography>
+                <Typography
+                  color={isDarkMode ? 'white' : 'inherit'}
+                  variant='subtitle2'
+                >{`${album.photos.length} photo${album.photos.length > 1 ? 's' : ''}`}</Typography>
               </Grid>
             ),
         )}

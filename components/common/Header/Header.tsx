@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { Grid, IconButton } from '@mui/material';
+import { Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EventNoteTwoToneIcon from '@mui/icons-material/EventNoteTwoTone';
@@ -8,22 +8,33 @@ import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PhotoLibraryTwoToneIcon from '@mui/icons-material/PhotoLibraryTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 
+import GlobalContext from '../../../context/GlobalContext';
+
+import DarkMode from '../DarkMode/DarkMode';
+import { DrillyTextField } from '../../../styles/globals';
+
 import {
   HeaderLogo,
   HeaderMenuButton,
   HeaderMenuLink,
+  HeaderProfileButton,
   HeaderRoot,
   HeaderSearchField,
+  HeaderSearchFieldIconButton,
   HeaderTop,
 } from './style';
 
 const Header = () => {
+  const {
+    state: { isDarkMode },
+  } = React.useContext(GlobalContext);
+
   const [isSearchIconShown, setIsSearchIconShown] = React.useState<boolean>(true);
   const [searchField, setSearchField] = React.useState<string>('');
 
   return (
-    <HeaderRoot>
-      <HeaderTop container>
+    <HeaderRoot $isDarkMode={isDarkMode}>
+      <HeaderTop container $isDarkMode={isDarkMode}>
         <Grid item xs={4} display={{ xs: 'inline-block', md: 'none' }} />
         <Grid item xs={4} lg={3}>
           <Grid container>
@@ -44,7 +55,7 @@ const Header = () => {
               xs={isSearchIconShown ? 10 : 12}
               display={{ xs: 'none', md: 'inline-block' }}
             >
-              <HeaderSearchField
+              <DrillyTextField
                 color='secondary'
                 fullWidth
                 onBlur={() => setIsSearchIconShown(true)}
@@ -56,13 +67,17 @@ const Header = () => {
                 variant='outlined'
                 InputProps={{
                   startAdornment: isSearchIconShown ? (
-                    <SearchIcon color='disabled' />
+                    <HeaderSearchFieldIconButton $isDarkMode={isDarkMode}>
+                      <SearchIcon />
+                    </HeaderSearchFieldIconButton>
                   ) : (
-                    <IconButton>
+                    <HeaderSearchFieldIconButton $isDarkMode={isDarkMode}>
                       <ArrowBackIcon />
-                    </IconButton>
+                    </HeaderSearchFieldIconButton>
                   ),
                 }}
+                $isDarkMode={isDarkMode}
+                $isRounded
               />
             </Grid>
           </Grid>
@@ -70,18 +85,18 @@ const Header = () => {
         <Grid item xs={1} display={{ xs: 'none', lg: 'inline-block' }} />
         <Grid item xs={4} display={{ xs: 'none', md: 'inline-block' }}>
           <Grid container justifyContent='space-around'>
-            <HeaderMenuLink href='/'>
-              <HeaderMenuButton>
+            <HeaderMenuLink href='/' $isDarkMode={isDarkMode}>
+              <HeaderMenuButton $isDarkMode={isDarkMode}>
                 <HomeTwoToneIcon />
               </HeaderMenuButton>
             </HeaderMenuLink>
-            <HeaderMenuLink href='/photos'>
-              <HeaderMenuButton>
+            <HeaderMenuLink href='/photos' $isDarkMode={isDarkMode}>
+              <HeaderMenuButton $isDarkMode={isDarkMode}>
                 <PhotoLibraryTwoToneIcon />
               </HeaderMenuButton>
             </HeaderMenuLink>
-            <HeaderMenuLink href='/'>
-              <HeaderMenuButton>
+            <HeaderMenuLink href='/' $isDarkMode={isDarkMode}>
+              <HeaderMenuButton $isDarkMode={isDarkMode}>
                 <EventNoteTwoToneIcon />
               </HeaderMenuButton>
             </HeaderMenuLink>
@@ -90,9 +105,10 @@ const Header = () => {
         <Grid item xs={1} display={{ xs: 'none', md: 'inline-block' }} />
         <Grid item xs={4} md={3}>
           <Grid container justifyContent='flex-end'>
-            <IconButton>
+            <DarkMode />
+            <HeaderProfileButton $isDarkMode={isDarkMode}>
               <AccountCircleIcon />
-            </IconButton>
+            </HeaderProfileButton>
           </Grid>
         </Grid>
       </HeaderTop>

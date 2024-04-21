@@ -1,11 +1,17 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import styled from '@emotion/styled';
+import tw from 'twin.macro';
 import { Button, IconButton, Modal, TextField, Typography } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+
+import GlobalContext from '../../../../context/GlobalContext';
+
+import { DrillyTypography } from '../../../../styles/globals';
 
 type PhotoViewerTypes = {
   isPhotoViewerOpen: boolean;
@@ -15,6 +21,10 @@ type PhotoViewerTypes = {
 
 export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoViewerTypes) => {
   const router = useRouter();
+
+  const {
+    state: { isDarkMode },
+  } = React.useContext(GlobalContext);
 
   return (
     <Modal open={isPhotoViewerOpen}>
@@ -42,9 +52,9 @@ export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoVi
                       minHeight: '30px',
                     }}
                   >
-                    <Typography component='span' variant='h5'>
+                    <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
                       &#10539;
-                    </Typography>
+                    </DrillyTypography>
                   </Button>
                 </div>
                 <Image
@@ -52,7 +62,7 @@ export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoVi
                   alt='selected-image'
                   height={600}
                   src={photoURL}
-                  width={500}
+                  width={600}
                 />
                 <Image
                   tw='inline-block md:hidden'
@@ -63,29 +73,30 @@ export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoVi
                 />
               </div>
             </div>
-            <div tw='bg-white h-screen w-full md:w-1/4'>
+            <PhotoViewerActionsPanel $isDarkMode={isDarkMode}>
               <div tw='m-8'>
-                <Typography component='h1' variant='h5'>
+                <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
                   {photoTitle}
-                </Typography>
+                </DrillyTypography>
                 <div tw='flex'>
-                  <IconButton>
+                  <IconButton color='info'>
                     <ThumbUpOffAltIcon />
                   </IconButton>
-                  <IconButton>
+                  <IconButton color='error'>
                     <FavoriteBorderIcon />
                   </IconButton>
-                  <IconButton>
+                  <IconButton color='secondary'>
                     <TagFacesIcon />
                   </IconButton>
                 </div>
                 <>
-                  <TextField
+                  <PhotoViewerCommentInput
                     tw='mt-4'
                     fullWidth
                     multiline
                     placeholder='Leave a comment...'
                     rows={3}
+                    $isDarkMode={isDarkMode}
                   />
                   <div tw='flex justify-end'>
                     <Button
@@ -101,10 +112,27 @@ export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoVi
                   </div>
                 </>
               </div>
-            </div>
+            </PhotoViewerActionsPanel>
           </div>
         )}
       </>
     </Modal>
   );
 };
+
+export const PhotoViewerActionsPanel = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  $isDarkMode && tw`bg-gray-900`,
+  !$isDarkMode && tw`bg-white`,
+  tw`h-screen`,
+  tw`w-full`,
+  tw`md:w-1/4`,
+]);
+
+export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    {
+      '.MuiInputBase-root': [$isDarkMode && tw`bg-gray-100`],
+    },
+  ],
+);
+

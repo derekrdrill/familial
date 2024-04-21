@@ -5,7 +5,7 @@ import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 
-import ActionButton from '../ActionButton/ActionButton';
+import GlobalContext from '../../../context/GlobalContext';
 
 import { SidebarMenuLink, SidebarRoot, SidebarMenuText } from './style';
 
@@ -15,8 +15,16 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
+  const {
+    state: { isDarkMode },
+  } = React.useContext(GlobalContext);
+
   return (
-    <SidebarRoot display={{ xs: 'block', md: 'none' }} $isSidebarOpen={isSidebarOpen}>
+    <SidebarRoot
+      display={{ xs: 'block', md: 'none' }}
+      $isDarkMode={isDarkMode}
+      $isSidebarOpen={isSidebarOpen}
+    >
       <Grid container rowSpacing={6}>
         <TextField
           color='secondary'
