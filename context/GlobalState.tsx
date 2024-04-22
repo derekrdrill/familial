@@ -1,5 +1,13 @@
 import { ImageListType as PhotoListType } from 'react-images-uploading';
-import { Albums, AlertItem, ModalItem, PhotoUploadData, Photos, SelectedPhotoAlbum } from './types';
+import {
+  Albums,
+  AlertItem,
+  ModalItem,
+  PhotoUploadData,
+  Photos,
+  SelectedPhotoAlbum,
+  User,
+} from './types';
 
 export type GlobalStateType = {
   albums?: Albums[];
@@ -19,6 +27,7 @@ export type GlobalStateType = {
     title?: string;
     url?: string;
   };
+  user?: User;
 };
 
 const GlobalState: GlobalStateType = {
@@ -44,6 +53,7 @@ const GlobalState: GlobalStateType = {
   photoUploadData: [],
   selectedPhotoAlbum: undefined,
   selectedPhoto: undefined,
+  user: undefined,
 };
 
 export default GlobalState;

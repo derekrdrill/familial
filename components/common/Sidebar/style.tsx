@@ -2,22 +2,25 @@ import styled from 'styled-components';
 import { Grid, Typography } from '@mui/material';
 import Link from 'next/link';
 
-export const SidebarRoot = styled(Grid)<{ $isSidebarOpen: boolean; $isDarkMode?: boolean }>(
-  ({ $isDarkMode, $isSidebarOpen }) => ({
-    backgroundColor: $isDarkMode ? 'darkgrey' : '#f5f5f5',
-    bottom: 0,
-    height: '100%',
-    left: 0,
-    minHeight: '100%',
-    padding: '150px 30px',
-    position: 'fixed',
-    top: 0,
-    transform: $isSidebarOpen ? 'none' : 'translateX(-100%)',
-    transition: 'transform 500ms ease-in',
-    width: 450,
-    zIndex: 5,
-  }),
-);
+export const SidebarRoot = styled(Grid)<{
+  $isSidebarOpen: boolean;
+  $isDarkMode?: boolean;
+  $padding?: string;
+  $side?: 'left' | 'right';
+}>(({ $isDarkMode, $isSidebarOpen, $padding, $side = 'left' }) => ({
+  backgroundColor: $isDarkMode ? '#1b2328' : '#f5f5f5',
+  bottom: 0,
+  height: '100%',
+  minHeight: '100%',
+  padding: $padding ?? 10,
+  position: 'fixed',
+  top: 0,
+  transition: 'transform 500ms ease-in',
+  width: 450,
+  zIndex: 5,
+  ...($side === 'left' && { left: 0, transform: $isSidebarOpen ? 'none' : 'translateX(-100%)' }),
+  ...($side === 'right' && { right: 0, transform: $isSidebarOpen ? 'none' : 'translateX(110%)' }),
+}));
 
 export const SidebarMenuText = styled(Typography)({
   '&:hover': {

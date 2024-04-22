@@ -1,68 +1,38 @@
 import * as React from 'react';
-import { Grid, TextField } from '@mui/material';
-import EventNoteTwoToneIcon from '@mui/icons-material/EventNoteTwoTone';
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
-import SearchIcon from '@mui/icons-material/Search';
 
 import GlobalContext from '../../../context/GlobalContext';
-
-import { SidebarMenuLink, SidebarRoot, SidebarMenuText } from './style';
+import { SidebarRoot } from './style';
 
 type SidebarProps = {
+  children: React.ReactNode;
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  side: 'left' | 'right';
+  isMobileOnly?: boolean;
+  padding?: string;
 };
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
+const Sidebar = ({
+  children,
+  isMobileOnly,
+  isSidebarOpen,
+  padding,
+  setIsSidebarOpen,
+  side,
+}: SidebarProps) => {
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
   return (
     <SidebarRoot
-      display={{ xs: 'block', md: 'none' }}
+      display={{ xs: 'block', md: isMobileOnly ? 'none' : 'block' }}
       $isDarkMode={isDarkMode}
       $isSidebarOpen={isSidebarOpen}
+      $padding={padding}
+      $side={side}
     >
-      <Grid container rowSpacing={6}>
-        <TextField
-          color='secondary'
-          fullWidth
-          placeholder='Search drill-y'
-          InputProps={{ startAdornment: <SearchIcon color='disabled' /> }}
-        />
-        <Grid item xs={12}>
-          <SidebarMenuLink href='/'>
-            <SidebarMenuText variant='h4'>
-              <Grid container justifyContent='space-between'>
-                Home
-                <HomeTwoToneIcon />
-              </Grid>
-            </SidebarMenuText>
-          </SidebarMenuLink>
-        </Grid>
-        <Grid item xs={12}>
-          <SidebarMenuLink href='/photos'>
-            <SidebarMenuText variant='h4'>
-              <Grid container justifyContent='space-between'>
-                Photos
-                <PhotoSizeSelectActualTwoToneIcon />
-              </Grid>
-            </SidebarMenuText>
-          </SidebarMenuLink>
-        </Grid>
-        <Grid item xs={12}>
-          <SidebarMenuLink href='/'>
-            <SidebarMenuText variant='h4'>
-              <Grid container justifyContent='space-between'>
-                Events
-                <EventNoteTwoToneIcon />
-              </Grid>
-            </SidebarMenuText>
-          </SidebarMenuLink>
-        </Grid>
-      </Grid>
+      {children}
     </SidebarRoot>
   );
 };

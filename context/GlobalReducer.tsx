@@ -11,6 +11,7 @@ export enum GlobalReducerActionEnum {
   SET_PHOTO_UPLOAD_DATA = 'SET_PHOTO_UPLOAD_DATA',
   SET_SELECTED_PHOTO_ALBUM = 'SET_SELECTED_PHOTO_ALBUM',
   SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO',
+  SET_USER = 'SET_USER',
   RESET_MODAL_ITEM = 'RESET_MODAL_ITEM',
 }
 
@@ -32,6 +33,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       photoUploadData,
       selectedPhotoAlbum,
       selectedPhoto,
+      user,
     },
     type,
   } = action;
@@ -91,6 +93,11 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         selectedPhoto: selectedPhoto,
+      };
+    case GlobalReducerActionEnum.SET_USER:
+      return {
+        ...state,
+        user: user,
       };
     default:
       return state;

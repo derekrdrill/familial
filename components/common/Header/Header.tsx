@@ -24,7 +24,12 @@ import {
   HeaderTop,
 } from './style';
 
-const Header = () => {
+type HeaderType = {
+  isUserSidebarOpen: boolean;
+  setIsUserSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
@@ -106,7 +111,10 @@ const Header = () => {
         <Grid item xs={4} md={3}>
           <Grid container justifyContent='flex-end'>
             <DarkMode />
-            <HeaderProfileButton $isDarkMode={isDarkMode}>
+            <HeaderProfileButton
+              onClick={() => setIsUserSidebarOpen(!isUserSidebarOpen)}
+              $isDarkMode={isDarkMode}
+            >
               <AccountCircleIcon />
             </HeaderProfileButton>
           </Grid>
