@@ -16,7 +16,6 @@ const Overlay = ({ isSidebarOpen }: GridProps & OverlayProps) => (
   <OverlayRoot
     display={{
       xs: getOverlayDisplay(isSidebarOpen),
-      md: 'none',
     }}
     sx={{ zIndex: getZIndex(isSidebarOpen) }}
   />
