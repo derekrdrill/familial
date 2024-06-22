@@ -12,34 +12,19 @@ export const HeaderRoot = styled(AppBar)<{ $isDarkMode?: boolean }>(({ $isDarkMo
 
 export const HeaderTop = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => ({
   borderBottom: !$isDarkMode ? '1px solid #DFDFDF' : 'none',
-  padding: '6px 8px',
+  padding: '10px 20px 4px 20px',
 }));
 
-export const HeaderLogo = styled.img({
-  '&:hover': {
-    opacity: 0.8,
-  },
-  cursor: 'pointer',
-  height: 40,
-  width: 50,
-});
-
-export const HeaderSearchField = styled(TextField)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
-  {
-    '.MuiOutlinedInput-root': {
-      fieldset: {
-        border: `1px lightgrey solid ${$isDarkMode ? '!important' : ''}`,
-        borderRadius: 20,
-        backgroundColor: 'invisible',
-      },
-      input: {
-        '::placeholder': {
-          color: $isDarkMode ? 'white' : 'inherit',
-        },
-      },
+export const HeaderLogo = styled.img<{ $height?: number; $width?: number }>(
+  ({ $height = 40, $width = 50 }) => ({
+    '&:hover': {
+      opacity: 0.8,
     },
-  },
-]);
+    cursor: 'pointer',
+    height: $height,
+    width: $width,
+  }),
+);
 
 export const HeaderSearchFieldIconButton = styled(IconButton)<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [$isDarkMode && tw`text-white`],
