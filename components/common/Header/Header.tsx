@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import EventNoteTwoToneIcon from '@mui/icons-material/EventNoteTwoTone';
+import DiningTwoToneIcon from '@mui/icons-material/DiningTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PhotoLibraryTwoToneIcon from '@mui/icons-material/PhotoLibraryTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
@@ -19,7 +19,6 @@ import {
   HeaderMenuLink,
   HeaderProfileButton,
   HeaderRoot,
-  HeaderSearchField,
   HeaderSearchFieldIconButton,
   HeaderTop,
 } from './style';
@@ -51,7 +50,20 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
             >
               <Grid container justifyContent={{ xs: 'center', md: 'flex-start' }}>
                 <Link href='/'>
-                  <HeaderLogo src='/favicon.ico' />
+                  <Grid container display={{ xs: 'none', md: 'inline-block' }}>
+                    <HeaderLogo
+                      src={isDarkMode ? '/logoDarkMode.png' : '/logo.png'}
+                      $height={50}
+                      $width={40}
+                    />
+                  </Grid>
+                  <Grid container display={{ xs: 'inline-block', md: 'none' }}>
+                    <HeaderLogo
+                      $height={80}
+                      src={isDarkMode ? '/logoMobileDarkMode.png' : '/logoMobile.png'}
+                      $width={90}
+                    />
+                  </Grid>
                 </Link>
               </Grid>
             </Grid>
@@ -102,7 +114,7 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
             </HeaderMenuLink>
             <HeaderMenuLink href='/' $isDarkMode={isDarkMode}>
               <HeaderMenuButton $isDarkMode={isDarkMode}>
-                <EventNoteTwoToneIcon />
+                <DiningTwoToneIcon />
               </HeaderMenuButton>
             </HeaderMenuLink>
           </Grid>
