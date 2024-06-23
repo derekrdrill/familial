@@ -15,16 +15,7 @@ export const HeaderTop = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode 
   padding: '10px 20px 4px 20px',
 }));
 
-export const HeaderLogo = styled.img<{ $height?: number; $width?: number }>(
-  ({ $height = 40, $width = 50 }) => ({
-    '&:hover': {
-      opacity: 0.8,
-    },
-    cursor: 'pointer',
-    height: $height,
-    width: $width,
-  }),
-);
+export const HeaderLogo = styled.img([tw`cursor-pointer h-20 lg:h-14 hover:opacity-[0.8]`]);
 
 export const HeaderSearchFieldIconButton = styled(IconButton)<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [$isDarkMode && tw`text-white`],

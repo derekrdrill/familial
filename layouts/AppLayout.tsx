@@ -139,6 +139,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         setIsSidebarOpen={setIsUserSidebarOpen}
         padding='0px'
         side='right'
+        zIndex={10}
       >
         <UserProfile
           isUserSidebarOpen={isUserSidebarOpen}
