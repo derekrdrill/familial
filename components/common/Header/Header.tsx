@@ -2,16 +2,16 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DiningTwoToneIcon from '@mui/icons-material/DiningTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PhotoLibraryTwoToneIcon from '@mui/icons-material/PhotoLibraryTwoTone';
-import SearchIcon from '@mui/icons-material/Search';
+// import SearchIcon from '@mui/icons-material/Search';
 
 import GlobalContext from '../../../context/GlobalContext';
 
 import DarkMode from '../DarkMode/DarkMode';
-import { DrillyTextField } from '../../../styles/globals';
+// import { DrillyTextField } from '../../../styles/globals';
 
 import {
   HeaderLogo,
@@ -50,24 +50,13 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
             >
               <Grid container justifyContent={{ xs: 'center', md: 'flex-start' }}>
                 <Link href='/'>
-                  <Grid container display={{ xs: 'none', md: 'inline-block' }}>
-                    <HeaderLogo
-                      src={isDarkMode ? '/logoDarkMode.png' : '/logo.png'}
-                      $height={50}
-                      $width={40}
-                    />
-                  </Grid>
-                  <Grid container display={{ xs: 'inline-block', md: 'none' }}>
-                    <HeaderLogo
-                      $height={80}
-                      src={isDarkMode ? '/logoMobileDarkMode.png' : '/logoMobile.png'}
-                      $width={90}
-                    />
+                  <Grid container>
+                    <HeaderLogo src={isDarkMode ? '/logoMobileDarkMode.png' : '/logoMobile.png'} />
                   </Grid>
                 </Link>
               </Grid>
             </Grid>
-            <Grid
+            {/* <Grid
               item
               xs={isSearchIconShown ? 10 : 12}
               display={{ xs: 'none', md: 'inline-block' }}
@@ -96,7 +85,7 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
                 $isDarkMode={isDarkMode}
                 $isRounded
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
         <Grid item xs={1} display={{ xs: 'none', lg: 'inline-block' }} />

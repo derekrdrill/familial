@@ -5,11 +5,12 @@ import { SidebarRoot } from './style';
 
 type SidebarProps = {
   children: React.ReactNode;
+  isMobileOnly?: boolean;
   isSidebarOpen: boolean;
+  padding?: string;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   side: 'left' | 'right';
-  isMobileOnly?: boolean;
-  padding?: string;
+  zIndex?: number;
 };
 
 const Sidebar = ({
@@ -19,6 +20,7 @@ const Sidebar = ({
   padding,
   setIsSidebarOpen,
   side,
+  zIndex,
 }: SidebarProps) => {
   const {
     state: { isDarkMode },
@@ -31,6 +33,7 @@ const Sidebar = ({
       $isSidebarOpen={isSidebarOpen}
       $padding={padding}
       $side={side}
+      $zIndex={zIndex}
     >
       {children}
     </SidebarRoot>

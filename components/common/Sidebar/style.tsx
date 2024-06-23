@@ -7,7 +7,8 @@ export const SidebarRoot = styled(Grid)<{
   $isDarkMode?: boolean;
   $padding?: string;
   $side?: 'left' | 'right';
-}>(({ $isDarkMode, $isSidebarOpen, $padding, $side = 'left' }) => ({
+  $zIndex?: number;
+}>(({ $isDarkMode, $isSidebarOpen, $padding, $side = 'left', $zIndex = 5 }) => ({
   backgroundColor: $isDarkMode ? '#1b2328' : '#f5f5f5',
   bottom: 0,
   height: '100%',
@@ -17,7 +18,7 @@ export const SidebarRoot = styled(Grid)<{
   top: 0,
   transition: 'transform 500ms ease-in',
   width: 450,
-  zIndex: 5,
+  zIndex: $zIndex,
   ...($side === 'left' && { left: 0, transform: $isSidebarOpen ? 'none' : 'translateX(-100%)' }),
   ...($side === 'right' && { right: 0, transform: $isSidebarOpen ? 'none' : 'translateX(110%)' }),
 }));
