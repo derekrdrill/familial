@@ -20,11 +20,11 @@ const PhotoQuick = ({ photoTitle, photoUrl }: PhotoQuickProps) => {
         <PhotoQuickRoot
           alt='album-cover'
           height={0}
+          loading='lazy'
           onLoad={() => null}
           sizes='100vw'
           src={photoUrl}
           width={0}
-          $isLoading={false}
         />
       </div>
       <h3 tw='mt-3 text-3xl text-center text-black md:text-base'>
@@ -52,14 +52,14 @@ const PhotoQuick = ({ photoTitle, photoUrl }: PhotoQuickProps) => {
   );
 };
 
-const PhotoQuickRoot = styled(Image)<{
-  $isLoading: boolean;
-}>(({ $isLoading }) => [
-  tw`cursor-pointer`,
-  tw`object-cover`,
+const PhotoQuickRoot = styled(Image)([
   tw`h-80`,
-  tw`md:h-48`,
+  tw`object-cover`,
   tw`w-full`,
+  tw`md:h-52`,
+  {
+    overflowClipMargin: 'unset',
+  },
 ]);
 
 export { PhotoQuick };
