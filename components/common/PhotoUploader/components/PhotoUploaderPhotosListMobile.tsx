@@ -1,6 +1,4 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import tw from 'twin.macro';
 import { Button, Checkbox, Grid, MenuItem, Typography } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
@@ -19,7 +17,13 @@ export const PhotoUploaderPhotosListMobile = ({
   onImageRemove,
 }: PhotoUploaderPhotosListMobileProps) => {
   const {
-    state: { albums, isDarkMode, photoList, photoUploadData, selectedPhotoAlbum },
+    state: {
+      albums,
+      isDarkMode,
+      photoList,
+      photoUploadData,
+      selectedPhotoAlbum,
+    },
     dispatch,
   } = React.useContext(GlobalContext);
 
@@ -27,9 +31,10 @@ export const PhotoUploaderPhotosListMobile = ({
     <Grid container display={{ xs: 'inline-block', md: 'none' }}>
       {photoList?.map((image, imageIndex) => (
         <Grid key={image.file?.name} item xs={12}>
-          <PhotoUploadPhotosListItemMobileGrid
+          <Grid
             key={`${image.file?.name} ${image.file?.lastModified}`}
             container
+            tw='p-8'
           >
             <Grid item xs={11} tw='mb-4'>
               <img src={image['dataURL']} width='150' />
@@ -212,15 +217,9 @@ export const PhotoUploaderPhotosListMobile = ({
                 </DrillyTextField>
               </Grid>
             </Grid>
-          </PhotoUploadPhotosListItemMobileGrid>
+          </Grid>
         </Grid>
       ))}
     </Grid>
   );
 };
-
-export const PhotoUploadPhotosListItemMobileGrid = styled(Grid)([
-  tw`border-b-2`,
-  tw`border-gray-100`,
-  tw`p-8`,
-]);

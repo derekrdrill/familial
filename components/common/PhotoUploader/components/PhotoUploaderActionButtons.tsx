@@ -84,7 +84,7 @@ export const PhotoUploaderActionButtons = ({
         $isPhotoAlbumSelected={!!selectedPhotoAlbum}
       >
         {!!selectedPhotoAlbum && (
-          <Grid item>
+          <Grid item tw='mb-2 lg:mb-0'>
             <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
               Adding photo(s) to: <b>{selectedPhotoAlbum?.albumName}</b>
             </DrillyTypography>
@@ -207,7 +207,7 @@ export const PhotoUploaderActionButtons = ({
               isDarkMode ? tw`text-success-dark-mode` : tw`text-success`
             }
           >
-            Upload new photos
+            Upload photos
           </PhotoUploadActionButton>
         </Grid>
       </PhotoUploadActionButtonsContainer>
@@ -219,16 +219,21 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
   $isDarkMode?: boolean;
   $isPhotoAlbumSelected: boolean;
 }>(({ $isDarkMode, $isPhotoAlbumSelected }) => [
-  !$isDarkMode && tw`bg-white`,
-  $isDarkMode && tw`bg-black`,
-  $isPhotoAlbumSelected && tw`justify-between`,
   tw`!sticky`,
   tw`justify-end`,
-  tw`py-4`,
-  tw`px-10`,
+  tw`pb-4`,
+  tw`pt-4`,
+  tw`px-6`,
   tw`top-20`,
   tw`z-10`,
-  tw`lg:top-16`,
+  tw`lg:mx-0`,
+  tw`lg:pt-2`,
+  tw`lg:px-8`,
+  tw`lg:top-[70px]`,
+  !$isDarkMode && tw`bg-white`,
+  $isDarkMode && tw`bg-black`,
+  $isPhotoAlbumSelected && tw`justify-center`,
+  $isPhotoAlbumSelected && tw`lg:justify-between`,
 ]);
 
 export const PhotoUploadActionButton = styled(Button)<{

@@ -49,24 +49,6 @@ const PhotosLayout = ({
     React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const maxY = !!photoList?.length ? 728 : 400;
-
-      if (scrollY >= maxY && !isScrollBtnShown) {
-        setIsScrollBtnShown(true);
-      } else {
-        setIsScrollBtnShown(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [photoList]);
-
-  React.useEffect(() => {
     dispatch({
       type: GlobalReducerActionEnum.SET_ALBUMS,
       payload: { albums: albumsData },
@@ -79,6 +61,24 @@ const PhotosLayout = ({
       payload: { photos: photosData },
     });
   }, [photosData]);
+
+  // React.useEffect(() => {
+  //   const handleScroll = () => {
+  //     const scrollY = window.scrollY;
+  //     const maxY = !!photoList?.length ? 728 : 400;
+
+  //     if (scrollY >= maxY && !isScrollBtnShown) {
+  //       setIsScrollBtnShown(true);
+  //     } else {
+  //       setIsScrollBtnShown(false);
+  //     }
+  //   };
+
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, []);
 
   return (
     <>
@@ -274,13 +274,15 @@ export const PhotosMainContainer = styled(Grid)<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [
     !$isDarkMode && tw`bg-gray-100`,
     $isDarkMode && tw`bg-transparent`,
+    tw`mt-6`,
     tw`mx-2`,
-    tw`md:mx-8`,
     tw`pb-4`,
     tw`px-4`,
     tw`rounded-2xl`,
     tw`w-full`,
     tw`z-20`,
+    tw`md:mt-2`,
+    tw`md:mx-8`,
   ],
 );
 
