@@ -1,6 +1,4 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import tw from 'twin.macro';
 import { Button, Checkbox, Grid, MenuItem, Typography } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
@@ -19,7 +17,13 @@ export const PhotoUploaderPhotosListMobile = ({
   onImageRemove,
 }: PhotoUploaderPhotosListMobileProps) => {
   const {
-    state: { albums, isDarkMode, photoList, photoUploadData, selectedPhotoAlbum },
+    state: {
+      albums,
+      isDarkMode,
+      photoList,
+      photoUploadData,
+      selectedPhotoAlbum,
+    },
     dispatch,
   } = React.useContext(GlobalContext);
 
@@ -27,9 +31,10 @@ export const PhotoUploaderPhotosListMobile = ({
     <Grid container display={{ xs: 'inline-block', md: 'none' }}>
       {photoList?.map((image, imageIndex) => (
         <Grid key={image.file?.name} item xs={12}>
-          <PhotoUploadPhotosListItemMobileGrid
+          <Grid
             key={`${image.file?.name} ${image.file?.lastModified}`}
             container
+            tw='p-8'
           >
             <Grid item xs={11} tw='mb-4'>
               <img src={image['dataURL']} width='150' />
@@ -42,10 +47,14 @@ export const PhotoUploaderPhotosListMobile = ({
                     dispatch({
                       type: GlobalReducerActionEnum.SET_PHOTO_LIST,
                       payload: {
-                        photoList: photoList.map((imageCheck, imageCheckIndex) =>
-                          imageCheckIndex === imageIndex
-                            ? { ...imageCheck, ...{ checked: !imageCheck.checked } }
-                            : imageCheck,
+                        photoList: photoList.map(
+                          (imageCheck, imageCheckIndex) =>
+                            imageCheckIndex === imageIndex
+                              ? {
+                                  ...imageCheck,
+                                  ...{ checked: !imageCheck.checked },
+                                }
+                              : imageCheck,
                         ),
                       },
                     })
@@ -73,7 +82,8 @@ export const PhotoUploaderPhotosListMobile = ({
                               <Grid item xs={2} />
                             </Grid>
                           ),
-                          modalTitle: 'Are you sure you want to remove this image?',
+                          modalTitle:
+                            'Are you sure you want to remove this image?',
                           submitButtonColor: 'error',
                           submitButtonText: 'Remove',
                         },
@@ -92,7 +102,9 @@ export const PhotoUploaderPhotosListMobile = ({
                   id='title'
                   fullWidth
                   label='Title'
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
+                  onChange={e =>
+                    handleInputChange(e, image.dataURL, imageIndex)
+                  }
                   size='small'
                   variant='outlined'
                   $isDarkMode={isDarkMode}
@@ -104,17 +116,25 @@ export const PhotoUploaderPhotosListMobile = ({
                   label='Album'
                   select
                   size='small'
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
+                  onChange={e =>
+                    handleInputChange(e, image.dataURL, imageIndex)
+                  }
                   value={
                     selectedPhotoAlbum?.albumName ??
-                    (photoUploadData ? photoUploadData[imageIndex]?.albumName : '')
+                    (photoUploadData
+                      ? photoUploadData[imageIndex]?.albumName
+                      : '')
                   }
                   variant='outlined'
                   tw='my-1'
                   $isDarkMode={isDarkMode}
                 >
                   {albums?.map(album => (
-                    <MenuItem key={album._id} id='albumName' value={album.albumName}>
+                    <MenuItem
+                      key={album._id}
+                      id='albumName'
+                      value={album.albumName}
+                    >
                       {album.albumName}
                     </MenuItem>
                   ))}
@@ -196,30 +216,10 @@ export const PhotoUploaderPhotosListMobile = ({
                   </MenuItem>
                 </DrillyTextField>
               </Grid>
-              <Grid item xs={12}>
-                <DrillyTextField
-                  id='description'
-                  fullWidth
-                  label='Description (Optional)'
-                  maxRows={3}
-                  minRows={3}
-                  multiline
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
-                  variant='outlined'
-                  size='small'
-                  $isDarkMode={isDarkMode}
-                />
-              </Grid>
             </Grid>
-          </PhotoUploadPhotosListItemMobileGrid>
+          </Grid>
         </Grid>
       ))}
     </Grid>
   );
 };
-
-export const PhotoUploadPhotosListItemMobileGrid = styled(Grid)([
-  tw`border-b-2`,
-  tw`border-gray-100`,
-  tw`p-8`,
-]);

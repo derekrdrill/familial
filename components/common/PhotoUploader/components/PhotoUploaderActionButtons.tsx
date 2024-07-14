@@ -11,6 +11,7 @@ import {
   GlobalReducerActionEnum,
 } from '../../../../context/GlobalReducer';
 
+import { DrillyTypography } from '../../../../styles/globals';
 import { PhotoUploadData } from '../types/PhotoUploaderData';
 
 export const handlePhotoUpload = async (
@@ -79,15 +80,14 @@ export const PhotoUploaderActionButtons = ({
     !!photoList?.length && (
       <PhotoUploadActionButtonsContainer
         container
-        sx={{ paddingTop: 2, paddingBottom: 2 }}
         $isDarkMode={isDarkMode}
         $isPhotoAlbumSelected={!!selectedPhotoAlbum}
       >
         {!!selectedPhotoAlbum && (
-          <Grid item>
-            <Typography variant='h5'>
+          <Grid item tw='mb-2 lg:mb-0'>
+            <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
               Adding photo(s) to: <b>{selectedPhotoAlbum?.albumName}</b>
-            </Typography>
+            </DrillyTypography>
           </Grid>
         )}
         <Grid item>
@@ -179,7 +179,7 @@ export const PhotoUploaderActionButtons = ({
                     isModalOpen: true,
                     modalBody: (
                       <Typography variant='body1'>
-                        Submitting will post your new photos to drill-y!
+                        Submitting will post your new photos to familial!
                       </Typography>
                     ),
                     modalTitle: 'Confirm submit',
@@ -207,7 +207,7 @@ export const PhotoUploaderActionButtons = ({
               isDarkMode ? tw`text-success-dark-mode` : tw`text-success`
             }
           >
-            Upload new photos
+            Upload photos
           </PhotoUploadActionButton>
         </Grid>
       </PhotoUploadActionButtonsContainer>
@@ -219,13 +219,21 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
   $isDarkMode?: boolean;
   $isPhotoAlbumSelected: boolean;
 }>(({ $isDarkMode, $isPhotoAlbumSelected }) => [
+  tw`!sticky`,
+  tw`justify-end`,
+  tw`pb-4`,
+  tw`pt-4`,
+  tw`px-6`,
+  tw`top-20`,
+  tw`z-10`,
+  tw`lg:mx-0`,
+  tw`lg:pt-2`,
+  tw`lg:px-8`,
+  tw`lg:top-[70px]`,
   !$isDarkMode && tw`bg-white`,
   $isDarkMode && tw`bg-black`,
-  tw`!sticky`,
-  tw`top-24`,
-  tw`z-[2]`,
-  tw`justify-end`,
-  $isPhotoAlbumSelected && tw`justify-between`,
+  $isPhotoAlbumSelected && tw`justify-center`,
+  $isPhotoAlbumSelected && tw`lg:justify-between`,
 ]);
 
 export const PhotoUploadActionButton = styled(Button)<{

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Home from '../components/drill-y/Home';
+import Home from '../components/familial/Home';
 import { Photos } from '../context/types';
 
 import conn from '../data/connection';

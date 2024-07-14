@@ -10,13 +10,13 @@ export const PhotoAlbumsBackButton = () => {
 
   return (
     isPhotoAlbumOpened && (
-      <Grid container tw='md:mx-8 mt-6'>
+      <Grid container tw='mb-2 mt-6 mx-8'>
         <Button
           onClick={() => {
             router.push('/photos');
           }}
           startIcon={<KeyboardDoubleArrowLeftIcon />}
-          tw='normal-case'
+          tw='normal-case px-1'
           variant='text'
         >
           Back to Photo Albums

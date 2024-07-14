@@ -3,9 +3,11 @@ import { NextComponentType, NextPageContext } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useUser } from '@clerk/nextjs';
-import styled from '@emotion/styled';
-import { GlobalStyles as GlobalStylesTwinMacro } from 'twin.macro';
+
 import { Global as GlobalStyles } from '@emotion/react';
+import styled from '@emotion/styled';
+import tw, { GlobalStyles as GlobalStylesTwinMacro } from 'twin.macro';
+
 import { Grid, TextField, Typography } from '@mui/material';
 import DiningTwoToneIcon from '@mui/icons-material/DiningTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
@@ -25,7 +27,7 @@ import MenuIcon from '../components/common/MenuIcon/MenuIcon';
 import Modal from '../components/common/Modal/Modal';
 import Overlay from '../components/common/Overlay/Overlay';
 import Sidebar from '../components/common/Sidebar/Sidebar';
-import UserProfile from '../components/drill-y/UserProfile/UserProfile';
+import UserProfile from '../components/familial/UserProfile/UserProfile';
 
 export const getUserData = async (
   user,
@@ -115,12 +117,12 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
           <TextField
             color='secondary'
             fullWidth
-            placeholder='Search drill-y'
+            placeholder='Search familial'
             InputProps={{ startAdornment: <SearchIcon color='disabled' /> }}
           />
           <Grid item xs={12}>
             <SidebarMenuLink href='/'>
-              <SidebarMenuText variant='h4'>
+              <SidebarMenuText variant='h4' $isDarkMode={isDarkMode}>
                 <Grid container justifyContent='space-between'>
                   Home
                   <HomeTwoToneIcon />
@@ -130,7 +132,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
           </Grid>
           <Grid item xs={12}>
             <SidebarMenuLink href='/photos'>
-              <SidebarMenuText variant='h4'>
+              <SidebarMenuText variant='h4' $isDarkMode={isDarkMode}>
                 <Grid container justifyContent='space-between'>
                   Photos
                   <PhotoSizeSelectActualTwoToneIcon />
@@ -140,7 +142,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
           </Grid>
           <Grid item xs={12}>
             <SidebarMenuLink href='/'>
-              <SidebarMenuText variant='h4'>
+              <SidebarMenuText variant='h4' $isDarkMode={isDarkMode}>
                 <Grid container justifyContent='space-between'>
                   Recipes
                   <DiningTwoToneIcon />
@@ -173,24 +175,28 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
 
 export default AppLayout;
 
-export const SidebarMenuText = styled(Typography)({
-  '&:hover': {
-    backgroundPositionX: '0%',
-    backgroundSize: '100% 0.1em',
-  },
-  backgroundImage: 'linear-gradient(#212121, #212121)',
-  backgroundPositionX: '100%',
-  backgroundPositionY: '100%',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: '0% 0.1em',
-  color: 'black',
-  cursor: 'pointer',
-  fontFamily: `'Josefin Sans', sans-serif !important`,
-  fontWeight: '600 !important',
-  textDecoration: 'none',
-  textTransform: 'uppercase',
-  transition: 'background-size 0.2s ease-in-out',
-});
+export const SidebarMenuText = styled(Typography)<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    !$isDarkMode && tw`bg-gradient-to-r from-black to-black`,
+    !$isDarkMode && tw`text-black`,
+    $isDarkMode && tw`bg-gradient-to-r from-white to-white`,
+    $isDarkMode && tw`text-white`,
+    tw`bg-left-bottom`,
+    tw`bg-no-repeat`,
+    tw`cursor-pointer`,
+    tw`delay-75`,
+    tw`ease-in-out`,
+    tw`transition-all`,
+    tw`hover:bg-left-bottom`,
+    {
+      '&:hover': {
+        backgroundSize: '100% 0.1em',
+      },
+      backgroundSize: '0% 0.1em',
+      fontFamily: `'Josefin Sans', sans-serif !important`,
+    },
+  ],
+);
 
 export const SidebarMenuLink = styled(Link)({
   textDecoration: 'none',

@@ -4,7 +4,7 @@ import { Grid, Typography } from '@mui/material';
 import GlobalContext from '../../context/GlobalContext';
 
 import PhotosLayout from '../../layouts/PhotosLayout';
-import { PhotoCover } from '../../components/drill-y/Photos';
+import { PhotoCover } from '../../components/familial/Photos';
 
 import conn from '../../data/connection';
 import { Albums as AlbumsData, Photos as PhotosData } from '../../data/models';

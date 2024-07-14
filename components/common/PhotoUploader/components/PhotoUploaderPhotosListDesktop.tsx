@@ -36,13 +36,16 @@ export const PhotoUploaderPhotosListDesktop = ({
         xs={1}
         display={{
           xs: 'none',
-          md: photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
+          md:
+            photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
         }}
       >
         <Grid
           container
           justifyContent='flex-end'
-          display={photoList?.length && photoList.length > 4 ? 'inline-flex' : 'none'}
+          display={
+            photoList?.length && photoList.length > 4 ? 'inline-flex' : 'none'
+          }
         >
           <IconButton onClick={handlePrevSlide} tw='mt-40'>
             <SkipPreviousIcon />
@@ -51,7 +54,13 @@ export const PhotoUploaderPhotosListDesktop = ({
       </Grid>
       <Grid item xs={12} md={photoList?.length && photoList.length > 3 && 10}>
         <Grid container display={{ xs: 'none', md: 'inline-block' }}>
-          <Slider dots infinite={false} ref={photosSliderRef} slidesToShow={4} slidesToScroll={1}>
+          <Slider
+            dots
+            infinite={false}
+            ref={photosSliderRef}
+            slidesToShow={5}
+            slidesToScroll={1}
+          >
             {photoList?.map((image, imageIndex) => (
               <Grid key={image.file?.name} container tw='px-4'>
                 <Checkbox
@@ -60,23 +69,33 @@ export const PhotoUploaderPhotosListDesktop = ({
                     dispatch({
                       type: GlobalReducerActionEnum.SET_PHOTO_LIST,
                       payload: {
-                        photoList: photoList.map((imageCheck, imageCheckIndex) =>
-                          imageCheckIndex === imageIndex
-                            ? { ...imageCheck, ...{ checked: !imageCheck.checked } }
-                            : imageCheck,
+                        photoList: photoList.map(
+                          (imageCheck, imageCheckIndex) =>
+                            imageCheckIndex === imageIndex
+                              ? {
+                                  ...imageCheck,
+                                  ...{ checked: !imageCheck.checked },
+                                }
+                              : imageCheck,
                         ),
                       },
                     })
                   }
                 />
                 <Grid item xs={12} tw='h-32 mb-3'>
-                  <img src={image['dataURL']} tw='h-full object-cover' width='120' />
+                  <img
+                    src={image['dataURL']}
+                    tw='h-full object-cover'
+                    width='120'
+                  />
                 </Grid>
                 <DrillyTextField
                   id='title'
                   fullWidth
                   label='Title'
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
+                  onChange={e =>
+                    handleInputChange(e, image.dataURL, imageIndex)
+                  }
                   size='small'
                   variant='outlined'
                   tw='my-1'
@@ -87,17 +106,25 @@ export const PhotoUploaderPhotosListDesktop = ({
                   label='Album'
                   select
                   size='small'
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
+                  onChange={e =>
+                    handleInputChange(e, image.dataURL, imageIndex)
+                  }
                   value={
                     selectedPhotoAlbum?.albumName ??
-                    (photoUploadData ? photoUploadData[imageIndex]?.albumName : '')
+                    (photoUploadData
+                      ? photoUploadData[imageIndex]?.albumName
+                      : '')
                   }
                   variant='outlined'
                   tw='my-1'
                   $isDarkMode={isDarkMode}
                 >
                   {albums?.map(album => (
-                    <MenuItem key={album._id} id='albumName' value={album.albumName}>
+                    <MenuItem
+                      key={album._id}
+                      id='albumName'
+                      value={album.albumName}
+                    >
                       {album.albumName}
                     </MenuItem>
                   ))}
@@ -112,7 +139,9 @@ export const PhotoUploaderPhotosListDesktop = ({
                               //   album => album.albumName === newAlbumName,
                               // );
                               const newAlbumName = (
-                                document.getElementById('album') as HTMLInputElement
+                                document.getElementById(
+                                  'album',
+                                ) as HTMLInputElement
                               )?.value;
 
                               await fetch('/api/album/add', {
@@ -137,7 +166,8 @@ export const PhotoUploaderPhotosListDesktop = ({
                                                 ...photoUpload,
                                                 ...{
                                                   albumName:
-                                                    selectedPhotoAlbum?.albumName ?? newAlbumName,
+                                                    selectedPhotoAlbum?.albumName ??
+                                                    newAlbumName,
                                                 },
                                               }
                                             : photoUpload,
@@ -173,19 +203,6 @@ export const PhotoUploaderPhotosListDesktop = ({
                     </Typography>
                   </MenuItem>
                 </DrillyTextField>
-                <DrillyTextField
-                  id='description'
-                  fullWidth
-                  label='Description (Optional)'
-                  maxRows={3}
-                  minRows={3}
-                  multiline
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
-                  variant='outlined'
-                  size='small'
-                  tw='my-1'
-                  $isDarkMode={isDarkMode}
-                />
                 <Button
                   color='error'
                   fullWidth
@@ -208,7 +225,8 @@ export const PhotoUploaderPhotosListDesktop = ({
                               <Grid item xs={2} />
                             </Grid>
                           ),
-                          modalTitle: 'Are you sure you want to remove this image?',
+                          modalTitle:
+                            'Are you sure you want to remove this image?',
                           submitButtonColor: 'error',
                           submitButtonText: 'Remove',
                         },
@@ -229,12 +247,15 @@ export const PhotoUploaderPhotosListDesktop = ({
         xs={1}
         display={{
           xs: 'none',
-          md: photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
+          md:
+            photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
         }}
       >
         <Grid
           container
-          display={photoList?.length && photoList.length > 4 ? 'inline-block' : 'none'}
+          display={
+            photoList?.length && photoList.length > 4 ? 'inline-block' : 'none'
+          }
         >
           <IconButton onClick={handleNextSlide} tw='mt-40'>
             <SkipNextIcon />

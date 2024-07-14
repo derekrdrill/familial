@@ -46,12 +46,24 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
               item
               xs={12}
               md={2}
-              display={{ xs: 'inline-block', md: isSearchIconShown ? 'inline-block' : 'none' }}
+              display={{
+                xs: 'inline-block',
+                md: isSearchIconShown ? 'inline-block' : 'none',
+              }}
             >
-              <Grid container justifyContent={{ xs: 'center', md: 'flex-start' }}>
+              <Grid
+                container
+                justifyContent={{ xs: 'center', md: 'flex-start' }}
+              >
                 <Link href='/'>
                   <Grid container>
-                    <HeaderLogo src={isDarkMode ? '/logoMobileDarkMode.png' : '/logoMobile.png'} />
+                    <HeaderLogo
+                      src={
+                        isDarkMode
+                          ? '/logoMobileDarkMode.png'
+                          : '/logoMobile.png'
+                      }
+                    />
                   </Grid>
                 </Link>
               </Grid>
@@ -67,7 +79,7 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
                 onBlur={() => setIsSearchIconShown(true)}
                 onChange={e => setSearchField(e.currentTarget.value)}
                 onFocus={() => setIsSearchIconShown(false)}
-                placeholder='Search drill-y'
+                placeholder='Search familial'
                 size='small'
                 value={searchField}
                 variant='outlined'
