@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
+import tw from 'twin.macro';
 import { Grid } from '@mui/material';
 
 export const MenuIconContainer = styled(Grid)<{
@@ -23,14 +24,18 @@ export const MenuIconContainer = styled(Grid)<{
     transition: 'all 150ms linear',
   },
   '.menu-icon-line-top': {
-    transform: $isMenuIconActive ? 'rotate(-28deg) translate(-5px, 7px)' : 'none',
+    transform: $isMenuIconActive
+      ? 'rotate(-28deg) translate(-5px, 7px)'
+      : 'none',
     width: $isMenuIconActive ? 30 : 58,
   },
   '.menu-icon-line-middle': {
     width: 58,
   },
   '.menu-icon-line-bottom': {
-    transform: $isMenuIconActive ? 'rotate(28deg) translate(-5px, -7px)' : 'none',
+    transform: $isMenuIconActive
+      ? 'rotate(28deg) translate(-5px, -7px)'
+      : 'none',
     width: $isMenuIconActive ? 30 : 58,
   },
   cursor: 'pointer',
@@ -44,10 +49,17 @@ export const MenuIconContainer = styled(Grid)<{
 
 export const MenuIconLine = styled(Grid)<{
   $isBottom?: boolean;
-}>(({ $isBottom }) => ({
-  backgroundColor: '#424242',
-  borderRadius: 5,
-  height: 5,
-  marginBottom: !$isBottom ? '10px !important' : '0px !important',
-  transition: 'all 150ms linear',
-}));
+  $isDarkMode?: boolean;
+}>(({ $isBottom, $isDarkMode }) => [
+  // backgroundColor: '#B6B6B6',
+  // borderRadius: 5,
+  // height: 5,
+  // marginBottom: !$isBottom ? '10px !important' : '0px !important',
+  !$isBottom && tw`!mb-2.5`,
+  $isBottom && tw`!mb-0`,
+  !$isDarkMode && tw`bg-black`,
+  $isDarkMode && tw`bg-gray-B6B6B6`,
+  tw`h-1.5`,
+  tw`rounded-b-md`,
+  { borderRadius: 5, transition: 'all 150ms linear' },
+]);

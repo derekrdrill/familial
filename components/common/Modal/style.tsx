@@ -8,15 +8,17 @@ export const ModalRootContainer = styled(Grid)({
   height: 1000,
 });
 
-export const ModalContainer = styled(Grid)<{ $isDarkMode: boolean }>(({ $isDarkMode }) => [
-  tw`rounded-3xl`,
-  tw`bg-amber-50`,
-  tw`pt-8`,
-  tw`pb-12`,
-  tw`px-16`,
-  $isDarkMode && tw`bg-gray-700`,
-  !$isDarkMode && tw`bg-gray-50`,
-]);
+export const ModalContainer = styled(Grid)<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    tw`rounded-3xl`,
+    tw`bg-amber-50`,
+    tw`pb-4`,
+    tw`p-8`,
+    $isDarkMode && tw`bg-gray-700`,
+    $isDarkMode && tw`text-gray-50`,
+    !$isDarkMode && tw`bg-gray-50`,
+  ],
+);
 
 export const ModalRow = styled(Grid)<{ isBottom?: boolean; isBody?: boolean }>(
   ({ isBottom, isBody }) => ({

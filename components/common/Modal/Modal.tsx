@@ -41,35 +41,44 @@ const Modal = () => {
         <Grid item xs={10} md={6} lg={4}>
           <ModalContainer container rowGap={4} $isDarkMode={isDarkMode}>
             <Grid item xs={12}>
-              <ModalRow container>
-                <Grid item xs={11}>
-                  <Typography variant='h6'>{modalTitle}</Typography>
-                </Grid>
-                <Grid item xs={1}>
-                  <Grid container justifyContent='flex-end'>
-                    {!isExitHidden && (
-                      <Button
-                        color='error'
-                        disabled={isModalLoading}
-                        onClick={
-                          /* istanbul ignore next */
-                          () => dispatch(setModalItem(null, false, null, ''))
-                        }
-                        size='small'
-                        variant='outlined'
-                      >
-                        x
-                      </Button>
-                    )}
-                  </Grid>
-                </Grid>
-              </ModalRow>
+              {modalTitle ||
+                (!isExitHidden && (
+                  <ModalRow container>
+                    <Grid item xs={11}>
+                      <Typography variant='h6'>{modalTitle}</Typography>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <Grid container justifyContent='flex-end'>
+                        {!isExitHidden && (
+                          <Button
+                            color='error'
+                            disabled={isModalLoading}
+                            onClick={
+                              /* istanbul ignore next */
+                              () =>
+                                dispatch(setModalItem(null, false, null, ''))
+                            }
+                            size='small'
+                            variant='outlined'
+                          >
+                            x
+                          </Button>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </ModalRow>
+                ))}
               <ModalRow container isBody>
                 <Grid item xs={12}>
                   {modalBody}
                 </Grid>
               </ModalRow>
-              <ModalRow columnSpacing={2} container isBottom justifyContent='flex-end'>
+              <ModalRow
+                columnSpacing={2}
+                container
+                isBottom
+                justifyContent='flex-end'
+              >
                 <Grid item>
                   {!isCancelHidden && (
                     <ModalButton
@@ -79,6 +88,7 @@ const Modal = () => {
                         /* istanbul ignore next */
                         () => dispatch(setModalItem(null, false, null, ''))
                       }
+                      size='small'
                       variant={cancelButtonVariant ?? 'outlined'}
                     >
                       {cancelButtonText ?? 'Cancel'}
@@ -116,9 +126,14 @@ const Modal = () => {
                         }, submitButtonLoadingDelay ?? 0);
                       }
                     }
+                    size='small'
                     variant={submitButtonVariant ?? 'contained'}
                   >
-                    {isModalLoading ? <CircularProgress /> : submitButtonText ?? 'Submit'}
+                    {isModalLoading ? (
+                      <CircularProgress />
+                    ) : (
+                      submitButtonText ?? 'Submit'
+                    )}
                   </ModalButton>
                 </Grid>
               </ModalRow>

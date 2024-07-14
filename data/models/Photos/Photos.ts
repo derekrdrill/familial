@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export const PhotosSchema = new mongoose.Schema({
-  albumID: Number,
+  albumID: String,
   albumName: String,
   description: String,
   title: String,

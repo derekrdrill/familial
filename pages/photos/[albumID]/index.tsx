@@ -61,29 +61,22 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
         {photoList && (
           <ImageUploading
             multiple
-            onChange={photoListData => handlePhotoUploadingChange(photoListData, dispatch)}
+            onChange={photoListData =>
+              handlePhotoUploadingChange(photoListData, dispatch)
+            }
             value={photoList}
           >
             {({ onImageUpload }) =>
               photosView === 'list' ? (
-                // <Grid item xs={12}>
-                //   <Grid container>
-                //     <Grid item sm={1} md={3} xl={4} />
-                //     <Grid item xs={12} sm={10} md={6} xl={4}>
                 <Button
-                  color='info'
                   endIcon={<AddAPhotoTwoToneIcon />}
                   fullWidth
-                  variant={isDarkMode ? 'outlined' : 'contained'}
-                  tw='mt-6 hover:shadow-none shadow-none'
+                  variant='outlined'
+                  tw='!bg-opacity-20 hover:!bg-opacity-30 mt-6 hover:shadow-none shadow-none bg-info hover:bg-info border-info hover:border-info text-info'
                 >
                   Add to album
                 </Button>
               ) : (
-                //     </Grid>
-                //     <Grid item sm={1} md={3} xl={4} />
-                //   </Grid>
-                // </Grid>
                 <PhotoUploaderTile
                   item
                   onClick={onImageUpload}
@@ -99,7 +92,10 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
                     $isDarkMode={isDarkMode}
                     $photosView={photosView}
                   >
-                    <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
+                    <DrillyTypography
+                      variant='subtitle2'
+                      $isDarkMode={isDarkMode}
+                    >
                       Add to album <AddAPhotoTwoToneIcon />
                     </DrillyTypography>
                   </PhotoAlbumsAddTextContainer>
@@ -111,7 +107,13 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
         {photosData?.map(photoListItem => (
           <>
             {photosView === 'list' && (
-              <Grid item xs={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+              <Grid
+                item
+                xs={1}
+                md={3}
+                xl={4}
+                display={{ xs: 'none', sm: 'inline-block' }}
+              />
             )}
             <Grid
               item
@@ -130,7 +132,13 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
               </Grid>
             </Grid>
             {photosView === 'list' && (
-              <Grid item xs={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+              <Grid
+                item
+                xs={1}
+                md={3}
+                xl={4}
+                display={{ xs: 'none', sm: 'inline-block' }}
+              />
             )}
           </>
         ))}
