@@ -82,6 +82,7 @@ export const PhotoUploadAreaRoot = styled(Grid)<{ $isDarkMode?: boolean }>(
     tw`pb-4`,
     tw`pt-6`,
     tw`mx-8`,
+    tw`lg:mt-4`,
   ],
 );
 
