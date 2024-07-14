@@ -15,7 +15,7 @@ import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';
 
 import PhotosLayout from '../../../layouts/PhotosLayout';
-import { PhotoCover } from '../../../components/drill-y/Photos';
+import { PhotoCover } from '../../../components/familial/Photos';
 import { DrillyTypography } from '../../../styles/globals';
 
 const handlePhotoUploadingChange = (

@@ -15,7 +15,7 @@ import PhotoUploader from '../components/common/PhotoUploader';
 import {
   PhotoAlbumsBackButton,
   PhotoViewer,
-} from '../components/drill-y/Photos';
+} from '../components/familial/Photos';
 import { Albums, Photos } from '../context/types';
 import { GlobalReducerActionEnum } from '../context/GlobalReducer';
 

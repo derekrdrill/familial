@@ -179,7 +179,7 @@ export const PhotoUploaderActionButtons = ({
                     isModalOpen: true,
                     modalBody: (
                       <Typography variant='body1'>
-                        Submitting will post your new photos to drill-y!
+                        Submitting will post your new photos to familial!
                       </Typography>
                     ),
                     modalTitle: 'Confirm submit',

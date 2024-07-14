@@ -27,7 +27,7 @@ import MenuIcon from '../components/common/MenuIcon/MenuIcon';
 import Modal from '../components/common/Modal/Modal';
 import Overlay from '../components/common/Overlay/Overlay';
 import Sidebar from '../components/common/Sidebar/Sidebar';
-import UserProfile from '../components/drill-y/UserProfile/UserProfile';
+import UserProfile from '../components/familial/UserProfile/UserProfile';
 
 export const getUserData = async (
   user,
@@ -117,7 +117,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
           <TextField
             color='secondary'
             fullWidth
-            placeholder='Search drill-y'
+            placeholder='Search familial'
             InputProps={{ startAdornment: <SearchIcon color='disabled' /> }}
           />
           <Grid item xs={12}>
