@@ -119,8 +119,6 @@ const PhotoQuickRoot = styled.div<{ $isDarkMode?: boolean }>(
 const PhotoQuickImage = styled(Image)([
   tw`h-80`,
   tw`object-cover`,
-  tw`h-80`,
-  tw`object-cover`,
   tw`w-full`,
   tw`md:h-52`,
   {

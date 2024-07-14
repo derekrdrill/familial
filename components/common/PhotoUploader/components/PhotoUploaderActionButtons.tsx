@@ -11,6 +11,7 @@ import {
   GlobalReducerActionEnum,
 } from '../../../../context/GlobalReducer';
 
+import { DrillyTypography } from '../../../../styles/globals';
 import { PhotoUploadData } from '../types/PhotoUploaderData';
 
 export const handlePhotoUpload = async (
@@ -79,15 +80,14 @@ export const PhotoUploaderActionButtons = ({
     !!photoList?.length && (
       <PhotoUploadActionButtonsContainer
         container
-        sx={{ paddingTop: 2, paddingBottom: 2 }}
         $isDarkMode={isDarkMode}
         $isPhotoAlbumSelected={!!selectedPhotoAlbum}
       >
         {!!selectedPhotoAlbum && (
           <Grid item>
-            <Typography variant='h5'>
+            <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
               Adding photo(s) to: <b>{selectedPhotoAlbum?.albumName}</b>
-            </Typography>
+            </DrillyTypography>
           </Grid>
         )}
         <Grid item>
@@ -221,11 +221,14 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
 }>(({ $isDarkMode, $isPhotoAlbumSelected }) => [
   !$isDarkMode && tw`bg-white`,
   $isDarkMode && tw`bg-black`,
-  tw`!sticky`,
-  tw`top-24`,
-  tw`z-[2]`,
-  tw`justify-end`,
   $isPhotoAlbumSelected && tw`justify-between`,
+  tw`!sticky`,
+  tw`justify-end`,
+  tw`py-4`,
+  tw`px-10`,
+  tw`top-20`,
+  tw`z-10`,
+  tw`lg:top-16`,
 ]);
 
 export const PhotoUploadActionButton = styled(Button)<{

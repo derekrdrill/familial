@@ -1,8 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import tw from 'twin.macro';
+import tw, { TwStyle } from 'twin.macro';
 import { Button, Grid, TextField } from '@mui/material';
+
+import AddAPhotoTwoTone from '@mui/icons-material/AddAPhotoTwoTone';
 import AppsIcon from '@mui/icons-material/Apps';
 import ListIcon from '@mui/icons-material/List';
 import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
@@ -10,7 +12,10 @@ import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelec
 import GlobalContext from '../context/GlobalContext';
 
 import PhotoUploader from '../components/common/PhotoUploader';
-import { PhotoAlbumsBackButton, PhotoViewer } from '../components/drill-y/Photos';
+import {
+  PhotoAlbumsBackButton,
+  PhotoViewer,
+} from '../components/drill-y/Photos';
 import { Albums, Photos } from '../context/types';
 import { GlobalReducerActionEnum } from '../context/GlobalReducer';
 
@@ -19,6 +24,7 @@ import { DrillyTypography } from '../styles/globals';
 type PhotosLayoutProps = {
   albumsData: Albums[];
   children: React.ReactNode;
+  onImageUpload: () => void;
   photosData: Photos[];
   photosLayoutTitle: string;
   photoAlbumLength?: number;
@@ -27,6 +33,7 @@ type PhotosLayoutProps = {
 const PhotosLayout = ({
   albumsData,
   children,
+  onImageUpload,
   photoAlbumLength,
   photosData,
   photosLayoutTitle,
@@ -35,15 +42,42 @@ const PhotosLayout = ({
 
   const {
     dispatch,
-    state: { isDarkMode, photosView },
+    state: { isDarkMode, photoList, photosView },
   } = React.useContext(GlobalContext);
 
+  const [isScrollBtnShown, setIsScrollBtnShown] =
+    React.useState<boolean>(false);
+
   React.useEffect(() => {
-    dispatch({ type: GlobalReducerActionEnum.SET_ALBUMS, payload: { albums: albumsData } });
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const maxY = !!photoList?.length ? 728 : 400;
+
+      if (scrollY >= maxY && !isScrollBtnShown) {
+        setIsScrollBtnShown(true);
+      } else {
+        setIsScrollBtnShown(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [photoList]);
+
+  React.useEffect(() => {
+    dispatch({
+      type: GlobalReducerActionEnum.SET_ALBUMS,
+      payload: { albums: albumsData },
+    });
   }, [albumsData]);
 
   React.useEffect(() => {
-    dispatch({ type: GlobalReducerActionEnum.SET_PHOTOS, payload: { photos: photosData } });
+    dispatch({
+      type: GlobalReducerActionEnum.SET_PHOTOS,
+      payload: { photos: photosData },
+    });
   }, [photosData]);
 
   return (
@@ -52,22 +86,41 @@ const PhotosLayout = ({
       <PhotoUploader />
       <PhotoViewer
         isPhotoViewerOpen={!!router.query.p}
-        photoTitle={photosData?.find(photo => photo._id === router.query.p)?.title}
+        photoTitle={
+          photosData?.find(photo => photo._id === router.query.p)?.title
+        }
         photoURL={photosData?.find(photo => photo._id === router.query.p)?.url}
       />
       <PhotosMainContainer $isDarkMode={isDarkMode}>
-        <Grid item xs={12}>
+        <PhotoInfoAndActionsContainer item xs={12} $isDarkMode={isDarkMode}>
           <Grid container justifyContent='space-between'>
-            <PhotosLayoutTitleContainer item $isAlbumOpened={!!!router.query.albumID}>
-              <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
-                {photosLayoutTitle}
-              </DrillyTypography>
-              {photoAlbumLength && (
-                <DrillyTypography
-                  variant='subtitle1'
-                  $isDarkMode={isDarkMode}
-                >{`${photoAlbumLength} photo${photoAlbumLength === 1 ? '' : 's'}`}</DrillyTypography>
-              )}
+            <PhotosLayoutTitleContainer
+              item
+              $isAlbumOpened={!!!router.query.albumID}
+            >
+              <div tw='flex flex-col gap-2'>
+                <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
+                  {photosLayoutTitle}
+                </DrillyTypography>
+                {photoAlbumLength && (
+                  <DrillyTypography
+                    variant='subtitle1'
+                    $isDarkMode={isDarkMode}
+                  >{`${photoAlbumLength} photo${photoAlbumLength === 1 ? '' : 's'}`}</DrillyTypography>
+                )}
+                {isScrollBtnShown && (
+                  <PhotoAddButton
+                    onClick={onImageUpload}
+                    startIcon={<AddAPhotoTwoTone />}
+                    variant='outlined'
+                    $bgColor={tw`bg-info hover:bg-info`}
+                    $borderColor={tw`border-info hover:border-info`}
+                    $textColor={tw`text-info hover:text-info`}
+                  >
+                    Add to album
+                  </PhotoAddButton>
+                )}
+              </div>
             </PhotosLayoutTitleContainer>
             {!photoAlbumLength && (
               <Button
@@ -112,10 +165,16 @@ const PhotosLayout = ({
                         modalTitle: 'Add new album',
                         submitSuccessMessage: (
                           <>
-                            <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
+                            <DrillyTypography
+                              variant='subtitle1'
+                              $isDarkMode={isDarkMode}
+                            >
                               New album added!
                             </DrillyTypography>
-                            <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
+                            <DrillyTypography
+                              variant='subtitle2'
+                              $isDarkMode={isDarkMode}
+                            >
                               Album will not appear here until photos are added
                             </DrillyTypography>
                           </>
@@ -168,7 +227,7 @@ const PhotosLayout = ({
               </Grid>
             )}
           </Grid>
-        </Grid>
+        </PhotoInfoAndActionsContainer>
         {children}
       </PhotosMainContainer>
     </>
@@ -177,22 +236,53 @@ const PhotosLayout = ({
 
 export default PhotosLayout;
 
-export const PhotosLayoutTitleContainer = styled(Grid)<{ $isAlbumOpened: boolean }>(
-  ({ $isAlbumOpened }) => [
-    $isAlbumOpened && tw`flex`,
-    $isAlbumOpened && tw`[align-items: flex-end]`,
+export const PhotoAddButton = styled(Button)<{
+  $bgColor: TwStyle;
+  $borderColor: TwStyle;
+  $textColor: TwStyle;
+}>(({ $bgColor, $borderColor, $textColor }) => [
+  tw`!bg-opacity-20`,
+  tw`normal-case`,
+  tw`shadow-none`,
+  tw`hover:!bg-opacity-30`,
+  tw`hover:shadow-none`,
+  $bgColor,
+  $borderColor,
+  $textColor,
+]);
+
+export const PhotoInfoAndActionsContainer = styled(Grid)<{
+  $isDarkMode?: boolean;
+}>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`bg-gray-100`,
+  $isDarkMode && tw`bg-black`,
+  tw`py-4`,
+  tw`sticky`,
+  tw`top-20`,
+  tw`z-20`,
+  tw`lg:top-16`,
+]);
+
+export const PhotosLayoutTitleContainer = styled(Grid)<{
+  $isAlbumOpened: boolean;
+}>(({ $isAlbumOpened }) => [
+  $isAlbumOpened && tw`flex`,
+  $isAlbumOpened && tw`[align-items: flex-end]`,
+]);
+
+export const PhotosMainContainer = styled(Grid)<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    !$isDarkMode && tw`bg-gray-100`,
+    $isDarkMode && tw`bg-transparent`,
+    tw`mx-2`,
+    tw`md:mx-8`,
+    tw`pb-4`,
+    tw`px-4`,
+    tw`rounded-2xl`,
+    tw`w-full`,
+    tw`z-20`,
   ],
 );
-
-export const PhotosMainContainer = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
-  !$isDarkMode && tw`bg-gray-100`,
-  $isDarkMode && tw`bg-transparent`,
-  tw`mx-2`,
-  tw`md:mx-8`,
-  tw`p-4`,
-  tw`rounded-2xl`,
-  tw`w-full`,
-]);
 
 export const PhotosViewButton = styled(Button)<{
   $isActive?: boolean;

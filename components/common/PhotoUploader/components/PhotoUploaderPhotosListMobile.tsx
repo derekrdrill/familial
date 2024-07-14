@@ -42,10 +42,14 @@ export const PhotoUploaderPhotosListMobile = ({
                     dispatch({
                       type: GlobalReducerActionEnum.SET_PHOTO_LIST,
                       payload: {
-                        photoList: photoList.map((imageCheck, imageCheckIndex) =>
-                          imageCheckIndex === imageIndex
-                            ? { ...imageCheck, ...{ checked: !imageCheck.checked } }
-                            : imageCheck,
+                        photoList: photoList.map(
+                          (imageCheck, imageCheckIndex) =>
+                            imageCheckIndex === imageIndex
+                              ? {
+                                  ...imageCheck,
+                                  ...{ checked: !imageCheck.checked },
+                                }
+                              : imageCheck,
                         ),
                       },
                     })
@@ -73,7 +77,8 @@ export const PhotoUploaderPhotosListMobile = ({
                               <Grid item xs={2} />
                             </Grid>
                           ),
-                          modalTitle: 'Are you sure you want to remove this image?',
+                          modalTitle:
+                            'Are you sure you want to remove this image?',
                           submitButtonColor: 'error',
                           submitButtonText: 'Remove',
                         },
@@ -92,7 +97,9 @@ export const PhotoUploaderPhotosListMobile = ({
                   id='title'
                   fullWidth
                   label='Title'
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
+                  onChange={e =>
+                    handleInputChange(e, image.dataURL, imageIndex)
+                  }
                   size='small'
                   variant='outlined'
                   $isDarkMode={isDarkMode}
@@ -104,17 +111,25 @@ export const PhotoUploaderPhotosListMobile = ({
                   label='Album'
                   select
                   size='small'
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
+                  onChange={e =>
+                    handleInputChange(e, image.dataURL, imageIndex)
+                  }
                   value={
                     selectedPhotoAlbum?.albumName ??
-                    (photoUploadData ? photoUploadData[imageIndex]?.albumName : '')
+                    (photoUploadData
+                      ? photoUploadData[imageIndex]?.albumName
+                      : '')
                   }
                   variant='outlined'
                   tw='my-1'
                   $isDarkMode={isDarkMode}
                 >
                   {albums?.map(album => (
-                    <MenuItem key={album._id} id='albumName' value={album.albumName}>
+                    <MenuItem
+                      key={album._id}
+                      id='albumName'
+                      value={album.albumName}
+                    >
                       {album.albumName}
                     </MenuItem>
                   ))}
@@ -195,20 +210,6 @@ export const PhotoUploaderPhotosListMobile = ({
                     </Typography>
                   </MenuItem>
                 </DrillyTextField>
-              </Grid>
-              <Grid item xs={12}>
-                <DrillyTextField
-                  id='description'
-                  fullWidth
-                  label='Description (Optional)'
-                  maxRows={3}
-                  minRows={3}
-                  multiline
-                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
-                  variant='outlined'
-                  size='small'
-                  $isDarkMode={isDarkMode}
-                />
               </Grid>
             </Grid>
           </PhotoUploadPhotosListItemMobileGrid>

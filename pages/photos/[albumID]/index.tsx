@@ -70,29 +70,30 @@ const AlbumIDIndex = ({
   }, [router]);
 
   return (
-    <PhotosLayout
-      albumsData={albumsData}
-      photoAlbumLength={photosData.length}
-      photosData={photosData}
-      photosLayoutTitle={albumName}
-    >
-      <Grid container>
-        {photoList && (
-          <ImageUploading
-            multiple
-            onChange={photoListData =>
-              handlePhotoUploadingChange(photoListData, dispatch)
-            }
-            value={photoList}
+    photoList && (
+      <ImageUploading
+        multiple
+        onChange={photoListData =>
+          handlePhotoUploadingChange(photoListData, dispatch)
+        }
+        value={photoList}
+      >
+        {({ onImageUpload }) => (
+          <PhotosLayout
+            albumsData={albumsData}
+            onImageUpload={onImageUpload}
+            photoAlbumLength={photosData.length}
+            photosData={photosData}
+            photosLayoutTitle={albumName}
           >
-            {({ onImageUpload }) =>
-              photosView === 'list' ? (
+            <Grid container>
+              {photosView === 'list' ? (
                 <Button
-                  endIcon={<AddAPhotoTwoToneIcon />}
                   fullWidth
                   onClick={onImageUpload}
                   variant='outlined'
-                  tw='!bg-opacity-20 hover:!bg-opacity-30 mt-6 hover:shadow-none shadow-none bg-info hover:bg-info border-info hover:border-info text-info'
+                  startIcon={<AddAPhotoTwoToneIcon />}
+                  tw='!bg-opacity-20 hover:!bg-opacity-30 mt-6 normal-case hover:shadow-none shadow-none bg-info hover:bg-info border-info hover:border-info text-info'
                 >
                   Add to album
                 </Button>
@@ -103,7 +104,7 @@ const AlbumIDIndex = ({
                   xs={6}
                   sm={4}
                   md={3}
-                  xl={2}
+                  lg={2}
                   $photosView={photosView}
                 >
                   <PhotoAlbumsAddTextContainer
@@ -120,50 +121,52 @@ const AlbumIDIndex = ({
                     </DrillyTypography>
                   </PhotoAlbumsAddTextContainer>
                 </PhotoUploaderTile>
-              )
-            }
-          </ImageUploading>
-        )}
-        {photosData?.map(photoListItem => (
-          <>
-            {photosView === 'list' && (
-              <Grid
-                item
-                xs={1}
-                md={3}
-                xl={4}
-                display={{ xs: 'none', sm: 'inline-block' }}
-              />
-            )}
-            <Grid
-              item
-              xs={photosView === 'list' ? 12 : 6}
-              sm={photosView === 'list' ? 10 : 4}
-              md={photosView === 'list' ? 6 : 3}
-              xl={photosView === 'list' ? 4 : 2}
-              tw='flex justify-center'
-            >
-              <Grid container>
-                <PhotoCover
-                  key={photoListItem._id}
-                  photoListItem={photoListItem}
-                  photoURL={photoListItem.url}
-                />
-              </Grid>
+              )}
+              {/* </ImageUploading>
+        )} */}
+              {photosData?.map(photoListItem => (
+                <>
+                  {photosView === 'list' && (
+                    <Grid
+                      item
+                      xs={1}
+                      md={3}
+                      xl={4}
+                      display={{ xs: 'none', sm: 'inline-block' }}
+                    />
+                  )}
+                  <Grid
+                    item
+                    xs={photosView === 'list' ? 12 : 6}
+                    sm={photosView === 'list' ? 10 : 4}
+                    md={photosView === 'list' ? 6 : 3}
+                    lg={photosView === 'list' ? 4 : 2}
+                    tw='flex justify-center'
+                  >
+                    <Grid container>
+                      <PhotoCover
+                        key={photoListItem._id}
+                        photoListItem={photoListItem}
+                        photoURL={photoListItem.url}
+                      />
+                    </Grid>
+                  </Grid>
+                  {photosView === 'list' && (
+                    <Grid
+                      item
+                      xs={1}
+                      md={3}
+                      xl={4}
+                      display={{ xs: 'none', sm: 'inline-block' }}
+                    />
+                  )}
+                </>
+              ))}
             </Grid>
-            {photosView === 'list' && (
-              <Grid
-                item
-                xs={1}
-                md={3}
-                xl={4}
-                display={{ xs: 'none', sm: 'inline-block' }}
-              />
-            )}
-          </>
-        ))}
-      </Grid>
-    </PhotosLayout>
+          </PhotosLayout>
+        )}
+      </ImageUploading>
+    )
   );
 };
 
@@ -194,7 +197,6 @@ export const PhotosMainContainer = styled(Grid)([
 export const PhotoUploaderTile = styled(Grid)<{
   $photosView?: 'grid' | 'list';
 }>(({ $photosView }) => [
-  tw`mt-8`,
   tw`mb-2`,
   $photosView === 'list' && tw`sm:mx-16`,
   $photosView === 'list' && tw`md:mx-40`,

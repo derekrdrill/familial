@@ -51,7 +51,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
       }}
     >
       {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
-      <div tw='relative mx-2 translate-y-10 z-10'>
+      <PhotoCoverImageControlButtonDiv $photosView={photosView}>
         <PhotoCoverImageControlButton
           color='inherit'
           onClick={e => {
@@ -212,7 +212,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
         >
           <EditTwoToneIcon />
         </PhotoCoverImageControlButton>
-      </div>
+      </PhotoCoverImageControlButtonDiv>
       <PhotoCoverImage
         alt='album-cover'
         height={0}
@@ -228,7 +228,8 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
 };
 
 export const PhotoCoverRoot = styled.div([
-  tw`p-2`,
+  tw`pl-2`,
+  tw`py-2`,
   tw`w-full`,
   tw`cursor-pointer`,
   {
@@ -249,12 +250,25 @@ export const PhotoCoverImage = styled(Image)<{
   !$isLoading && tw`border-gray-100`,
   !$isLoading && tw`border-solid`,
   $photosView === 'grid' && tw`h-40`,
-  $photosView === 'grid' && tw`md:h-48`,
+  $photosView === 'grid' && tw`-mt-9`,
   $photosView === 'grid' && tw`object-cover`,
   $photosView === 'grid' && tw`w-full`,
+  $photosView === 'grid' && tw`md:h-48`,
   $photosView === 'list' && tw`h-full`,
   $photosView === 'list' && tw`w-fit`,
   $photosView === 'list' && tw`inline-block`,
+  {
+    overflowClipMargin: 'unset',
+  },
+]);
+
+export const PhotoCoverImageControlButtonDiv = styled.div<{
+  $photosView?: 'grid' | 'list';
+}>(({ $photosView }) => [
+  $photosView === 'list' && tw`translate-y-10`,
+  tw`relative`,
+  tw`mx-2`,
+  tw`z-10`,
 ]);
 
 export const PhotoCoverImageControlButton = styled(Button)<{
