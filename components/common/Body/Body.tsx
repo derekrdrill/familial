@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { GridProps } from '@mui/material';
-import { BodyRoot } from './style';
+import { BodyRoot, BodyChildrenContainer } from './style';
 
 import conn from '../../../data/connection';
 import { Albums } from '../../../data/models';
 
 const Body = ({ children }: GridProps) => {
-  return <BodyRoot container>{children}</BodyRoot>;
+  return (
+    <BodyRoot tw='flex justify-center'>
+      <BodyChildrenContainer container>{children}</BodyChildrenContainer>;
+    </BodyRoot>
+  );
 };
 
 export default Body;

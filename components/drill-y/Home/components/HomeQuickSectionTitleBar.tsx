@@ -33,12 +33,12 @@ const HomeQuickSectionTitleBar = ({
         </HomeQuickSectionTitle>
       </div>
       <div tw='col-span-1 flex justify-end'>
-        <button>
+        <HomeQuickSectionFilterButton $isDarkMode={isDarkMode}>
           <div tw='flex items-center'>
             Recently added
             <KeyboardArrowDownIcon />
           </div>
-        </button>
+        </HomeQuickSectionFilterButton>
       </div>
     </HomeQuickSectionTitleColDiv>
   );
@@ -68,3 +68,11 @@ const HomeQuickSectionTitle = styled.div<{
   tw`mb-2`,
   $styles,
 ]);
+
+const HomeQuickSectionFilterButton = styled.button<{ $isDarkMode }>(
+  ({ $isDarkMode }) => [
+    $isDarkMode && tw`text-white`,
+    !$isDarkMode && tw`text-black`,
+    tw`hover:underline`,
+  ],
+);

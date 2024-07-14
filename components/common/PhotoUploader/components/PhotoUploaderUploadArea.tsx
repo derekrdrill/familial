@@ -70,18 +70,21 @@ export const PhotoUploaderUploadArea = ({
   );
 };
 
-export const PhotoUploadAreaRoot = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
-  $isDarkMode && tw`border-[0.5px]`,
-  $isDarkMode && tw`!bg-gray-900`,
-  $isDarkMode && tw`border-gray-700`,
-  !$isDarkMode && tw`border-2`,
-  tw`border-dashed`,
-  tw`max-h-40`,
-  tw`mt-10`,
-  tw`pb-4`,
-  tw`pt-6`,
-  tw`sm:mx-6`,
-  tw`md:mx-24`,
-]);
+export const PhotoUploadAreaRoot = styled(Grid)<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    $isDarkMode && tw`border-[0.5px]`,
+    $isDarkMode && tw`!bg-gray-900`,
+    $isDarkMode && tw`border-gray-700`,
+    !$isDarkMode && tw`border-2`,
+    tw`border-dashed`,
+    tw`max-h-40`,
+    tw`max-w-screen-2xl`,
+    tw`mt-10`,
+    tw`m-2`,
+    tw`pb-4`,
+    tw`pt-6`,
+    tw`m-8`,
+  ],
+);
 
 export const PhotoUploadAreaIcon = styled(DriveFolderUploadIcon)([tw`-translate-y-0.5`]);

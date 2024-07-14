@@ -19,7 +19,11 @@ type PhotoViewerTypes = {
   photoURL?: string;
 };
 
-export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoViewerTypes) => {
+export const PhotoViewer = ({
+  isPhotoViewerOpen,
+  photoTitle,
+  photoURL,
+}: PhotoViewerTypes) => {
   const router = useRouter();
 
   const {
@@ -32,10 +36,10 @@ export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoVi
         {photoURL && (
           <div tw='md:flex md:justify-between'>
             <div tw='bg-[#00000099] w-full md:w-3/4'>
-              <div tw='flex justify-center mt-[6%]'>
+              <div tw='flex items-center justify-center md:h-screen'>
                 <div tw='absolute left-2 top-2'>
                   <Button
-                    tw='mt-8 md:m-0'
+                    tw='md:m-0'
                     color='secondary'
                     fullWidth
                     onClick={() => {
@@ -58,23 +62,25 @@ export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoVi
                   </Button>
                 </div>
                 <Image
-                  tw='md:inline-block hidden'
                   alt='selected-image'
-                  height={600}
+                  height={0}
+                  sizes='100vw'
                   src={photoURL}
-                  width={600}
+                  tw='max-h-[700px] hidden w-fit md:inline-block'
+                  width={0}
                 />
                 <Image
-                  tw='inline-block md:hidden'
                   alt='selected-image'
-                  height={300}
+                  height={0}
+                  sizes='100vw'
                   src={photoURL}
-                  width={300}
+                  tw='max-h-[500px] inline-block w-fit md:hidden'
+                  width={0}
                 />
               </div>
             </div>
             <PhotoViewerActionsPanel $isDarkMode={isDarkMode}>
-              <div tw='m-8'>
+              <div tw='p-8'>
                 <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
                   {photoTitle}
                 </DrillyTypography>
@@ -120,13 +126,15 @@ export const PhotoViewer = ({ isPhotoViewerOpen, photoTitle, photoURL }: PhotoVi
   );
 };
 
-export const PhotoViewerActionsPanel = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
-  $isDarkMode && tw`bg-gray-900`,
-  !$isDarkMode && tw`bg-white`,
-  tw`h-screen`,
-  tw`w-full`,
-  tw`md:w-1/4`,
-]);
+export const PhotoViewerActionsPanel = styled.div<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    $isDarkMode && tw`bg-gray-900`,
+    !$isDarkMode && tw`bg-white`,
+    tw`h-screen`,
+    tw`w-full`,
+    tw`md:w-1/4`,
+  ],
+);
 
 export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [

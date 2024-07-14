@@ -75,14 +75,22 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
         />
         <div tw='col-span-1 flex justify-center lg:p-2 lg:px-8'>
           <Carousel
-            carouselContent={photosQuick.map(photo => ({
-              id: photo._id,
-              component: (
-                <div tw='w-80 md:w-56'>
-                  <PhotoQuick photoTitle={photo.title} photoUrl={photo.url} />
-                </div>
-              ),
-            }))}
+            carouselContent={photosQuick.map(photo => {
+              console.log(photo);
+              return {
+                id: photo._id,
+                component: (
+                  <div tw='w-80 md:w-56'>
+                    <PhotoQuick
+                      photoAlbumID={photo.albumID}
+                      photoID={photo._id}
+                      photoTitle={photo.title}
+                      photoUrl={photo.url}
+                    />
+                  </div>
+                ),
+              };
+            })}
           />
         </div>
       </HomeQuickSectionDiv>

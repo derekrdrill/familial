@@ -126,7 +126,9 @@ export const PhotoUploaderPhotosListMobile = ({
                           modalItem: {
                             handleSubmit: async () => {
                               const newAlbumName = (
-                                document.getElementById('album') as HTMLInputElement
+                                document.getElementById(
+                                  'album',
+                                ) as HTMLInputElement
                               )?.value;
                               // const isNewAlbumNameInCurrentAlbums = albums?.some(
                               //   album => album.albumName === newAlbumName,
@@ -155,7 +157,8 @@ export const PhotoUploaderPhotosListMobile = ({
                                                 ...photoUpload,
                                                 ...{
                                                   albumName:
-                                                    selectedPhotoAlbum?.albumName ?? newAlbumName,
+                                                    selectedPhotoAlbum?.albumName ??
+                                                    newAlbumName,
                                                 },
                                               }
                                             : photoUpload,

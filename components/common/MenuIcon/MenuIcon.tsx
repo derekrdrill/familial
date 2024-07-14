@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import GlobalContext from '../../../context/GlobalContext';
+
 import { MenuIconContainer, MenuIconLine } from './style';
 
 type MenuIconProps = {
@@ -7,20 +9,39 @@ type MenuIconProps = {
   setIsMenuIconActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const MenuIcon = ({ isMenuIconActive, setIsMenuIconActive }: MenuIconProps) => (
-  <MenuIconContainer
-    container
-    display={{ xs: 'block', md: 'none' }}
-    onClick={
-      /* istanbul ignore next */
-      () => setIsMenuIconActive(!isMenuIconActive)
-    }
-    $isMenuIconActive={isMenuIconActive}
-  >
-    <MenuIconLine className='menu-icon-line-top' item />
-    <MenuIconLine className='menu-icon-line-middle' item />
-    <MenuIconLine className='menu-icon-line-bottom' $isBottom item />
-  </MenuIconContainer>
-);
+const MenuIcon = ({ isMenuIconActive, setIsMenuIconActive }: MenuIconProps) => {
+  const {
+    state: { isDarkMode },
+  } = React.useContext(GlobalContext);
+
+  return (
+    <MenuIconContainer
+      container
+      display={{ xs: 'block', md: 'none' }}
+      onClick={
+        /* istanbul ignore next */
+        () => setIsMenuIconActive(!isMenuIconActive)
+      }
+      $isMenuIconActive={isMenuIconActive}
+    >
+      <MenuIconLine
+        className='menu-icon-line-top'
+        item
+        $isDarkMode={isDarkMode}
+      />
+      <MenuIconLine
+        className='menu-icon-line-middle'
+        item
+        $isDarkMode={isDarkMode}
+      />
+      <MenuIconLine
+        className='menu-icon-line-bottom'
+        item
+        $isBottom
+        $isDarkMode={isDarkMode}
+      />
+    </MenuIconContainer>
+  );
+};
 
 export default MenuIcon;

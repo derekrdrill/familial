@@ -3,10 +3,13 @@ import { NextRouter, useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { Button, Grid, Typography } from '@mui/material';
 import { ImageListType as PhotoListType } from 'react-images-uploading';
-import tw from 'twin.macro';
+import tw, { TwStyle } from 'twin.macro';
 
 import GlobalContext from '../../../../context/GlobalContext';
-import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
+import {
+  GlobalReducerAction,
+  GlobalReducerActionEnum,
+} from '../../../../context/GlobalReducer';
 
 import { PhotoUploadData } from '../types/PhotoUploaderData';
 
@@ -19,7 +22,9 @@ export const handlePhotoUpload = async (
   photoList.forEach(async (photo, photoKey) => {
     await fetch('/api/photo-uploader/blob', {
       method: 'POST',
-      headers: { 'content-type': photo.file?.type ?? 'application/octet-stream' },
+      headers: {
+        'content-type': photo.file?.type ?? 'application/octet-stream',
+      },
       body: photo.file,
     }).then(async res => {
       if (res.status === 200) {
@@ -28,7 +33,10 @@ export const handlePhotoUpload = async (
         if (photoUploadData) {
           await fetch('/api/photo-uploader', {
             method: 'POST',
-            body: JSON.stringify({ ...photoUploadData[photoKey], ...{ url: url } }),
+            body: JSON.stringify({
+              ...photoUploadData[photoKey],
+              ...{ url: url },
+            }),
           }).then(res => {
             if (res.status === 200) {
               dispatch({
@@ -84,7 +92,6 @@ export const PhotoUploaderActionButtons = ({
         )}
         <Grid item>
           <PhotoUploadActionButton
-            color='info'
             onClick={() =>
               dispatch({
                 type: GlobalReducerActionEnum.SET_PHOTO_LIST,
@@ -97,14 +104,15 @@ export const PhotoUploaderActionButtons = ({
               })
             }
             size='small'
-            variant={isDarkMode ? 'outlined' : 'contained'}
+            variant='outlined'
             tw='mr-2 normal-case'
+            $bgColor={tw`bg-info hover:bg-info`}
+            $borderColor={tw`border-info hover:border-info`}
+            $textColor={tw`text-info`}
           >
             {`${hasEveryPhotosSelected ? 'Unc' : 'C'}heck all photos`}
           </PhotoUploadActionButton>
           <PhotoUploadActionButton
-            color='error'
-            // disabled={!hasSomePhotosSelected}
             onClick={() =>
               dispatch({
                 type: GlobalReducerActionEnum.SET_MODAL_ITEM,
@@ -118,7 +126,9 @@ export const PhotoUploaderActionButtons = ({
                         : dispatch({
                             type: GlobalReducerActionEnum.SET_PHOTO_LIST,
                             payload: {
-                              photoList: photoList.filter(photo => !photo.checked),
+                              photoList: photoList.filter(
+                                photo => !photo.checked,
+                              ),
                             },
                           }),
                     modalBody:
@@ -134,7 +144,8 @@ export const PhotoUploaderActionButtons = ({
                       //   </Grid>
                       // )
                       '',
-                    modalTitle: 'Are you sure you want to remove the selected images?',
+                    modalTitle:
+                      'Are you sure you want to remove the selected images?',
                     submitButtonColor: 'error',
                     submitButtonText: 'Remove',
                   },
@@ -142,21 +153,28 @@ export const PhotoUploaderActionButtons = ({
               })
             }
             size='small'
-            variant={isDarkMode ? 'outlined' : 'contained'}
+            variant='outlined'
             tw='mr-2 normal-case'
+            $bgColor={tw`bg-error hover:bg-error`}
+            $borderColor={tw`border-error hover:border-error`}
+            $textColor={tw`text-error`}
             $isDisabled={!hasSomePhotosSelected}
           >
             {`Remove ${hasEveryPhotosSelected ? 'all' : ''} photos`}
           </PhotoUploadActionButton>
           <PhotoUploadActionButton
-            color='success'
             onClick={() =>
               dispatch({
                 type: GlobalReducerActionEnum.SET_MODAL_ITEM,
                 payload: {
                   modalItem: {
                     handleSubmit: async () =>
-                      handlePhotoUpload(photoList, photoUploadData, dispatch, router),
+                      handlePhotoUpload(
+                        photoList,
+                        photoUploadData,
+                        dispatch,
+                        router,
+                      ),
                     isExitHidden: true,
                     isModalOpen: true,
                     modalBody: (
@@ -173,8 +191,21 @@ export const PhotoUploaderActionButtons = ({
             }
             size='small'
             tw='normal-case'
-            variant={isDarkMode ? 'outlined' : 'contained'}
+            variant='outlined'
+            $bgColor={
+              isDarkMode
+                ? tw`bg-success-dark-mode hover:bg-success-dark-mode`
+                : tw`bg-success hover:bg-success`
+            }
+            $borderColor={
+              isDarkMode
+                ? tw`border-success-dark-mode hover:border-success-dark-mode`
+                : tw`border-success hover:border-success`
+            }
             $isDisabled={!isAbleToSubmitUpload}
+            $textColor={
+              isDarkMode ? tw`text-success-dark-mode` : tw`text-success`
+            }
           >
             Upload new photos
           </PhotoUploadActionButton>
@@ -190,16 +221,28 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
 }>(({ $isDarkMode, $isPhotoAlbumSelected }) => [
   !$isDarkMode && tw`bg-white`,
   $isDarkMode && tw`bg-black`,
-  tw`sticky`,
-  tw`top-12`,
+  tw`!sticky`,
+  tw`top-24`,
   tw`z-[2]`,
   tw`justify-end`,
   $isPhotoAlbumSelected && tw`justify-between`,
 ]);
 
-export const PhotoUploadActionButton = styled(Button)<{ $isDisabled?: boolean }>(({ $isDisabled }) => [
-  $isDisabled && tw`opacity-20`,
+export const PhotoUploadActionButton = styled(Button)<{
+  $bgColor: TwStyle;
+  $borderColor: TwStyle;
+  $isDisabled?: boolean;
+  $textColor: TwStyle;
+}>(({ $bgColor, $borderColor, $isDisabled, $textColor }) => [
+  $isDisabled && tw`!bg-gray-B6B6B6`,
+  $isDisabled && tw`!border-gray-B6B6B6`,
+  $isDisabled && tw`!text-gray-B6B6B6`,
   $isDisabled && tw`pointer-events-none`,
+  tw`!bg-opacity-20`,
   tw`shadow-none`,
+  tw`hover:!bg-opacity-30`,
   tw`hover:shadow-none`,
+  $bgColor,
+  $borderColor,
+  $textColor,
 ]);
