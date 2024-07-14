@@ -35,7 +35,11 @@ type AlbumIDIndexProps = {
   photosData: PhotosType[];
 };
 
-const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) => {
+const AlbumIDIndex = ({
+  albumsData,
+  albumName,
+  photosData,
+}: AlbumIDIndexProps) => {
   const router = useRouter();
 
   const {
@@ -46,9 +50,24 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
   React.useEffect(() => {
     dispatch({
       type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
-      payload: { selectedPhotoAlbum: albumsData.find(album => album._id === router.query.albumID) },
+      payload: {
+        selectedPhotoAlbum: albumsData.find(
+          album => album._id === router.query.albumID,
+        ),
+      },
     });
   }, [albumsData]);
+
+  React.useEffect(() => {
+    if (!!!router.query.p) {
+      dispatch({
+        type: GlobalReducerActionEnum.SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN,
+        payload: {
+          isPhotoViewerBackBtnShown: false,
+        },
+      });
+    }
+  }, [router]);
 
   return (
     <PhotosLayout
@@ -71,6 +90,7 @@ const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) 
                 <Button
                   endIcon={<AddAPhotoTwoToneIcon />}
                   fullWidth
+                  onClick={onImageUpload}
                   variant='outlined'
                   tw='!bg-opacity-20 hover:!bg-opacity-30 mt-6 hover:shadow-none shadow-none bg-info hover:bg-info border-info hover:border-info text-info'
                 >
@@ -165,7 +185,11 @@ export const PhotoAlbumsAddTextContainer = styled(Grid)<{
   $photosView === 'list' && tw`pb-6`,
 ]);
 
-export const PhotosMainContainer = styled(Grid)([tw`bg-gray-100`, tw`p-4`, tw`rounded-2xl`]);
+export const PhotosMainContainer = styled(Grid)([
+  tw`bg-gray-100`,
+  tw`p-4`,
+  tw`rounded-2xl`,
+]);
 
 export const PhotoUploaderTile = styled(Grid)<{
   $photosView?: 'grid' | 'list';
@@ -196,7 +220,15 @@ export const getServerSideProps = async context => {
       albumName: album.albumName,
     }));
 
+    const redirect = {
+      redirect: !!!photos.length && {
+        permanent: false,
+        destination: '/photos',
+      },
+    };
+
     return {
+      ...redirect,
       props: {
         albumsData: JSON.parse(JSON.stringify(albumsMapped)),
         albumName: album.albumName,

@@ -33,7 +33,10 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
   const [isPhotoLoading, setIsPhotoLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    dispatch({ type: GlobalReducerActionEnum.SET_PHOTOS_VIEW, payload: { photosView: 'grid' } });
+    dispatch({
+      type: GlobalReducerActionEnum.SET_PHOTOS_VIEW,
+      payload: { photosView: 'grid' },
+    });
   }, []);
 
   return (
@@ -141,19 +144,27 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                 modalItem: {
                   handleSubmit: async () => {
                     if (!!router.query.albumID) {
-                      await fetch('/api/photo/delete', {
-                        method: 'DELETE',
-                        body: JSON.stringify(photoListItem),
+                      const newPhotoTitle = (
+                        document.getElementById('album') as HTMLInputElement
+                      )?.value;
+
+                      await fetch('/api/photo/update', {
+                        method: 'PUT',
+                        body: JSON.stringify({
+                          photoID: photoListItem._id,
+                          newPhotoTitle: newPhotoTitle,
+                        }),
                       })
-                        .then(async res => {
+                        .then(async () => {
                           router.reload();
                         })
                         .catch(e => {
                           console.log(e);
                         });
                     } else {
-                      const newAlbumName = (document.getElementById('album') as HTMLInputElement)
-                        ?.value;
+                      const newAlbumName = (
+                        document.getElementById('album') as HTMLInputElement
+                      )?.value;
 
                       await fetch('/api/album/update', {
                         method: 'PUT',
@@ -180,7 +191,9 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                       <TextField
                         id='album'
                         defaultValue={
-                          router.query.albumID ? photoListItem.title : photoListItem.albumName
+                          router.query.albumID
+                            ? photoListItem.title
+                            : photoListItem.albumName
                         }
                         fullWidth
                       />
@@ -242,9 +255,6 @@ export const PhotoCoverImage = styled(Image)<{
   $photosView === 'list' && tw`h-full`,
   $photosView === 'list' && tw`w-fit`,
   $photosView === 'list' && tw`inline-block`,
-  {
-    overflowClipMargin: 'unset',
-  },
 ]);
 
 export const PhotoCoverImageControlButton = styled(Button)<{
