@@ -21,6 +21,7 @@ module.exports = {
         info: '#006F92',
         notecard: '#EFE9D4',
         primary: '#456DBA',
+        secondary: '#A245BA',
         success: '#00920F',
         'success-dark-mode': '#7ED988',
       },

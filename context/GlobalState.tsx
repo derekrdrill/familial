@@ -14,6 +14,7 @@ export type GlobalStateType = {
   alertItem?: AlertItem;
   authenticatedUser?: object | null;
   isDarkMode?: boolean;
+  isPhotoViewerBackBtnShown?: boolean;
   modalItem?: ModalItem;
   photoList?: PhotoListType;
   photoUploadData?: PhotoUploadData[];
@@ -39,6 +40,7 @@ const GlobalState: GlobalStateType = {
   },
   authenticatedUser: null,
   isDarkMode: false,
+  isPhotoViewerBackBtnShown: false,
   modalItem: {
     handleSubmit: null,
     isModalOpen: false,

@@ -5,6 +5,7 @@ export enum GlobalReducerActionEnum {
   SET_ALERT_ITEM = 'SET_ALERT_ITEM',
   SET_DARK_MODE = 'SET_DARK_MODE',
   SET_MODAL_ITEM = 'SET_MODAL_ITEM',
+  SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN = 'SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN',
   SET_PHOTOS = 'SET_PHOTOS',
   SET_PHOTOS_VIEW = 'SET_PHOTOS_VIEW',
   SET_PHOTO_LIST = 'SET_PHOTO_LIST',
@@ -26,6 +27,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       albums,
       alertItem,
       isDarkMode,
+      isPhotoViewerBackBtnShown,
       modalItem,
       photoList,
       photos,
@@ -58,6 +60,11 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         isDarkMode: isDarkMode,
+      };
+    case GlobalReducerActionEnum.SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN:
+      return {
+        ...state,
+        isPhotoViewerBackBtnShown: isPhotoViewerBackBtnShown,
       };
     case GlobalReducerActionEnum.SET_MODAL_ITEM:
       return {
