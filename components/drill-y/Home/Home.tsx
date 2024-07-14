@@ -52,6 +52,9 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
                     height={0}
                     sizes='100vw'
                     src={photo.url}
+                    style={{
+                      overflowClipMargin: 'unset',
+                    }}
                     tw='h-96 object-contain w-full'
                     width={0}
                   />

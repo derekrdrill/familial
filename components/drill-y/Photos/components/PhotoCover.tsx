@@ -242,6 +242,9 @@ export const PhotoCoverImage = styled(Image)<{
   $photosView === 'list' && tw`h-full`,
   $photosView === 'list' && tw`w-fit`,
   $photosView === 'list' && tw`inline-block`,
+  {
+    overflowClipMargin: 'unset',
+  },
 ]);
 
 export const PhotoCoverImageControlButton = styled(Button)<{
