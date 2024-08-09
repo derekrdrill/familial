@@ -14,7 +14,7 @@ import Carousel from '../../common/Carousel/Carousel';
 import { PhotoQuick } from '../Photos';
 import { RecipeCard } from '../Recipes';
 
-import { Photos } from '../../../context/types';
+import { Photos } from '../../../types';
 
 type HomeProps = {
   photosAllRandomized: Photos[];

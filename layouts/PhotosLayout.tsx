@@ -16,7 +16,7 @@ import {
   PhotoAlbumsBackButton,
   PhotoViewer,
 } from '../components/familial/Photos';
-import { Albums, Photos } from '../context/types';
+import { Albums, Photos } from '../types';
 import { GlobalReducerActionEnum } from '../context/GlobalReducer';
 
 import { DrillyTypography } from '../styles/globals';

@@ -8,7 +8,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteForever from '@mui/icons-material/DeleteForever';
 
 import GlobalContext from '../../../../context/GlobalContext';
-import { Photos } from '../../../../context/types';
+import { Photos } from '../../../../types';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
 type PhotoCoverProps = {

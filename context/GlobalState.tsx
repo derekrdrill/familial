@@ -7,7 +7,7 @@ import {
   Photos,
   SelectedPhotoAlbum,
   User,
-} from './types';
+} from '../types';
 
 export type GlobalStateType = {
   albums?: Albums[];

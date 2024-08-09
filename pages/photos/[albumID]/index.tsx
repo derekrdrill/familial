@@ -9,7 +9,7 @@ import AddAPhotoTwoToneIcon from '@mui/icons-material/AddAPhotoTwoTone';
 
 import conn from '../../../data/connection';
 import { Albums as AlbumsData, Photos as PhotosData } from '../../../data/models';
-import { Albums, Photos as PhotosType } from '../../../context/types';
+import { Albums, Photos as PhotosType } from '../../../types';
 
 import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';

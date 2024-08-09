@@ -2,9 +2,9 @@ import React from 'react';
 import RecipesLayout from '../../layouts/RecipesLayout';
 
 import conn from '../../data/connection';
-import { Cookbook } from '../../context/types';
+import { Cookbook } from '../../types';
 import { Cookbook as CookbookData } from '../../data/models';
-import { Recipe } from '../../context/types';
+import { Recipe } from '../../types';
 import { Recipe as RecipeData } from '../../data/models';
 
 type RecipesIndexProps = {
