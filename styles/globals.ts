@@ -10,29 +10,31 @@ export const DrillyTypography = styled(Typography)<{ $isDarkMode?: boolean }>(
   ],
 );
 
-export const DrillyTextField = styled(TextField)<{ $isDarkMode?: boolean; $isRounded?: boolean }>(
-  ({ $isDarkMode, $isRounded }) => [
-    {
-      '.MuiFormLabel-root': [$isDarkMode && tw`text-white`],
-      '.MuiInputBase-root': [
-        $isDarkMode && tw`text-white`,
+export const DrillyTextField = styled(TextField)<{
+  $isDarkMode?: boolean;
+  $isRounded?: boolean;
+}>(({ $isDarkMode, $isRounded }) => [
+  tw`rounded-lg`,
+  {
+    '.MuiFormLabel-root': [$isDarkMode && tw`text-white`],
+    '.MuiInputBase-root': [
+      $isDarkMode && tw`text-white`,
+      {
+        svg: [$isDarkMode && tw`text-white`],
+      },
+    ],
+    '.MuiOutlinedInput-root': {
+      fieldset: [
+        $isRounded ? tw`rounded-3xl` : tw`rounded-lg`,
         {
-          svg: [$isDarkMode && tw`text-white`],
+          border: `1px lightgrey solid ${$isDarkMode ? '!important' : ''}`,
         },
       ],
-      '.MuiOutlinedInput-root': {
-        fieldset: [
-          $isRounded && tw`rounded-3xl`,
-          {
-            border: `1px lightgrey solid ${$isDarkMode ? '!important' : ''}`,
-          },
-        ],
-        input: {
-          '::placeholder': {
-            color: $isDarkMode ? 'white' : 'inherit',
-          },
+      input: {
+        '::placeholder': {
+          color: $isDarkMode ? 'white' : 'inherit',
         },
       },
     },
-  ],
-);
+  },
+]);
