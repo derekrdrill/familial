@@ -1,5 +1,5 @@
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
-import { AlertItem } from '../../../../context/types';
+import { AlertItem } from '../../../../types';
 
 export type SetAlertItemParams = {
   type: GlobalReducerActionEnum.SET_ALERT_ITEM;

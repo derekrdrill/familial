@@ -1,5 +1,5 @@
 import { GlobalReducerActionEnum } from './GlobalReducer';
-import { Albums } from './types';
+import { Albums } from '../types';
 import conn from '../data/connection';
 import { Albums as AlbumsModel } from '../data/models';
 

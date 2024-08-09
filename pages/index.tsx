@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Home from '../components/familial/Home';
-import { Photos } from '../context/types';
+import { Photos } from '../types';
 
 import conn from '../data/connection';
 import { Photos as PhotosData } from '../data/models';

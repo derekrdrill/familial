@@ -8,7 +8,7 @@ import { PhotoCover } from '../../components/familial/Photos';
 
 import conn from '../../data/connection';
 import { Albums as AlbumsData, Photos as PhotosData } from '../../data/models';
-import { Albums, Photos } from '../../context/types';
+import { Albums, Photos } from '../../types';
 import { GlobalReducerActionEnum } from '../../context/GlobalReducer';
 
 type PhotosIndexProps = {

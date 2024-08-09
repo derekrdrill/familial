@@ -1,5 +1,5 @@
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
-import { ModalItem } from '../../../../context/types/ModalItem/ModalItem';
+import { ModalItem } from '../../../../types/ModalItem/ModalItem';
 
 export type SetModalItemParams = {
   type: GlobalReducerActionEnum.SET_MODAL_ITEM;
