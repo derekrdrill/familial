@@ -113,7 +113,7 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
                 <PhotoLibraryTwoToneIcon />
               </HeaderMenuButton>
             </HeaderMenuLink>
-            <HeaderMenuLink href='/' $isDarkMode={isDarkMode}>
+            <HeaderMenuLink href='/recipes' $isDarkMode={isDarkMode}>
               <HeaderMenuButton $isDarkMode={isDarkMode}>
                 <DiningTwoToneIcon />
               </HeaderMenuButton>
