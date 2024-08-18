@@ -13,8 +13,6 @@ type RecipesIndexProps = {
 };
 
 const RecipesIndex = ({ cookbook, recipes }: RecipesIndexProps) => {
-  console.log(cookbook);
-  console.log(recipes);
   return <RecipesLayout>Recipes index!!</RecipesLayout>;
 };
 

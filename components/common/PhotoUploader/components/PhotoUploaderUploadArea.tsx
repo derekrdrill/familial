@@ -15,12 +15,14 @@ type PhotoUploaderUploadAreaProps = {
     onDragStart: (e: any) => void;
   };
   isDragging: boolean;
+  isMultiple: boolean;
   onImageUpload: () => void;
 };
 
 export const PhotoUploaderUploadArea = ({
   dragProps,
   isDragging,
+  isMultiple,
   onImageUpload,
 }: PhotoUploaderUploadAreaProps) => {
   const {
@@ -41,7 +43,7 @@ export const PhotoUploaderUploadArea = ({
         <Grid container display={{ xs: 'none', sm: 'inline-block' }}>
           <Grid container justifyContent='center' tw='mb-3'>
             <Typography color='#B3B3B3' typography='h6' variant='caption'>
-              <PhotoUploadAreaIcon /> Drag and drop files here
+              <PhotoUploadAreaIcon /> Drag and drop file{isMultiple && 's'} here
             </Typography>
           </Grid>
           <Grid container>
@@ -51,7 +53,11 @@ export const PhotoUploaderUploadArea = ({
             </Grid>
             <Grid item xs={2}>
               <Grid container justifyContent='center'>
-                <Typography color='#B3B3B3' typography='body2' variant='caption'>
+                <Typography
+                  color='#B3B3B3'
+                  typography='body2'
+                  variant='caption'
+                >
                   OR
                 </Typography>
               </Grid>
@@ -63,7 +69,9 @@ export const PhotoUploaderUploadArea = ({
           </Grid>
         </Grid>
         <Button color='info' size='small' variant='text' tw='my-4 normal-case'>
-          <Typography variant='subtitle1'>Click here to add images</Typography>
+          <Typography variant='subtitle1'>
+            Click here to add image{isMultiple && 's'}
+          </Typography>
         </Button>
       </Grid>
     </PhotoUploadAreaRoot>

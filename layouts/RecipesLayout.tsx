@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { Menu, MenuItem } from '@mui/material';
 import tw from 'twin.macro';
@@ -12,20 +13,31 @@ type RecipesLayoutProps = {
 };
 
 const RecipesLayout = ({ children }: RecipesLayoutProps) => {
+  const router = useRouter();
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
+  const [isAddMenuOpen, setIsAddMenuOpen] = React.useState<boolean>(false);
+
   return (
     <div tw='pt-9 px-8 w-full'>
       <div tw='flex justify-end'>
-        <RecipeAddButton $isDarkMode={isDarkMode}>
+        <RecipeAddButton
+          onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
+          $isDarkMode={isDarkMode}
+        >
           Add new <KeyboardArrowDownIcon />
         </RecipeAddButton>
-        <Menu open>
+        <RecipeAddMenu
+          onClose={() => setIsAddMenuOpen(false)}
+          open={isAddMenuOpen}
+        >
           <MenuItem>Cookbook</MenuItem>
-          <MenuItem>Recipe</MenuItem>
-        </Menu>
+          <MenuItem onClick={() => router.push('/recipes/add-new')}>
+            Recipe
+          </MenuItem>
+        </RecipeAddMenu>
       </div>
       <DrillyTypography
         tw='font-main mt-4 text-4xl text-center'
@@ -69,6 +81,17 @@ const RecipeAddButton = styled.button<{ $isDarkMode?: boolean }>(
     tw`rounded-lg`,
   ],
 );
+
+const RecipeAddMenu = styled(Menu)({
+  '.MuiPaper-root': [
+    tw`absolute`,
+    tw`!left-auto`,
+    tw`!right-8`,
+    tw`!top-48`,
+    tw`w-[124px]`,
+    tw`lg:!top-36`,
+  ],
+});
 
 const RecipeSearch = styled(DrillyTextField)<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [
