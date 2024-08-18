@@ -8,6 +8,8 @@ export const RecipeSchema = new mongoose.Schema({
   temperature: String,
   time: String,
   title: String,
+  type: String,
+  uploadedAt: Date,
 });
 
 const Recipe =

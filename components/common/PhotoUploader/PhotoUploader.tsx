@@ -11,12 +11,17 @@ import {
   PhotoUploaderUploadArea,
 } from '../PhotoUploader';
 
-export const PhotoUploader = () => {
+type PhotoUploadProps = {
+  isMultiple?: boolean;
+};
+
+export const PhotoUploader = ({ isMultiple = true }: PhotoUploadProps) => {
   const {
     dispatch,
     state: { photoList, photoUploadData, selectedPhotoAlbum },
   } = React.useContext(GlobalContext);
-  const [isAbleToSubmitUpload, setIsAbleToSubmitUpload] = React.useState<boolean>(false);
+  const [isAbleToSubmitUpload, setIsAbleToSubmitUpload] =
+    React.useState<boolean>(false);
 
   const handlePhotoUploadingChange = (photoListData: PhotoListType) =>
     dispatch({
@@ -34,10 +39,14 @@ export const PhotoUploader = () => {
     dispatch({
       type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
       payload: {
-        photoUploadData: photoUploadData?.map((photoUpload, photoUploadIndex) =>
-          photoUploadIndex === imageIndex
-            ? { ...photoUpload, ...{ [e.target.id ?? 'albumName']: e.target.value } }
-            : photoUpload,
+        photoUploadData: photoUploadData?.map(
+          (photoUpload, photoUploadIndex) =>
+            photoUploadIndex === imageIndex
+              ? {
+                  ...photoUpload,
+                  ...{ [e.target.id ?? 'albumName']: e.target.value },
+                }
+              : photoUpload,
         ),
       },
     });
@@ -49,7 +58,9 @@ export const PhotoUploader = () => {
         type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
         payload: {
           photoUploadData: photoList.map((photo, photoIndex) => ({
-            albumName: selectedPhotoAlbum?.albumName ?? photoUploadData[photoIndex]?.albumName,
+            albumName:
+              selectedPhotoAlbum?.albumName ??
+              photoUploadData[photoIndex]?.albumName,
             description: photoUploadData[photoIndex]?.description,
             title: photoUploadData[photoIndex]?.title,
             uploadedAt: new Date(),
@@ -61,13 +72,25 @@ export const PhotoUploader = () => {
   }, [photoList]);
 
   React.useEffect(() => {
-    setIsAbleToSubmitUpload(!photoUploadData?.find(photo => !photo.title || !photo.albumName));
+    setIsAbleToSubmitUpload(
+      !photoUploadData?.find(photo => !photo.title || !photo.albumName),
+    );
   }, [photoUploadData]);
 
   return (
     photoList && (
-      <ImageUploading multiple onChange={handlePhotoUploadingChange} value={photoList}>
-        {({ dragProps, isDragging, onImageUpload, onImageRemoveAll, onImageRemove }) => (
+      <ImageUploading
+        multiple={isMultiple}
+        onChange={handlePhotoUploadingChange}
+        value={photoList}
+      >
+        {({
+          dragProps,
+          isDragging,
+          onImageUpload,
+          onImageRemoveAll,
+          onImageRemove,
+        }) => (
           <>
             <PhotoUploaderActionButtons
               isAbleToSubmitUpload={isAbleToSubmitUpload}
@@ -76,6 +99,7 @@ export const PhotoUploader = () => {
             <PhotoUploaderUploadArea
               dragProps={dragProps}
               isDragging={isDragging}
+              isMultiple={isMultiple}
               onImageUpload={onImageUpload}
             />
             <PhotoUploaderPhotosListDesktop
