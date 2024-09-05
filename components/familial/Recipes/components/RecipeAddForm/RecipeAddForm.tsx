@@ -90,7 +90,7 @@ export const RecipeAddForm = ({ cookbooks }: RecipeAddFormProps) => {
         />
       </div>
       <div tw='col-span-full flex justify-end'>
-        <DrillyButton onClick={handleSubmit} $variant='success'>
+        <DrillyButton onClick={handleSubmit} tw='py-2' $variant='success'>
           Submit
         </DrillyButton>
       </div>

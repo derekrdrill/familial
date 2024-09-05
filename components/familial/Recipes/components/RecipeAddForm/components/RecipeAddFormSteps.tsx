@@ -63,7 +63,7 @@ const RecipeAddFormSteps = ({
       <DrillyTypography tw='font-main mt-5 text-2xl' variant='h2' $isDarkMode={isDarkMode}>
         Steps
       </DrillyTypography>
-      <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-12'>
+      <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
         {stepRows.map((stepRow, stepRowKey) => (
           <React.Fragment key={stepRowKey}>
             <div tw='col-span-full lg:col-span-8'>
