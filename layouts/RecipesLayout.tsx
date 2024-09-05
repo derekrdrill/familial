@@ -1,19 +1,32 @@
 import React from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import { Menu, MenuItem } from '@mui/material';
-import tw from 'twin.macro';
-import GlobalContext from '../context/GlobalContext';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchIcon from '@mui/icons-material/Search';
+import { Menu, MenuItem } from '@mui/material';
+import tw from 'twin.macro';
+
+import GlobalContext from '../context/GlobalContext';
+import Carousel from '../components/common/Carousel/Carousel';
+import { RecipeCard } from '../components/familial/Recipes';
 import { DrillyTextField, DrillyTypography } from '../styles/globals';
+import { Recipe } from '../types';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 type RecipesLayoutProps = {
   children: React.ReactNode;
+  recipes: Recipe[];
 };
 
-const RecipesLayout = ({ children }: RecipesLayoutProps) => {
+const RecipesLayout = ({ children, recipes }: RecipesLayoutProps) => {
   const router = useRouter();
+  const theme = useTheme();
+
+  const isMD = useMediaQuery(theme.breakpoints.up('md'));
+
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
@@ -23,20 +36,12 @@ const RecipesLayout = ({ children }: RecipesLayoutProps) => {
   return (
     <div tw='pt-9 px-8 w-full'>
       <div tw='flex justify-end'>
-        <RecipeAddButton
-          onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
-          $isDarkMode={isDarkMode}
-        >
+        <RecipeAddButton onClick={() => setIsAddMenuOpen(!isAddMenuOpen)} $isDarkMode={isDarkMode}>
           Add new <KeyboardArrowDownIcon />
         </RecipeAddButton>
-        <RecipeAddMenu
-          onClose={() => setIsAddMenuOpen(false)}
-          open={isAddMenuOpen}
-        >
+        <RecipeAddMenu onClose={() => setIsAddMenuOpen(false)} open={isAddMenuOpen}>
           <MenuItem>Cookbook</MenuItem>
-          <MenuItem onClick={() => router.push('/recipes/add-new')}>
-            Recipe
-          </MenuItem>
+          <MenuItem onClick={() => router.push('/recipes/add-new')}>Recipe</MenuItem>
         </RecipeAddMenu>
       </div>
       <DrillyTypography
@@ -56,7 +61,43 @@ const RecipesLayout = ({ children }: RecipesLayoutProps) => {
           $isDarkMode={isDarkMode}
         />
       </div>
-      {/* {children} */}
+      <div tw='mx-12'>
+        <div tw='gap-2 grid grid-cols-1 mt-12 md:grid-cols-2'>
+          <Image
+            height={0}
+            alt='recipe-image'
+            sizes='100vw'
+            src='/dinner2.webp'
+            tw='w-full'
+            width={0}
+          />
+          <div></div>
+        </div>
+        <div tw='my-24'>
+          <DrillyTypography tw='font-bold font-main mb-7 ml-2 text-2xl' variant='h2'>
+            Newly added
+          </DrillyTypography>
+          <div tw='col-span-1 flex justify-center'>
+            <Carousel
+              carouselContent={recipes.map(recipe => ({
+                id: recipe._id ?? '',
+                component: (
+                  <RecipeCard
+                    recipeAuthor={recipe.author ?? ''}
+                    recipeCardContainerStyles={tw`w-96 md:w-80`}
+                    recipeIngredients={recipe.ingredients.join(', ')}
+                    recipeSteps={recipe.steps.join(', ')}
+                    recipeTemp={recipe.temperature}
+                    recipeTime={recipe.time}
+                    recipeTitle={recipe.title}
+                  />
+                ),
+              }))}
+              carouselHeight={isMD ? 250 : 290}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

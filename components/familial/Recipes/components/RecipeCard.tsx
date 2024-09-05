@@ -8,8 +8,9 @@ import GlobalContext from '../../../../context/GlobalContext';
 
 type RecipeCardType = {
   recipeAuthor: string;
-  recipeCardContainerStyles: TwStyle;
+  recipeCardContainerStyles?: TwStyle;
   recipeIngredients: string;
+  recipePhotoSrc?: string;
   recipeSteps: string;
   recipeTemp: string;
   recipeTime: string;
@@ -20,6 +21,7 @@ const RecipeCard = ({
   recipeAuthor,
   recipeCardContainerStyles,
   recipeIngredients,
+  recipePhotoSrc,
   recipeSteps,
   recipeTemp,
   recipeTime,
@@ -33,9 +35,7 @@ const RecipeCard = ({
     <RecipeCardRootDiv $styles={recipeCardContainerStyles}>
       <RecipeCardHeaderDiv $isDarkMode={isDarkMode}>
         <RecipeCardHeaderTitleDiv>
-          <RecipeCardHeaderTitleH3 $isDarkMode={isDarkMode}>
-            {recipeTitle}
-          </RecipeCardHeaderTitleH3>
+          <RecipeCardHeaderTitleH3 $isDarkMode={isDarkMode}>{recipeTitle}</RecipeCardHeaderTitleH3>
           <RecipeCardHeaderAddedBySpan $isDarkMode={isDarkMode}>
             by {recipeAuthor}
           </RecipeCardHeaderAddedBySpan>
@@ -55,26 +55,35 @@ const RecipeCard = ({
               <RecipeCardInfoSubtitle>Time to cook: </RecipeCardInfoSubtitle>
               {recipeTime}
             </RecipeCardInfoParagraph>
-            <RecipeCardInfoParagraph>
+            <RecipeCardInfoParagraph tw='max-h-12 overflow-hidden text-ellipsis whitespace-nowrap'>
               <RecipeCardInfoSubtitle>Ingredients: </RecipeCardInfoSubtitle>
-              {recipeIngredients}
+              <span>{recipeIngredients}</span>
             </RecipeCardInfoParagraph>
-            <RecipeCardInfoParagraph>
+            <RecipeCardInfoParagraph tw='max-h-12 overflow-hidden text-ellipsis whitespace-nowrap'>
               <RecipeCardInfoSubtitle>Steps: </RecipeCardInfoSubtitle>
               {recipeSteps}
             </RecipeCardInfoParagraph>
           </RecipeCardInfoRootDiv>
         </RecipeCardInfoColDiv>
-        <RecipeCardImageDiv>
-          <RecipeCardImage alt='recipe-image' src='/dinner2.webp' />
-        </RecipeCardImageDiv>
+        {recipePhotoSrc && (
+          <RecipeCardImageDiv>
+            <RecipeCardImage alt='recipe-image' src='/dinner2.webp' />
+          </RecipeCardImageDiv>
+        )}
       </RecipeCardBodyDiv>
     </RecipeCardRootDiv>
   );
 };
 
 const RecipeCardHeaderTitleDiv = styled.div([tw`flex`, tw`gap-1`]);
-const RecipeCardInfoColDiv = styled.div([tw`col-span-2`, tw`h-auto`, tw`p-2`]);
+const RecipeCardInfoColDiv = styled.div<{ hasRecipePhotoSrc?: boolean }>(
+  ({ hasRecipePhotoSrc }) => [
+    !hasRecipePhotoSrc && tw`col-span-3`,
+    hasRecipePhotoSrc && tw`col-span-2`,
+    tw`h-auto`,
+    tw`p-2`,
+  ],
+);
 const RecipeCardInfoRootDiv = styled.div([tw`flex`, tw`flex-col`, tw`gap-1`]);
 const RecipeCardInfoParagraph = styled.p([tw`lg:text-sm`]);
 const RecipeCardInfoSubtitle = styled.span([tw`font-semibold`]);
@@ -89,7 +98,7 @@ const RecipeCardImage = styled.img([
   tw`w-full`,
 ]);
 
-const RecipeCardRootDiv = styled.div<{ $styles: TwStyle }>(({ $styles }) => [
+const RecipeCardRootDiv = styled.div<{ $styles?: TwStyle }>(({ $styles }) => [
   tw`h-60`,
   tw`rounded-xl`,
   tw`md:h-48`,

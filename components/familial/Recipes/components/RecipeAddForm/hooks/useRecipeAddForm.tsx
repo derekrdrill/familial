@@ -2,6 +2,7 @@ import React from 'react';
 import GlobalContext from '../../../../../../context/GlobalContext';
 import { Cookbook, Recipe } from '../../../../../../types';
 import { RecipeAddFormIngredient, RecipeAddFormStep } from '../types';
+import { useRouter } from 'next/router';
 
 import {
   RECIPE_FORM_DEFAULTS,
@@ -12,6 +13,7 @@ import {
 import { getRecipeFormErrors, getRecipeIngredients, getRecipeSteps } from '../helpers';
 
 export const useRecipeAddForm = () => {
+  const router = useRouter();
   const {
     state: { user },
   } = React.useContext(GlobalContext);
@@ -73,13 +75,18 @@ export const useRecipeAddForm = () => {
     setRows(newRows);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const currentErrors = getRecipeFormErrors({ newRecipeData });
 
-    if (!!currentErrors) {
+    if (!!currentErrors.length) {
       setErrors(currentErrors);
     } else {
-      // console.log('All gooood keep it pushin');
+      await fetch('/api/recipe/add', {
+        method: 'POST',
+        body: JSON.stringify(newRecipeData),
+      });
+
+      router.push('/recipes');
     }
   };
 
@@ -89,6 +96,7 @@ export const useRecipeAddForm = () => {
         ...newRecipeData,
         ...{
           author: user?.firstName,
+          authorId: user?.userID,
           cookbook: cookbook,
           ingredients: getRecipeIngredients({ ingredientsRows }),
           steps: getRecipeSteps({ stepRows }),

@@ -48,6 +48,7 @@ const CarouselDots = ({ carouselApi }: CarouselDotsProps) => {
     <div>
       {carouselDots.map((_, carouselDot) => (
         <CarouselDotButton
+          key={carouselDot}
           onClick={() => handleDotButtonClick(carouselDot)}
           $isDarkMode={isDarkMode}
           $isCarouselDotSelected={carouselDotSelected === carouselDot}
