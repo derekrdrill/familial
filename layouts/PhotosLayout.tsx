@@ -24,7 +24,7 @@ import { DrillyTypography } from '../styles/globals';
 type PhotosLayoutProps = {
   albumsData: Albums[];
   children: React.ReactNode;
-  onImageUpload: () => void;
+  onImageUpload?: () => void;
   photosData: Photos[];
   photosLayoutTitle: string;
   photoAlbumLength?: number;
@@ -45,8 +45,7 @@ const PhotosLayout = ({
     state: { isDarkMode, photoList, photosView },
   } = React.useContext(GlobalContext);
 
-  const [isScrollBtnShown, setIsScrollBtnShown] =
-    React.useState<boolean>(false);
+  const [isScrollBtnShown, setIsScrollBtnShown] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     dispatch({
@@ -80,24 +79,27 @@ const PhotosLayout = ({
   //   };
   // }, []);
 
+  const photoCurrent = photosData?.find(photo => photo._id === router.query.p);
+
+
   return (
     <>
       <PhotoAlbumsBackButton />
       <PhotoUploader />
       <PhotoViewer
         isPhotoViewerOpen={!!router.query.p}
-        photoTitle={
-          photosData?.find(photo => photo._id === router.query.p)?.title
-        }
-        photoURL={photosData?.find(photo => photo._id === router.query.p)?.url}
+        photoComments={photoCurrent?.comments}
+        photoId={photoCurrent?._id}
+        photoLikes={photoCurrent?.likes}
+        photoLoves={photoCurrent?.loves}
+        photoSmiles={photoCurrent?.smiles}
+        photoTitle={photoCurrent?.title}
+        photoURL={photoCurrent?.url}
       />
       <PhotosMainContainer $isDarkMode={isDarkMode}>
         <PhotoInfoAndActionsContainer item xs={12} $isDarkMode={isDarkMode}>
           <Grid container justifyContent='space-between'>
-            <PhotosLayoutTitleContainer
-              item
-              $isAlbumOpened={!!!router.query.albumID}
-            >
+            <PhotosLayoutTitleContainer item $isAlbumOpened={!!!router.query.albumID}>
               <div tw='flex flex-col gap-2'>
                 <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
                   {photosLayoutTitle}
@@ -165,16 +167,10 @@ const PhotosLayout = ({
                         modalTitle: 'Add new album',
                         submitSuccessMessage: (
                           <>
-                            <DrillyTypography
-                              variant='subtitle1'
-                              $isDarkMode={isDarkMode}
-                            >
+                            <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
                               New album added!
                             </DrillyTypography>
-                            <DrillyTypography
-                              variant='subtitle2'
-                              $isDarkMode={isDarkMode}
-                            >
+                            <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
                               Album will not appear here until photos are added
                             </DrillyTypography>
                           </>

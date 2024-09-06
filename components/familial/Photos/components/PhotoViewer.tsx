@@ -1,42 +1,70 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
-import { Button, IconButton, Modal, TextField } from '@mui/material';
+import styled from '@emotion/styled';
+import { Button, Modal, TextField } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import TagFacesIcon from '@mui/icons-material/TagFaces';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
 import GlobalContext from '../../../../context/GlobalContext';
-
 import { DrillyTypography } from '../../../../styles/globals';
+import { PhotoComment, PhotoReactionButton } from '../../Photos';
+import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
+
+import { PhotoReaction } from '../../../../types';
 
 type PhotoViewerTypes = {
   isPhotoViewerOpen: boolean;
+  photoComments?: PhotoReaction[];
+  photoId?: string;
+  photoLikes?: PhotoReaction[];
+  photoLoves?: PhotoReaction[];
+  photoSmiles?: PhotoReaction[];
   photoTitle?: string;
   photoURL?: string;
 };
 
 export const PhotoViewer = ({
   isPhotoViewerOpen,
+  photoComments,
+  photoId,
+  photoLikes,
+  photoLoves,
+  photoSmiles,
   photoTitle,
   photoURL,
 }: PhotoViewerTypes) => {
   const router = useRouter();
 
   const {
-    state: { isDarkMode, isPhotoViewerBackBtnShown },
+    state: { isDarkMode, isPhotoViewerBackBtnShown, user },
   } = React.useContext(GlobalContext);
 
+  const {
+    handleReactionClick,
+    hasUserLiked,
+    hasUserLoved,
+    hasUserSmiled,
+    photoCommentsState,
+    setHasUserLiked,
+    setHasUserLoved,
+    setHasUserSmiled,
+  } = usePhotoReactions({
+    photoLikes,
+    photoLoves,
+    photoSmiles,
+    photoComments,
+  });
+
+  const [newPhotoComment, setNewPhotoComment] = React.useState<string>('');
+
   return (
-    <Modal open={isPhotoViewerOpen}>
+    <PhotoViewerRoot open={isPhotoViewerOpen} $isDarkMode={isDarkMode}>
       <>
         {photoURL && (
           <div tw='md:flex md:justify-between'>
-            <div tw='bg-[#00000099] w-full md:w-3/4'>
+            <div tw='bg-[#00000099] w-full md:w-2/3'>
               <div tw='flex items-center justify-center md:h-screen'>
                 <div tw='absolute flex flex-col gap-2 left-2 top-2'>
                   {isPhotoViewerBackBtnShown && (
@@ -102,15 +130,48 @@ export const PhotoViewer = ({
                   {photoTitle}
                 </DrillyTypography>
                 <div tw='flex'>
-                  <IconButton color='info'>
-                    <ThumbUpOffAltIcon />
-                  </IconButton>
-                  <IconButton color='error'>
-                    <FavoriteBorderIcon />
-                  </IconButton>
-                  <IconButton color='secondary'>
-                    <TagFacesIcon />
-                  </IconButton>
+                  <PhotoReactionButton
+                    handleReactionClick={async () =>
+                      handleReactionClick({
+                        authorId: user?.userID,
+                        authorName: `${user?.firstName} ${user?.lastName}`,
+                        hasUserReacted: hasUserLiked,
+                        photoId: photoId,
+                        reactionType: 'like',
+                        setHasUserReacted: setHasUserLiked,
+                      })
+                    }
+                    hasUserLiked={hasUserLiked}
+                    reactionType='like'
+                  />
+                  <PhotoReactionButton
+                    handleReactionClick={async () =>
+                      handleReactionClick({
+                        authorId: user?.userID,
+                        authorName: `${user?.firstName} ${user?.lastName}`,
+                        hasUserReacted: hasUserLoved,
+                        photoId: photoId,
+                        reactionType: 'love',
+                        setHasUserReacted: setHasUserLoved,
+                      })
+                    }
+                    hasUserLoved={hasUserLoved}
+                    reactionType='love'
+                  />
+                  <PhotoReactionButton
+                    handleReactionClick={async () =>
+                      handleReactionClick({
+                        authorId: user?.userID,
+                        authorName: `${user?.firstName} ${user?.lastName}`,
+                        hasUserReacted: hasUserSmiled,
+                        photoId: photoId,
+                        reactionType: 'smile',
+                        setHasUserReacted: setHasUserSmiled,
+                      })
+                    }
+                    hasUserSmiled={hasUserSmiled}
+                    reactionType='smile'
+                  />
                 </div>
                 <>
                   <PhotoViewerCommentInput
@@ -118,11 +179,24 @@ export const PhotoViewer = ({
                     fullWidth
                     multiline
                     placeholder='Leave a comment...'
+                    onChange={e => setNewPhotoComment(e.target.value)}
                     rows={3}
+                    value={newPhotoComment}
                     $isDarkMode={isDarkMode}
                   />
                   <div tw='flex justify-end'>
                     <Button
+                      onClick={async () => {
+                        await handleReactionClick({
+                          authorId: user?.userID,
+                          authorName: `${user?.firstName} ${user?.lastName}`,
+                          comment: { date: new Date().toString(), text: newPhotoComment },
+                          photoId: photoId,
+                          reactionType: 'comment',
+                        });
+
+                        setNewPhotoComment('');
+                      }}
                       style={{
                         maxWidth: '30px',
                         maxHeight: '30px',
@@ -134,24 +208,30 @@ export const PhotoViewer = ({
                     </Button>
                   </div>
                 </>
+                {photoCommentsState?.map(photoComment => (
+                  <PhotoComment
+                    photoComment={photoComment}
+                    isUserCommentAuthor={photoComment.authorId === user?.userID}
+                  />
+                ))}
               </div>
             </PhotoViewerActionsPanel>
           </div>
         )}
       </>
-    </Modal>
+    </PhotoViewerRoot>
   );
 };
 
-export const PhotoViewerActionsPanel = styled.div<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    $isDarkMode && tw`bg-gray-900`,
-    !$isDarkMode && tw`bg-white`,
-    tw`h-screen`,
-    tw`w-full`,
-    tw`md:w-1/4`,
-  ],
-);
+export const PhotoViewerActionsPanel = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  $isDarkMode && tw`bg-gray-900`,
+  !$isDarkMode && tw`bg-white`,
+  tw`h-full`,
+  tw`overflow-auto`,
+  tw`w-full`,
+  tw`md:h-screen`,
+  tw`md:w-1/3`,
+]);
 
 export const PhotoViewerButton = styled(Button)<{
   $bgColor: TwStyle;
@@ -169,8 +249,23 @@ export const PhotoViewerButton = styled(Button)<{
 export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [
     {
-      '.MuiInputBase-root': [$isDarkMode && tw`bg-gray-100`],
+      '.MuiInputBase-root': [$isDarkMode && tw`bg-gray-200`],
     },
   ],
 );
+
+export const PhotoViewerRoot = styled(Modal)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  tw`absolute`,
+  tw`block`,
+  tw`h-full`,
+  tw`overflow-y-auto`,
+  {
+    '.MuiBackdrop-root': [
+      !$isDarkMode && tw`bg-white`,
+      $isDarkMode && tw`bg-gray-900`,
+      tw`md:bg-gray-3A3A3A`,
+      tw`md:bg-opacity-40`,
+    ],
+  },
+]);
 

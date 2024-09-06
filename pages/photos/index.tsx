@@ -29,26 +29,16 @@ const PhotosIndex = ({ albumsData, photosData }: PhotosIndexProps) => {
   }, []);
 
   return (
-    <PhotosLayout
-      albumsData={albumsData}
-      photosData={photosData}
-      photosLayoutTitle='Photo albums'
-    >
+    <PhotosLayout albumsData={albumsData} photosData={photosData} photosLayoutTitle='Photo albums'>
       <Grid container>
         {albumsData?.map(
           album =>
             !!album?.photos?.length && (
               <Grid key={album.albumName} item xs={6} sm={4} md={3} lg={2}>
                 <Grid container style={{ height: '80%' }} tw='mb-1'>
-                  <PhotoCover
-                    photoListItem={album}
-                    photoURL={album.photos[0].url}
-                  />
+                  <PhotoCover photoListItem={album} photoURL={album.photos[0].url} />
                 </Grid>
-                <Typography
-                  color={isDarkMode ? 'white' : 'inherit'}
-                  variant='subtitle1'
-                >
+                <Typography color={isDarkMode ? 'white' : 'inherit'} variant='subtitle1'>
                   {album.albumName}
                 </Typography>
                 <Typography
@@ -74,6 +64,7 @@ export const getServerSideProps = async () => {
     const albumsMapped = albums.map(album => ({
       _id: album._id.toString(),
       albumName: album.albumName,
+      authorId: album.authorId,
       photos: photos.filter(photo => photo.albumName === album.albumName),
     }));
 

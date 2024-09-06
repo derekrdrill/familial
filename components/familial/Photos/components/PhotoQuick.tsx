@@ -1,20 +1,21 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
-
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import TagFacesIcon from '@mui/icons-material/TagFaces';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import { IconButton } from '@mui/material';
+import { useRouter } from 'next/router';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
+import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
+import { PhotoReaction } from '../../../../types';
+import { PhotoReactionButton } from './PhotoReactionButton';
 
 type PhotoQuickProps = {
   photoAlbumID: string;
   photoID: string;
+  photoLikes?: PhotoReaction[];
+  photoLoves?: PhotoReaction[];
+  photoSmiles?: PhotoReaction[];
   photoTitle: string;
   photoUrl: string;
 };
@@ -22,65 +23,121 @@ type PhotoQuickProps = {
 const PhotoQuick = ({
   photoAlbumID,
   photoID,
+  photoLikes,
+  photoLoves,
+  photoSmiles,
   photoTitle,
   photoUrl,
 }: PhotoQuickProps) => {
+  const router = useRouter();
   const {
     dispatch,
-    state: { isDarkMode },
+    state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
+
+  const {
+    handleReactionClick,
+    hasUserLiked,
+    hasUserLoved,
+    hasUserSmiled,
+    setHasUserLiked,
+    setHasUserLoved,
+    setHasUserSmiled,
+  } = usePhotoReactions({
+    photoLikes,
+    photoLoves,
+    photoSmiles,
+  });
+
   return (
-    <Link
-      href={{
-        pathname: `/photos/${photoAlbumID}`,
-        query: {
-          p: photoID,
-        },
-      }}
-      onClick={() =>
+    <PhotoQuickRoot
+      onClick={() => {
         dispatch({
           type: GlobalReducerActionEnum.SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN,
           payload: { isPhotoViewerBackBtnShown: true },
-        })
-      }
+        });
+
+        router.push({
+          pathname: `/photos/${photoAlbumID}`,
+          query: {
+            p: photoID,
+          },
+        });
+      }}
+      $isDarkMode={isDarkMode}
     >
-      <PhotoQuickRoot $isDarkMode={isDarkMode}>
-        <div tw='bg-white relative top-2'>
-          <PhotoQuickImage
-            alt='album-cover'
-            height={0}
-            loading='lazy'
-            onLoad={() => null}
-            sizes='100vw'
-            src={photoUrl}
-            width={0}
+      <div tw='bg-white relative top-2'>
+        <PhotoQuickImage
+          alt='album-cover'
+          height={0}
+          loading='lazy'
+          onLoad={() => null}
+          sizes='100vw'
+          src={photoUrl}
+          width={0}
+        />
+      </div>
+      <PhotoQuickTitleText title={photoTitle} $isDarkMode={isDarkMode}>
+        {photoTitle}
+      </PhotoQuickTitleText>
+      <div tw='gap-0 grid grid-cols-3 mx-14'>
+        <div tw='col-span-1 flex justify-center'>
+          <PhotoReactionButton
+            handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+
+              handleReactionClick({
+                authorId: user?.userID,
+                authorName: `${user?.firstName} ${user?.lastName}`,
+                hasUserReacted: hasUserLiked,
+                photoId: photoID,
+                reactionType: 'like',
+                setHasUserReacted: setHasUserLiked,
+              });
+            }}
+            hasUserLiked={hasUserLiked}
+            reactionType='like'
           />
         </div>
-        <PhotoQuickTitleText title={photoTitle} $isDarkMode={isDarkMode}>
-          {photoTitle}
-        </PhotoQuickTitleText>
-        <div tw='gap-0 grid grid-cols-3 mx-14'>
-          <div tw='col-span-1 flex justify-center'>
-            <IconButton color='info' size='small'>
-              <ThumbUpOffAltIcon />
-            </IconButton>
-          </div>
-          <div tw='col-span-1 flex justify-center'>
-            <IconButton color='error' size='small'>
-              <FavoriteBorderIcon />
-            </IconButton>
-          </div>
-          <div tw='col-span-1 flex justify-center'>
-            <IconButton color='secondary' size='small'>
-              <TagFacesIcon />
-            </IconButton>
-          </div>
+        <div tw='col-span-1 flex justify-center'>
+          <PhotoReactionButton
+            handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+
+              handleReactionClick({
+                authorId: user?.userID,
+                authorName: `${user?.firstName} ${user?.lastName}`,
+                hasUserReacted: hasUserLoved,
+                photoId: photoID,
+                reactionType: 'love',
+                setHasUserReacted: setHasUserLoved,
+              });
+            }}
+            hasUserLoved={hasUserLoved}
+            reactionType='love'
+          />
         </div>
-        <PhotoQuickAddedByText $isDarkMode={isDarkMode}>
-          added by Derek
-        </PhotoQuickAddedByText>
-      </PhotoQuickRoot>
-    </Link>
+        <div tw='col-span-1 flex justify-center'>
+          <PhotoReactionButton
+            handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
+              e.stopPropagation();
+
+              handleReactionClick({
+                authorId: user?.userID,
+                authorName: `${user?.firstName} ${user?.lastName}`,
+                hasUserReacted: hasUserSmiled,
+                photoId: photoID,
+                reactionType: 'smile',
+                setHasUserReacted: setHasUserSmiled,
+              });
+            }}
+            hasUserSmiled={hasUserSmiled}
+            reactionType='smile'
+          />
+        </div>
+      </div>
+      <PhotoQuickAddedByText $isDarkMode={isDarkMode}>added by Derek</PhotoQuickAddedByText>
+    </PhotoQuickRoot>
   );
 };
 
