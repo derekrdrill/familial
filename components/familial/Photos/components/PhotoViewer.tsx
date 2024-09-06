@@ -60,7 +60,7 @@ export const PhotoViewer = ({
   const [newPhotoComment, setNewPhotoComment] = React.useState<string>('');
 
   return (
-    <PhotoViewerRoot open={isPhotoViewerOpen}>
+    <PhotoViewerRoot open={isPhotoViewerOpen} $isDarkMode={isDarkMode}>
       <>
         {photoURL && (
           <div tw='md:flex md:justify-between'>
@@ -246,16 +246,26 @@ export const PhotoViewerButton = styled(Button)<{
   $borderColor,
 ]);
 
-export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
-  {
-    '.MuiInputBase-root': [$isDarkMode && tw`bg-gray-200`],
-  },
-]);
+export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    {
+      '.MuiInputBase-root': [$isDarkMode && tw`bg-gray-200`],
+    },
+  ],
+);
 
-export const PhotoViewerRoot = styled(Modal)([
+export const PhotoViewerRoot = styled(Modal)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
   tw`absolute`,
   tw`block`,
   tw`h-full`,
   tw`overflow-y-auto`,
+  {
+    '.MuiBackdrop-root': [
+      !$isDarkMode && tw`bg-white`,
+      $isDarkMode && tw`bg-gray-900`,
+      tw`md:bg-gray-3A3A3A`,
+      tw`md:bg-opacity-40`,
+    ],
+  },
 ]);
 

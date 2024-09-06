@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import GlobalContext from '../../../../context/GlobalContext';
 import { DrillyTypography } from '../../../../styles/globals';
 import { PhotoReaction } from '../../../../types';
+import { Tooltip } from '@mui/material';
 
 type PhotoCommentProps = { isUserCommentAuthor: boolean; photoComment: PhotoReaction };
 
@@ -16,9 +17,11 @@ export const PhotoComment = ({ isUserCommentAuthor, photoComment }: PhotoComment
   return (
     <PhotoCommentContainer $isUserCommentAuthor={isUserCommentAuthor}>
       <PhotoCommentAuthor $isUserCommentAuthor={isUserCommentAuthor}>
-        <DrillyTypography>
-          {`${photoComment.authorName?.charAt(0)}${photoComment.authorName?.charAt(photoComment.authorName?.indexOf(' ') + 1)}`}
-        </DrillyTypography>
+        <Tooltip title={photoComment.authorName}>
+          <DrillyTypography tw='cursor-default'>
+            {`${photoComment.authorName?.charAt(0)}${photoComment.authorName?.charAt(photoComment.authorName?.indexOf(' ') + 1)}`}
+          </DrillyTypography>
+        </Tooltip>
       </PhotoCommentAuthor>
       <PhotoCommentText
         variant='body1'
@@ -39,7 +42,8 @@ export const PhotoComment = ({ isUserCommentAuthor, photoComment }: PhotoComment
 export const PhotoCommentAuthor = styled.div<{ $isUserCommentAuthor: boolean }>(
   ({ $isUserCommentAuthor }) => [
     $isUserCommentAuthor && tw`order-2`,
-    tw`bg-amber-500`,
+    $isUserCommentAuthor && tw`bg-amber-500`,
+    !$isUserCommentAuthor && tw`bg-indigo-300`,
     tw`flex`,
     tw`h-8`,
     tw`items-center`,
@@ -63,13 +67,15 @@ export const PhotoCommentDate = styled(DrillyTypography)<{ $isUserCommentAuthor:
   ({ $isUserCommentAuthor }) => [$isUserCommentAuthor && tw`text-right`],
 );
 
-export const PhotoCommentText = styled(DrillyTypography)<{ $isUserCommentAuthor: boolean }>(
-  ({ $isUserCommentAuthor }) => [
-    $isUserCommentAuthor && tw`bg-blue-300`,
-    !$isUserCommentAuthor && tw`bg-notecard`,
-    tw`flex`,
-    tw`px-2`,
-    tw`py-1`,
-    tw`rounded`,
-  ],
-);
+export const PhotoCommentText = styled(DrillyTypography)<{
+  $isDarkMode?: boolean;
+  $isUserCommentAuthor: boolean;
+}>(({ $isDarkMode, $isUserCommentAuthor }) => [
+  !$isUserCommentAuthor && tw`bg-notecard`,
+  $isUserCommentAuthor && tw`bg-blue-300`,
+  $isDarkMode && !$isUserCommentAuthor && tw`bg-gray-696969`,
+  tw`flex`,
+  tw`px-2`,
+  tw`py-1`,
+  tw`rounded`,
+]);

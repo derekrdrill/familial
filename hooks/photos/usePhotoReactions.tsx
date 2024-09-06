@@ -22,13 +22,12 @@ const usePhotoReactions = ({
   );
 
   React.useEffect(() => {
-    if (!!photoComments?.length) {
-      setPhotoCommentsState(getSortedComments({ photoComments }));
-    }
-
     setHasUserLiked(!!photoLikes?.length);
     setHasUserLoved(!!photoLoves?.length);
     setHasUserSmiled(!!photoSmiles?.length);
+    setPhotoCommentsState(
+      !!photoComments?.length ? getSortedComments({ photoComments }) : photoComments,
+    );
   }, [photoComments, photoLikes, photoLoves, photoSmiles]);
 
   const getSortedComments = ({ photoComments }: { photoComments: PhotoReaction[] }) =>
