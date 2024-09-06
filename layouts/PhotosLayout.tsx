@@ -81,7 +81,6 @@ const PhotosLayout = ({
 
   const photoCurrent = photosData?.find(photo => photo._id === router.query.p);
 
-  // console.log(photoCurrent);
 
   return (
     <>
