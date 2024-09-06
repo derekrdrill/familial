@@ -24,7 +24,7 @@ import { DrillyTypography } from '../styles/globals';
 type PhotosLayoutProps = {
   albumsData: Albums[];
   children: React.ReactNode;
-  onImageUpload: () => void;
+  onImageUpload?: () => void;
   photosData: Photos[];
   photosLayoutTitle: string;
   photoAlbumLength?: number;
