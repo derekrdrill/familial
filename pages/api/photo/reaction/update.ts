@@ -41,5 +41,5 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
     { $set: { [photoReactionTypeField]: photoReactionDataNew } },
   );
 
-  res.json(await Photos.find().sort({ uploadedAt: -1 }));
+  res.json(await Photos.findById(photoID));
 }

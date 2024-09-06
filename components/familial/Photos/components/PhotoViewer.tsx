@@ -9,7 +9,7 @@ import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrow
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { DrillyTypography } from '../../../../styles/globals';
-import { PhotoReactionButton } from '../../Photos';
+import { PhotoComment, PhotoReactionButton } from '../../Photos';
 import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
 
 import { PhotoReaction } from '../../../../types';
@@ -46,6 +46,7 @@ export const PhotoViewer = ({
     hasUserLiked,
     hasUserLoved,
     hasUserSmiled,
+    photoCommentsState,
     setHasUserLiked,
     setHasUserLoved,
     setHasUserSmiled,
@@ -53,6 +54,7 @@ export const PhotoViewer = ({
     photoLikes,
     photoLoves,
     photoSmiles,
+    photoComments,
   });
 
   const [newPhotoComment, setNewPhotoComment] = React.useState<string>('');
@@ -188,7 +190,7 @@ export const PhotoViewer = ({
                         await handleReactionClick({
                           authorId: user?.userID,
                           authorName: `${user?.firstName} ${user?.lastName}`,
-                          comment: newPhotoComment,
+                          comment: { date: new Date().toString(), text: newPhotoComment },
                           photoId: photoId,
                           reactionType: 'comment',
                         });
@@ -206,30 +208,11 @@ export const PhotoViewer = ({
                     </Button>
                   </div>
                 </>
-                {photoComments?.map(photoComment => (
-                  <PhotoViewerCommentContainer
-                    $isUserCommentAuthor={photoComment.authorId === user?.userID}
-                  >
-                    <PhotoViewerCommentAuthor
-                      $isUserCommentAuthor={photoComment.authorId === user?.userID}
-                    >
-                      <DrillyTypography>
-                        {`${photoComment.authorName?.charAt(0)}${photoComment.authorName?.charAt(photoComment.authorName?.indexOf(' ') + 1)}`}
-                      </DrillyTypography>
-                    </PhotoViewerCommentAuthor>
-                    <PhotoViewerComment
-                      variant='body1'
-                      $isDarkMode={isDarkMode}
-                      $isUserCommentAuthor={photoComment.authorId === user?.userID}
-                    >
-                      <div tw='flex flex-col'>
-                        {photoComment.comment?.text}
-                        <DrillyTypography variant='caption'>
-                          {new Date(photoComment.comment?.date ?? '').toLocaleString()}
-                        </DrillyTypography>
-                      </div>
-                    </PhotoViewerComment>
-                  </PhotoViewerCommentContainer>
+                {photoCommentsState?.map(photoComment => (
+                  <PhotoComment
+                    photoComment={photoComment}
+                    isUserCommentAuthor={photoComment.authorId === user?.userID}
+                  />
                 ))}
               </div>
             </PhotoViewerActionsPanel>
@@ -262,39 +245,6 @@ export const PhotoViewerButton = styled(Button)<{
   $bgColor,
   $borderColor,
 ]);
-
-export const PhotoViewerCommentAuthor = styled.div<{ $isUserCommentAuthor: boolean }>(
-  ({ $isUserCommentAuthor }) => [
-    $isUserCommentAuthor && tw`order-2`,
-    tw`bg-amber-500`,
-    tw`flex`,
-    tw`items-center`,
-    tw`justify-center`,
-    tw`my-2`,
-    tw`px-1`,
-    tw`rounded-2xl`,
-  ],
-);
-
-export const PhotoViewerComment = styled(DrillyTypography)<{ $isUserCommentAuthor: boolean }>(
-  ({ $isUserCommentAuthor }) => [
-    $isUserCommentAuthor && tw`bg-blue-300`,
-    !$isUserCommentAuthor && tw`bg-blue-800`,
-    tw`flex`,
-    tw`px-2`,
-    tw`py-1`,
-    tw`rounded`,
-  ],
-);
-
-export const PhotoViewerCommentContainer = styled.div<{ $isUserCommentAuthor: boolean }>(
-  ({ $isUserCommentAuthor }) => [
-    $isUserCommentAuthor && tw`justify-end`,
-    tw`flex`,
-    tw`gap-1`,
-    tw`mt-4`,
-  ],
-);
 
 export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
   {
