@@ -88,6 +88,7 @@ const PhotosLayout = ({
       <PhotoUploader />
       <PhotoViewer
         isPhotoViewerOpen={!!router.query.p}
+        photoComments={photoCurrent?.comments}
         photoId={photoCurrent?._id}
         photoLikes={photoCurrent?.likes}
         photoLoves={photoCurrent?.loves}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { PhotoReaction } from '../../types';
 
+
 type usePhotoReactionsProps = {
   photoLikes?: PhotoReaction[];
   photoLoves?: PhotoReaction[];
@@ -21,6 +22,7 @@ const usePhotoReactions = ({ photoLikes, photoLoves, photoSmiles }: usePhotoReac
   const handleReactionClick = async ({
     authorId,
     authorName,
+    comment,
     hasUserReacted,
     photoId,
     reactionType,
@@ -28,10 +30,11 @@ const usePhotoReactions = ({ photoLikes, photoLoves, photoSmiles }: usePhotoReac
   }: {
     authorId?: string;
     authorName: string;
-    hasUserReacted: boolean;
+    comment?: string;
+    hasUserReacted?: boolean;
     photoId?: string;
-    reactionType: 'like' | 'love' | 'smile';
-    setHasUserReacted: React.Dispatch<React.SetStateAction<boolean>>;
+    reactionType: 'comment' | 'like' | 'love' | 'smile';
+    setHasUserReacted?: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
     await fetch('/api/photo/reaction/update', {
       method: 'PUT',
@@ -39,15 +42,18 @@ const usePhotoReactions = ({ photoLikes, photoLoves, photoSmiles }: usePhotoReac
         photoID: photoId,
         photoReactionType: reactionType,
         photoReaction: {
-          authorId: authorId,
-          authorName: authorName,
+          authorId,
+          authorName,
+          ...(reactionType === 'comment' && { comment }),
         },
       }),
     }).catch(e => {
       console.log(e);
     });
 
-    setHasUserReacted(!hasUserReacted);
+    if (reactionType !== 'comment' && !!setHasUserReacted) {
+      setHasUserReacted(!hasUserReacted);
+    }
   };
 
   return {

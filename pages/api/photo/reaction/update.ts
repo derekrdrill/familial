@@ -11,7 +11,9 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
   let photoReactionDataNew: PhotoReaction[];
   const photoID: string = JSON.parse(req.body).photoID;
   const photoReactionNew: PhotoReaction = JSON.parse(req.body).photoReaction;
-  const photoReactionType: string = JSON.parse(req.body).photoReactionType;
+  const photoReactionType: 'comment' | 'like' | 'love' | 'smile' = JSON.parse(
+    req.body,
+  ).photoReactionType;
   const photoReactionTypeField: string = `${photoReactionType}s`;
 
   const photo = await Photos.findById(photoID);
@@ -21,13 +23,18 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
     photoReaction => photoReaction.authorId === photoReactionNew.authorId,
   );
 
-  if (hasUserReacted) {
-    photoReactionDataNew = photoReactionsCurrent.filter(
-      photoReaction => photoReaction.authorId !== photoReactionNew.authorId,
-    );
-  } else {
+  if (photoReactionType === 'comment') {
     photoReactionDataNew = [...photoReactionsCurrent, ...[photoReactionNew]];
+  } else {
+    if (hasUserReacted) {
+      photoReactionDataNew = photoReactionsCurrent.filter(
+        photoReaction => photoReaction.authorId !== photoReactionNew.authorId,
+      );
+    } else {
+      photoReactionDataNew = [...photoReactionsCurrent, ...[photoReactionNew]];
+    }
   }
+
 
   await Photos.updateOne(
     { _id: new mongoose.Types.ObjectId(photoID) },

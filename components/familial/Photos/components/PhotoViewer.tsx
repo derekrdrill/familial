@@ -16,6 +16,7 @@ import { PhotoReaction } from '../../../../types';
 
 type PhotoViewerTypes = {
   isPhotoViewerOpen: boolean;
+  photoComments?: PhotoReaction[];
   photoId?: string;
   photoLikes?: PhotoReaction[];
   photoLoves?: PhotoReaction[];
@@ -26,6 +27,7 @@ type PhotoViewerTypes = {
 
 export const PhotoViewer = ({
   isPhotoViewerOpen,
+  photoComments,
   photoId,
   photoLikes,
   photoLoves,
@@ -53,12 +55,14 @@ export const PhotoViewer = ({
     photoSmiles,
   });
 
+  const [newPhotoComment, setNewPhotoComment] = React.useState<string>('');
+
   return (
-    <Modal open={isPhotoViewerOpen}>
+    <PhotoViewerRoot open={isPhotoViewerOpen}>
       <>
         {photoURL && (
           <div tw='md:flex md:justify-between'>
-            <div tw='bg-[#00000099] w-full md:w-3/4'>
+            <div tw='bg-[#00000099] w-full md:w-2/3'>
               <div tw='flex items-center justify-center md:h-screen'>
                 <div tw='absolute flex flex-col gap-2 left-2 top-2'>
                   {isPhotoViewerBackBtnShown && (
@@ -173,11 +177,24 @@ export const PhotoViewer = ({
                     fullWidth
                     multiline
                     placeholder='Leave a comment...'
+                    onChange={e => setNewPhotoComment(e.target.value)}
                     rows={3}
+                    value={newPhotoComment}
                     $isDarkMode={isDarkMode}
                   />
                   <div tw='flex justify-end'>
                     <Button
+                      onClick={async () => {
+                        await handleReactionClick({
+                          authorId: user?.userID,
+                          authorName: `${user?.firstName} ${user?.lastName}`,
+                          comment: newPhotoComment,
+                          photoId: photoId,
+                          reactionType: 'comment',
+                        });
+
+                        setNewPhotoComment('');
+                      }}
                       style={{
                         maxWidth: '30px',
                         maxHeight: '30px',
@@ -189,24 +206,49 @@ export const PhotoViewer = ({
                     </Button>
                   </div>
                 </>
+                {photoComments?.map(photoComment => (
+                  <PhotoViewerCommentContainer
+                    $isUserCommentAuthor={photoComment.authorId === user?.userID}
+                  >
+                    <PhotoViewerCommentAuthor
+                      $isUserCommentAuthor={photoComment.authorId === user?.userID}
+                    >
+                      <DrillyTypography>
+                        {`${photoComment.authorName?.charAt(0)}${photoComment.authorName?.charAt(photoComment.authorName?.indexOf(' ') + 1)}`}
+                      </DrillyTypography>
+                    </PhotoViewerCommentAuthor>
+                    <PhotoViewerComment
+                      variant='body1'
+                      $isDarkMode={isDarkMode}
+                      $isUserCommentAuthor={photoComment.authorId === user?.userID}
+                    >
+                      <div tw='flex flex-col'>
+                        {photoComment.comment?.text}
+                        <DrillyTypography variant='caption'>
+                          {new Date(photoComment.comment?.date ?? '').toLocaleString()}
+                        </DrillyTypography>
+                      </div>
+                    </PhotoViewerComment>
+                  </PhotoViewerCommentContainer>
+                ))}
               </div>
             </PhotoViewerActionsPanel>
           </div>
         )}
       </>
-    </Modal>
+    </PhotoViewerRoot>
   );
 };
 
-export const PhotoViewerActionsPanel = styled.div<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    $isDarkMode && tw`bg-gray-900`,
-    !$isDarkMode && tw`bg-white`,
-    tw`h-screen`,
-    tw`w-full`,
-    tw`md:w-1/4`,
-  ],
-);
+export const PhotoViewerActionsPanel = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  $isDarkMode && tw`bg-gray-900`,
+  !$isDarkMode && tw`bg-white`,
+  tw`h-full`,
+  tw`overflow-auto`,
+  tw`w-full`,
+  tw`md:h-screen`,
+  tw`md:w-1/3`,
+]);
 
 export const PhotoViewerButton = styled(Button)<{
   $bgColor: TwStyle;
@@ -221,11 +263,49 @@ export const PhotoViewerButton = styled(Button)<{
   $borderColor,
 ]);
 
-export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    {
-      '.MuiInputBase-root': [$isDarkMode && tw`bg-gray-100`],
-    },
+export const PhotoViewerCommentAuthor = styled.div<{ $isUserCommentAuthor: boolean }>(
+  ({ $isUserCommentAuthor }) => [
+    $isUserCommentAuthor && tw`order-2`,
+    tw`bg-amber-500`,
+    tw`flex`,
+    tw`items-center`,
+    tw`justify-center`,
+    tw`my-2`,
+    tw`px-1`,
+    tw`rounded-2xl`,
   ],
 );
+
+export const PhotoViewerComment = styled(DrillyTypography)<{ $isUserCommentAuthor: boolean }>(
+  ({ $isUserCommentAuthor }) => [
+    $isUserCommentAuthor && tw`bg-blue-300`,
+    !$isUserCommentAuthor && tw`bg-blue-800`,
+    tw`flex`,
+    tw`px-2`,
+    tw`py-1`,
+    tw`rounded`,
+  ],
+);
+
+export const PhotoViewerCommentContainer = styled.div<{ $isUserCommentAuthor: boolean }>(
+  ({ $isUserCommentAuthor }) => [
+    $isUserCommentAuthor && tw`justify-end`,
+    tw`flex`,
+    tw`gap-1`,
+    tw`mt-4`,
+  ],
+);
+
+export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  {
+    '.MuiInputBase-root': [$isDarkMode && tw`bg-gray-200`],
+  },
+]);
+
+export const PhotoViewerRoot = styled(Modal)([
+  tw`absolute`,
+  tw`block`,
+  tw`h-full`,
+  tw`overflow-y-auto`,
+]);
 

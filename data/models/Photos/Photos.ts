@@ -4,7 +4,7 @@ export const PhotosSchema = new mongoose.Schema({
   albumID: String,
   albumName: String,
   authorId: String,
-  comments: [{ authorId: String, authorName: String, comment: String }],
+  comments: [{ authorId: String, authorName: String, comment: { date: String, text: String } }],
   description: String,
   likes: [{ authorId: String, authorName: String }],
   loves: [{ authorId: String, authorName: String }],
