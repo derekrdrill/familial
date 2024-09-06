@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import styled from '@emotion/styled';
-import tw, { TwStyle } from 'twin.macro';
+import tw from 'twin.macro';
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -33,11 +33,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
     <HomeRoot>
       <HomeTitleAndSlideshowDiv>
         <HomeTitleColDiv>
-          <Typography
-            color={isDarkMode ? 'white' : 'inherit'}
-            component='h1'
-            variant='h4'
-          >
+          <Typography color={isDarkMode ? 'white' : 'inherit'} component='h1' variant='h4'>
             Welcome to your Drill Familial experience, Derek :)
           </Typography>
         </HomeTitleColDiv>
@@ -69,10 +65,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
         </HomeSlideshowColDiv>
       </HomeTitleAndSlideshowDiv>
       <HomeQuickSectionDiv>
-        <HomeQuickSectionTitleBar
-          homeQuickSectionTitleBarStyles={tw`mb-1`}
-          title='Quick photos'
-        />
+        <HomeQuickSectionTitleBar homeQuickSectionTitleBarStyles={tw`mb-1`} title='Quick photos' />
         <div tw='col-span-1 flex justify-center lg:p-2 lg:px-8'>
           <Carousel
             carouselContent={photosQuick.map(photo => ({
@@ -82,6 +75,9 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
                   <PhotoQuick
                     photoAlbumID={photo.albumID}
                     photoID={photo._id}
+                    photoLikes={photo.likes}
+                    photoLoves={photo.loves}
+                    photoSmiles={photo.smiles}
                     photoTitle={photo.title}
                     photoUrl={photo.url}
                   />
@@ -92,10 +88,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
         </div>
       </HomeQuickSectionDiv>
       <HomeQuickSectionDiv>
-        <HomeQuickSectionTitleBar
-          homeQuickSectionTitleBarStyles={tw`mb-3`}
-          title='Quick recipes'
-        />
+        <HomeQuickSectionTitleBar homeQuickSectionTitleBarStyles={tw`mb-3`} title='Quick recipes' />
         <div tw='col-span-1 flex justify-center px-8'>
           <Carousel
             carouselHeight={isMD ? 250 : 290}

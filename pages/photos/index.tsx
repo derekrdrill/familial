@@ -74,6 +74,7 @@ export const getServerSideProps = async () => {
     const albumsMapped = albums.map(album => ({
       _id: album._id.toString(),
       albumName: album.albumName,
+      authorId: album.authorId,
       photos: photos.filter(photo => photo.albumName === album.albumName),
     }));
 

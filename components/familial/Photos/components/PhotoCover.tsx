@@ -14,6 +14,7 @@ import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 type PhotoCoverProps = {
   photoListItem: {
     _id?: string;
+    authorId?: string;
     albumName?: string;
     photos?: Photos[] | undefined;
     title?: string;
@@ -27,10 +28,11 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
 
   const {
     dispatch,
-    state: { photosView },
+    state: { photosView, user },
   } = React.useContext(GlobalContext);
 
   const [isPhotoLoading, setIsPhotoLoading] = React.useState<boolean>(true);
+  const [isUserAuthor, setIsUserAuthor] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     dispatch({
@@ -38,6 +40,12 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
       payload: { photosView: 'grid' },
     });
   }, []);
+
+  React.useEffect(() => {
+    if (user?.userID) {
+      setIsUserAuthor(user?.userID === photoListItem.authorId);
+    }
+  }, [user]);
 
   return (
     <PhotoCoverRoot
@@ -49,6 +57,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
           ...(router.query.albumID && { query: { p: photoListItem._id } }),
         });
       }}
+      $isUserAuthor={isUserAuthor}
     >
       {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
       <PhotoCoverImageControlButtonDiv $photosView={photosView}>
@@ -131,6 +140,8 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
           }}
           variant='outlined'
           $isDelete
+          $isUserAuthor={isUserAuthor}
+          $isLoading={isPhotoLoading}
         >
           <DeleteForever />
         </PhotoCoverImageControlButton>
@@ -144,9 +155,8 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                 modalItem: {
                   handleSubmit: async () => {
                     if (!!router.query.albumID) {
-                      const newPhotoTitle = (
-                        document.getElementById('album') as HTMLInputElement
-                      )?.value;
+                      const newPhotoTitle = (document.getElementById('album') as HTMLInputElement)
+                        ?.value;
 
                       await fetch('/api/photo/update', {
                         method: 'PUT',
@@ -162,9 +172,8 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                           console.log(e);
                         });
                     } else {
-                      const newAlbumName = (
-                        document.getElementById('album') as HTMLInputElement
-                      )?.value;
+                      const newAlbumName = (document.getElementById('album') as HTMLInputElement)
+                        ?.value;
 
                       await fetch('/api/album/update', {
                         method: 'PUT',
@@ -191,9 +200,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                       <TextField
                         id='album'
                         defaultValue={
-                          router.query.albumID
-                            ? photoListItem.title
-                            : photoListItem.albumName
+                          router.query.albumID ? photoListItem.title : photoListItem.albumName
                         }
                         fullWidth
                       />
@@ -209,6 +216,8 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
           }}
           variant='outlined'
           $isEdit
+          $isUserAuthor={isUserAuthor}
+          $isLoading={isPhotoLoading}
         >
           <EditTwoToneIcon />
         </PhotoCoverImageControlButton>
@@ -227,18 +236,20 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
   );
 };
 
-export const PhotoCoverRoot = styled.div([
-  tw`pl-2`,
-  tw`py-2`,
-  tw`w-full`,
-  tw`cursor-pointer`,
-  {
-    ':hover': {
-      button: [tw`visible`],
+export const PhotoCoverRoot = styled.div<{ $isLoading?: boolean; $isUserAuthor?: boolean }>(
+  ({ $isLoading, $isUserAuthor }) => [
+    tw`pl-2`,
+    tw`py-2`,
+    tw`w-full`,
+    tw`cursor-pointer`,
+    {
+      ':hover': {
+        button: $isUserAuthor && !$isLoading && [tw`visible`],
+      },
+      button: [tw`invisible`],
     },
-    button: [tw`invisible`],
-  },
-]);
+  ],
+);
 
 export const PhotoCoverImage = styled(Image)<{
   $isLoading: boolean;
@@ -274,7 +285,9 @@ export const PhotoCoverImageControlButtonDiv = styled.div<{
 export const PhotoCoverImageControlButton = styled(Button)<{
   $isDelete?: boolean;
   $isEdit?: boolean;
-}>(({ $isDelete, $isEdit }) => [
+  $isLoading?: boolean;
+  $isUserAuthor?: boolean;
+}>(({ $isDelete, $isEdit, $isLoading, $isUserAuthor }) => [
   {
     maxWidth: '30px',
     maxHeight: '30px',
@@ -287,6 +300,7 @@ export const PhotoCoverImageControlButton = styled(Button)<{
   $isEdit && tw`text-blue-500`,
   $isEdit && tw`bg-blue-200`,
   $isEdit && tw`hover:bg-blue-300`,
+  ($isLoading || $isUserAuthor) && tw`invisible`,
 ]);
 
 

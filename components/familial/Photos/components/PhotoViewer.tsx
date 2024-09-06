@@ -1,35 +1,57 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
-import { Button, IconButton, Modal, TextField } from '@mui/material';
+import styled from '@emotion/styled';
+import { Button, Modal, TextField } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import TagFacesIcon from '@mui/icons-material/TagFaces';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
 import GlobalContext from '../../../../context/GlobalContext';
-
 import { DrillyTypography } from '../../../../styles/globals';
+import { PhotoReactionButton } from '../../Photos';
+import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
+
+import { PhotoReaction } from '../../../../types';
 
 type PhotoViewerTypes = {
   isPhotoViewerOpen: boolean;
+  photoId?: string;
+  photoLikes?: PhotoReaction[];
+  photoLoves?: PhotoReaction[];
+  photoSmiles?: PhotoReaction[];
   photoTitle?: string;
   photoURL?: string;
 };
 
 export const PhotoViewer = ({
   isPhotoViewerOpen,
+  photoId,
+  photoLikes,
+  photoLoves,
+  photoSmiles,
   photoTitle,
   photoURL,
 }: PhotoViewerTypes) => {
   const router = useRouter();
 
   const {
-    state: { isDarkMode, isPhotoViewerBackBtnShown },
+    state: { isDarkMode, isPhotoViewerBackBtnShown, user },
   } = React.useContext(GlobalContext);
+
+  const {
+    handleReactionClick,
+    hasUserLiked,
+    hasUserLoved,
+    hasUserSmiled,
+    setHasUserLiked,
+    setHasUserLoved,
+    setHasUserSmiled,
+  } = usePhotoReactions({
+    photoLikes,
+    photoLoves,
+    photoSmiles,
+  });
 
   return (
     <Modal open={isPhotoViewerOpen}>
@@ -102,15 +124,48 @@ export const PhotoViewer = ({
                   {photoTitle}
                 </DrillyTypography>
                 <div tw='flex'>
-                  <IconButton color='info'>
-                    <ThumbUpOffAltIcon />
-                  </IconButton>
-                  <IconButton color='error'>
-                    <FavoriteBorderIcon />
-                  </IconButton>
-                  <IconButton color='secondary'>
-                    <TagFacesIcon />
-                  </IconButton>
+                  <PhotoReactionButton
+                    handleReactionClick={async () =>
+                      handleReactionClick({
+                        authorId: user?.userID,
+                        authorName: `${user?.firstName} ${user?.lastName}`,
+                        hasUserReacted: hasUserLiked,
+                        photoId: photoId,
+                        reactionType: 'like',
+                        setHasUserReacted: setHasUserLiked,
+                      })
+                    }
+                    hasUserLiked={hasUserLiked}
+                    reactionType='like'
+                  />
+                  <PhotoReactionButton
+                    handleReactionClick={async () =>
+                      handleReactionClick({
+                        authorId: user?.userID,
+                        authorName: `${user?.firstName} ${user?.lastName}`,
+                        hasUserReacted: hasUserLoved,
+                        photoId: photoId,
+                        reactionType: 'love',
+                        setHasUserReacted: setHasUserLoved,
+                      })
+                    }
+                    hasUserLoved={hasUserLoved}
+                    reactionType='love'
+                  />
+                  <PhotoReactionButton
+                    handleReactionClick={async () =>
+                      handleReactionClick({
+                        authorId: user?.userID,
+                        authorName: `${user?.firstName} ${user?.lastName}`,
+                        hasUserReacted: hasUserSmiled,
+                        photoId: photoId,
+                        reactionType: 'smile',
+                        setHasUserReacted: setHasUserSmiled,
+                      })
+                    }
+                    hasUserSmiled={hasUserSmiled}
+                    reactionType='smile'
+                  />
                 </div>
                 <>
                   <PhotoViewerCommentInput
