@@ -12,6 +12,7 @@ import { PhotoReactionButton } from './PhotoReactionButton';
 
 type PhotoQuickProps = {
   photoAlbumID: string;
+  photoAuthorFirstName: string;
   photoID: string;
   photoLikes?: PhotoReaction[];
   photoLoves?: PhotoReaction[];
@@ -22,6 +23,7 @@ type PhotoQuickProps = {
 
 const PhotoQuick = ({
   photoAlbumID,
+  photoAuthorFirstName = '',
   photoID,
   photoLikes,
   photoLoves,
@@ -47,6 +49,7 @@ const PhotoQuick = ({
     photoLikes,
     photoLoves,
     photoSmiles,
+    user,
   });
 
   return (
@@ -136,7 +139,9 @@ const PhotoQuick = ({
           />
         </div>
       </div>
-      <PhotoQuickAddedByText $isDarkMode={isDarkMode}>added by Derek</PhotoQuickAddedByText>
+      <PhotoQuickAddedByText
+        $isDarkMode={isDarkMode}
+      >{`added by ${photoAuthorFirstName}`}</PhotoQuickAddedByText>
     </PhotoQuickRoot>
   );
 };

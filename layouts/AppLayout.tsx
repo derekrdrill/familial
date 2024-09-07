@@ -33,14 +33,13 @@ export const getUserData = async (
   user,
   dispatch: React.Dispatch<GlobalReducerAction>,
 ) => {
-  const { id, firstName, lastName, username, primaryPhoneNumber } = user.user;
+  const { id, firstName, lastName, primaryPhoneNumber } = user.user;
 
-  if (id && firstName && lastName && username && primaryPhoneNumber) {
+  if (id && firstName && lastName && primaryPhoneNumber) {
     const params = new URLSearchParams({
       userID: id,
       firstName: firstName,
       lastName: lastName,
-      userName: username,
       phoneNumber: primaryPhoneNumber.toString(),
     });
 
