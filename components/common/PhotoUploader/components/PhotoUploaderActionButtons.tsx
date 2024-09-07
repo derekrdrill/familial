@@ -54,8 +54,6 @@ export const handlePhotoUpload = async (
                 type: GlobalReducerActionEnum.SET_PHOTOS,
                 payload: { photos: photos },
               });
-
-              // router.reload();
             }
           });
         }
