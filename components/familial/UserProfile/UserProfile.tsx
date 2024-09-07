@@ -42,7 +42,7 @@ const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserProfilePro
         {user?.userName}
       </DrillyTypography>
       {user?.isAdmin && (
-        <Link href='/admin/add-new-user' onClick={() => setIsUserSidebarOpen(false)}>
+        <Link href='/admin/add-new-member' onClick={() => setIsUserSidebarOpen(false)}>
           <DrillyTypography
             textAlign='center'
             tw='text-info-dark text-xs underline'
