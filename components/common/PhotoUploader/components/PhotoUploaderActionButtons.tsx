@@ -38,7 +38,9 @@ export const handlePhotoUpload = async (
               ...photoUploadData[photoKey],
               ...{ url: url },
             }),
-          }).then(res => {
+          }).then(async res => {
+            const photos = await res.json();
+
             if (res.status === 200) {
               dispatch({
                 type: GlobalReducerActionEnum.SET_PHOTO_LIST,
@@ -48,8 +50,10 @@ export const handlePhotoUpload = async (
                 type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
                 payload: { photoUploadData: [] },
               });
-
-              router.reload();
+              dispatch({
+                type: GlobalReducerActionEnum.SET_PHOTOS,
+                payload: { photos: photos },
+              });
             }
           });
         }
@@ -70,7 +74,7 @@ export const PhotoUploaderActionButtons = ({
   const router = useRouter();
   const {
     dispatch,
-    state: { isDarkMode, photoList, photoUploadData, selectedPhotoAlbum },
+    state: { isDarkMode, photoList, photoUploadData, selectedPhotoAlbum, photos },
   } = React.useContext(GlobalContext);
 
   const hasEveryPhotosSelected = photoList?.every(photo => photo.checked);
@@ -126,9 +130,7 @@ export const PhotoUploaderActionButtons = ({
                         : dispatch({
                             type: GlobalReducerActionEnum.SET_PHOTO_LIST,
                             payload: {
-                              photoList: photoList.filter(
-                                photo => !photo.checked,
-                              ),
+                              photoList: photoList.filter(photo => !photo.checked),
                             },
                           }),
                     modalBody:
@@ -144,8 +146,7 @@ export const PhotoUploaderActionButtons = ({
                       //   </Grid>
                       // )
                       '',
-                    modalTitle:
-                      'Are you sure you want to remove the selected images?',
+                    modalTitle: 'Are you sure you want to remove the selected images?',
                     submitButtonColor: 'error',
                     submitButtonText: 'Remove',
                   },
@@ -169,12 +170,7 @@ export const PhotoUploaderActionButtons = ({
                 payload: {
                   modalItem: {
                     handleSubmit: async () =>
-                      handlePhotoUpload(
-                        photoList,
-                        photoUploadData,
-                        dispatch,
-                        router,
-                      ),
+                      handlePhotoUpload(photoList, photoUploadData, dispatch, router),
                     isExitHidden: true,
                     isModalOpen: true,
                     modalBody: (
@@ -203,9 +199,7 @@ export const PhotoUploaderActionButtons = ({
                 : tw`border-success hover:border-success`
             }
             $isDisabled={!isAbleToSubmitUpload}
-            $textColor={
-              isDarkMode ? tw`text-success-dark-mode` : tw`text-success`
-            }
+            $textColor={isDarkMode ? tw`text-success-dark-mode` : tw`text-success`}
           >
             Upload photos
           </PhotoUploadActionButton>

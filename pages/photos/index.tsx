@@ -1,10 +1,8 @@
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
 
 import GlobalContext from '../../context/GlobalContext';
 
 import PhotosLayout from '../../layouts/PhotosLayout';
-import { PhotoCover } from '../../components/familial/Photos';
 
 import conn from '../../data/connection';
 import { Albums as AlbumsData, Photos as PhotosData } from '../../data/models';
@@ -17,10 +15,8 @@ type PhotosIndexProps = {
 };
 
 const PhotosIndex = ({ albumsData, photosData }: PhotosIndexProps) => {
-  const {
-    dispatch,
-    state: { isDarkMode },
-  } = React.useContext(GlobalContext);
+  const { dispatch } = React.useContext(GlobalContext);
+
   React.useEffect(() => {
     dispatch({
       type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
@@ -29,27 +25,11 @@ const PhotosIndex = ({ albumsData, photosData }: PhotosIndexProps) => {
   }, []);
 
   return (
-    <PhotosLayout albumsData={albumsData} photosData={photosData} photosLayoutTitle='Photo albums'>
-      <Grid container>
-        {albumsData?.map(
-          album =>
-            !!album?.photos?.length && (
-              <Grid key={album.albumName} item xs={6} sm={4} md={3} lg={2}>
-                <Grid container style={{ height: '80%' }} tw='mb-1'>
-                  <PhotoCover photoListItem={album} photoURL={album.photos[0].url} />
-                </Grid>
-                <Typography color={isDarkMode ? 'white' : 'inherit'} variant='subtitle1'>
-                  {album.albumName}
-                </Typography>
-                <Typography
-                  color={isDarkMode ? 'white' : 'inherit'}
-                  variant='subtitle2'
-                >{`${album.photos.length} photo${album.photos.length > 1 ? 's' : ''}`}</Typography>
-              </Grid>
-            ),
-        )}
-      </Grid>
-    </PhotosLayout>
+    <PhotosLayout
+      albumsData={albumsData}
+      photosData={photosData}
+      photosLayoutTitle='Photo albums'
+    />
   );
 };
 

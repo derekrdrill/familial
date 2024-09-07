@@ -28,7 +28,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
 
   const {
     dispatch,
-    state: { photosView, user },
+    state: { albums, photosView, user },
   } = React.useContext(GlobalContext);
 
   const [isPhotoLoading, setIsPhotoLoading] = React.useState<boolean>(true);
@@ -83,7 +83,6 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                             payload: { photos: newPhotos },
                           });
                         })
-                        .then(() => router.reload())
                         .catch(e => {
                           console.log(e);
                         });
@@ -164,13 +163,9 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                           photoID: photoListItem._id,
                           newPhotoTitle: newPhotoTitle,
                         }),
-                      })
-                        .then(async () => {
-                          router.reload();
-                        })
-                        .catch(e => {
-                          console.log(e);
-                        });
+                      }).catch(e => {
+                        console.log(e);
+                      });
                     } else {
                       const newAlbumName = (document.getElementById('album') as HTMLInputElement)
                         ?.value;
@@ -182,8 +177,19 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
                           newAlbumName: newAlbumName,
                         }),
                       })
-                        .then(async () => {
-                          router.reload();
+                        .then(async res => {
+                          const albumResponse = await res.json();
+                          const newAlbums = albums?.map((album, albumKey) => ({
+                            ...album,
+                            ...{ albumName: albumResponse[albumKey].albumName },
+                          }));
+
+                          dispatch({
+                            type: GlobalReducerActionEnum.SET_ALBUMS,
+                            payload: {
+                              albums: newAlbums,
+                            },
+                          });
                         })
                         .catch(e => {
                           console.log(e);
