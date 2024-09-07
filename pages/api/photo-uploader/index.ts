@@ -17,5 +17,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   };
 
   Photos.insertMany([albumDataToInsert]);
-  res.json({});
+
+  res.json(await Photos.find({ albumID: album._id }).sort({ uploadedAt: -1 }));
 }
