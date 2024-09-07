@@ -18,10 +18,9 @@ type PhotoUploadProps = {
 export const PhotoUploader = ({ isMultiple = true }: PhotoUploadProps) => {
   const {
     dispatch,
-    state: { photoList, photoUploadData, selectedPhotoAlbum },
+    state: { photoList, photoUploadData, selectedPhotoAlbum, user },
   } = React.useContext(GlobalContext);
-  const [isAbleToSubmitUpload, setIsAbleToSubmitUpload] =
-    React.useState<boolean>(false);
+  const [isAbleToSubmitUpload, setIsAbleToSubmitUpload] = React.useState<boolean>(false);
 
   const handlePhotoUploadingChange = (photoListData: PhotoListType) =>
     dispatch({
@@ -39,14 +38,13 @@ export const PhotoUploader = ({ isMultiple = true }: PhotoUploadProps) => {
     dispatch({
       type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
       payload: {
-        photoUploadData: photoUploadData?.map(
-          (photoUpload, photoUploadIndex) =>
-            photoUploadIndex === imageIndex
-              ? {
-                  ...photoUpload,
-                  ...{ [e.target.id ?? 'albumName']: e.target.value },
-                }
-              : photoUpload,
+        photoUploadData: photoUploadData?.map((photoUpload, photoUploadIndex) =>
+          photoUploadIndex === imageIndex
+            ? {
+                ...photoUpload,
+                ...{ [e.target.id ?? 'albumName']: e.target.value },
+              }
+            : photoUpload,
         ),
       },
     });
@@ -58,9 +56,9 @@ export const PhotoUploader = ({ isMultiple = true }: PhotoUploadProps) => {
         type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
         payload: {
           photoUploadData: photoList.map((photo, photoIndex) => ({
-            albumName:
-              selectedPhotoAlbum?.albumName ??
-              photoUploadData[photoIndex]?.albumName,
+            albumName: selectedPhotoAlbum?.albumName ?? photoUploadData[photoIndex]?.albumName,
+            authorId: user?.userID,
+            authorName: `${user?.firstName} ${user?.lastName}`,
             description: photoUploadData[photoIndex]?.description,
             title: photoUploadData[photoIndex]?.title,
             uploadedAt: new Date(),

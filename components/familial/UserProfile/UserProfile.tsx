@@ -8,6 +8,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GlobalContext from '../../../context/GlobalContext';
 
 import { DrillyTypography } from '../../../styles/globals';
+import Link from 'next/link';
 
 type UserProfileProps = {
   isUserSidebarOpen: boolean;
@@ -40,6 +41,17 @@ const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserProfilePro
       <DrillyTypography variant='h6' textAlign='center' $isDarkMode={isDarkMode}>
         {user?.userName}
       </DrillyTypography>
+      {user?.isAdmin && (
+        <Link href='/admin/add-new-user' onClick={() => setIsUserSidebarOpen(false)}>
+          <DrillyTypography
+            textAlign='center'
+            tw='text-info-dark text-xs underline'
+            variant='subtitle2'
+          >
+            Admin settings
+          </DrillyTypography>
+        </Link>
+      )}
       <Grid container justifyContent='center' tw='mt-14'>
         <UserProfileAvatar sx={{ fontSize: '200px' }} $isDarkMode={isDarkMode} />
       </Grid>

@@ -55,6 +55,7 @@ export const PhotoViewer = ({
     photoLoves,
     photoSmiles,
     photoComments,
+    user,
   });
 
   const [newPhotoComment, setNewPhotoComment] = React.useState<string>('');

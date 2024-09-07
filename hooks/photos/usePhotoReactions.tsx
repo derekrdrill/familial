@@ -1,11 +1,12 @@
 import React from 'react';
-import { PhotoReaction, Photos } from '../../types';
+import { PhotoReaction, Photos, User } from '../../types';
 
 type usePhotoReactionsProps = {
   photoComments?: PhotoReaction[];
   photoLikes?: PhotoReaction[];
   photoLoves?: PhotoReaction[];
   photoSmiles?: PhotoReaction[];
+  user?: User;
 };
 
 const usePhotoReactions = ({
@@ -13,6 +14,7 @@ const usePhotoReactions = ({
   photoLikes,
   photoLoves,
   photoSmiles,
+  user,
 }: usePhotoReactionsProps) => {
   const [hasUserLiked, setHasUserLiked] = React.useState<boolean>(false);
   const [hasUserLoved, setHasUserLoved] = React.useState<boolean>(false);
@@ -22,13 +24,16 @@ const usePhotoReactions = ({
   );
 
   React.useEffect(() => {
-    setHasUserLiked(!!photoLikes?.length);
-    setHasUserLoved(!!photoLoves?.length);
-    setHasUserSmiled(!!photoSmiles?.length);
+    if (user) {
+      setHasUserLiked(!!photoLikes?.find(photoLike => photoLike.authorId === user.userID));
+      setHasUserLoved(!!photoLoves?.find(photoLove => photoLove.authorId === user.userID));
+      setHasUserSmiled(!!photoSmiles?.find(photoSmile => photoSmile.authorId === user.userID));
+    }
+
     setPhotoCommentsState(
       !!photoComments?.length ? getSortedComments({ photoComments }) : photoComments,
     );
-  }, [photoComments, photoLikes, photoLoves, photoSmiles]);
+  }, [photoComments, photoLikes, photoLoves, photoSmiles, user]);
 
   const getSortedComments = ({ photoComments }: { photoComments: PhotoReaction[] }) =>
     photoComments?.sort((a, b) => {

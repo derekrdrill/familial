@@ -5,6 +5,7 @@ export type Photos = {
   albumID: string;
   albumName: string;
   authorId: string;
+  authorName: string;
   bio?: string;
   comments?: PhotoReaction[];
   likes?: PhotoReaction[];

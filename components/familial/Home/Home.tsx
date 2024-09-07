@@ -26,7 +26,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
   const isMD = useMediaQuery(theme.breakpoints.up('md'));
 
   const {
-    state: { isDarkMode },
+    state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
 
   return (
@@ -34,7 +34,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
       <HomeTitleAndSlideshowDiv>
         <HomeTitleColDiv>
           <Typography color={isDarkMode ? 'white' : 'inherit'} component='h1' variant='h4'>
-            Welcome to your Drill Familial experience, Derek :)
+            {`Welcome to your Drill Familial experience, ${user?.firstName} :)`}
           </Typography>
         </HomeTitleColDiv>
         <HomeSlideshowColDiv>
@@ -74,6 +74,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
                 <div tw='w-80 md:w-56'>
                   <PhotoQuick
                     photoAlbumID={photo.albumID}
+                    photoAuthorFirstName={photo.authorName.split(' ')[0]}
                     photoID={photo._id}
                     photoLikes={photo.likes}
                     photoLoves={photo.loves}
