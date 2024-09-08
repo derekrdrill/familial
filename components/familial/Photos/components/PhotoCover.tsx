@@ -57,6 +57,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
           ...(router.query.albumID && { query: { p: photoListItem._id } }),
         });
       }}
+      $isAlbumsPage={!router.pathname.includes('[albumID]')}
       $isUserAuthor={isUserAuthor}
     >
       {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
@@ -243,20 +244,23 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
   );
 };
 
-export const PhotoCoverRoot = styled.div<{ $isLoading?: boolean; $isUserAuthor?: boolean }>(
-  ({ $isLoading, $isUserAuthor }) => [
-    tw`sm:pl-2`,
-    tw`py-2`,
-    tw`w-full`,
-    tw`cursor-pointer`,
-    {
-      ':hover': {
-        button: $isUserAuthor && !$isLoading && [tw`visible`],
-      },
-      button: [tw`invisible`],
+export const PhotoCoverRoot = styled.div<{
+  $isAlbumsPage?: boolean;
+  $isLoading?: boolean;
+  $isUserAuthor?: boolean;
+}>(({ $isAlbumsPage, $isLoading, $isUserAuthor }) => [
+  $isAlbumsPage && tw`pl-2`,
+  tw`sm:pl-2`,
+  tw`py-2`,
+  tw`w-full`,
+  tw`cursor-pointer`,
+  {
+    ':hover': {
+      button: $isUserAuthor && !$isLoading && [tw`visible`],
     },
-  ],
-);
+    button: [tw`invisible`],
+  },
+]);
 
 export const PhotoCoverImage = styled(Image)<{
   $isAlbumsPage?: boolean;
