@@ -182,7 +182,7 @@ const PhotosLayout = ({
               </Button>
             )}
             {photoAlbumLength && (
-              <Grid item>
+              <Grid item tw='hidden md:inline-block'>
                 <Grid container spacing={1} justifyContent='flex-end'>
                   <Grid item xs={7} md={6}>
                     <PhotosViewButton
@@ -225,7 +225,7 @@ const PhotosLayout = ({
               album =>
                 !!album?.photos?.length && (
                   <Grid key={album.albumName} item xs={6} sm={4} md={3} lg={2}>
-                    <Grid container style={{ height: '80%' }} tw='mb-1'>
+                    <Grid container tw='h-fit mb-1'>
                       <PhotoCover photoListItem={album} photoURL={album.photos[0].url} />
                     </Grid>
                     <Typography color={isDarkMode ? 'white' : 'inherit'} variant='subtitle1'>
@@ -241,48 +241,42 @@ const PhotosLayout = ({
           </Grid>
         ) : (
           <Grid container>
-            {photosView === 'list' ? (
-              <Button
-                fullWidth
-                onClick={onImageUpload}
-                variant='outlined'
-                startIcon={<AddAPhotoTwoTone />}
-                tw='!bg-opacity-20 hover:!bg-opacity-30 mt-6 normal-case hover:shadow-none shadow-none bg-info hover:bg-info border-info hover:border-info text-info'
-              >
-                Add to album
-              </Button>
-            ) : (
-              <PhotoUploaderTile
-                item
-                onClick={onImageUpload}
-                xs={6}
-                sm={4}
-                md={3}
-                lg={2}
+            <PhotoUploaderTile
+              item
+              onClick={onImageUpload}
+              xs={12}
+              sm={photosView === 'list' ? 12 : 6}
+              md={photosView === 'list' ? 12 : 4}
+              lg={photosView === 'list' ? 12 : 2}
+            >
+              <PhotoAlbumsAddTextContainer
+                container
+                tw='w-full'
+                $isDarkMode={isDarkMode}
                 $photosView={photosView}
               >
-                <PhotoAlbumsAddTextContainer
-                  container
-                  tw='w-full'
-                  $isDarkMode={isDarkMode}
-                  $photosView={photosView}
-                >
-                  <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
-                    Add to album <AddAPhotoTwoTone />
-                  </DrillyTypography>
-                </PhotoAlbumsAddTextContainer>
-              </PhotoUploaderTile>
-            )}
+                <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
+                  Add to album <AddAPhotoTwoTone />
+                </DrillyTypography>
+              </PhotoAlbumsAddTextContainer>
+            </PhotoUploaderTile>
             {photos?.map(photoListItem => (
               <>
                 {photosView === 'list' && (
-                  <Grid item xs={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+                  <Grid
+                    item
+                    xs={0}
+                    sm={2}
+                    md={3}
+                    lg={4}
+                    display={{ xs: 'none', sm: 'inline-block' }}
+                  />
                 )}
                 <Grid
                   item
-                  xs={photosView === 'list' ? 12 : 6}
-                  sm={photosView === 'list' ? 10 : 4}
-                  md={photosView === 'list' ? 6 : 3}
+                  xs={12}
+                  sm={photosView === 'list' ? 8 : 6}
+                  md={photosView === 'list' ? 6 : 4}
                   lg={photosView === 'list' ? 4 : 2}
                   tw='flex justify-center'
                 >
@@ -295,7 +289,14 @@ const PhotosLayout = ({
                   </Grid>
                 </Grid>
                 {photosView === 'list' && (
-                  <Grid item xs={1} md={3} xl={4} display={{ xs: 'none', sm: 'inline-block' }} />
+                  <Grid
+                    item
+                    xs={0}
+                    sm={2}
+                    md={3}
+                    lg={4}
+                    display={{ xs: 'none', sm: 'inline-block' }}
+                  />
                 )}
               </>
             ))}
@@ -374,23 +375,20 @@ export const PhotoAlbumsAddTextContainer = styled(Grid)<{
   $isDarkMode?: boolean;
   $photosView?: 'grid' | 'list';
 }>(({ $isDarkMode, $photosView }) => [
-  tw`cursor-pointer`,
-  tw`h-full`,
-  tw`hover:opacity-80`,
-  tw`rounded-2xl`,
   !$isDarkMode && tw`bg-gray-200`,
   $isDarkMode && tw`bg-gray-900`,
-  $photosView === 'grid' && tw`pt-3`,
-  $photosView === 'grid' && tw`pl-3`,
-  $photosView === 'list' && tw`pt-6`,
-  $photosView === 'list' && tw`pb-6`,
+  $photosView === 'grid' && tw`rounded-lg`,
+  $photosView === 'grid' && tw`sm:rounded-2xl`,
+  $photosView === 'grid' && tw`sm:pl-3`,
+  $photosView === 'grid' && tw`sm:pt-3`,
+  $photosView === 'list' && tw`rounded-lg`,
+  $photosView === 'list' && tw`sm:pt-6`,
+  $photosView === 'list' && tw`sm:pb-6`,
+  tw`cursor-pointer`,
+  tw`h-full`,
+  tw`px-3`,
+  tw`py-3`,
+  tw`hover:opacity-80`,
 ]);
 
-export const PhotoUploaderTile = styled(Grid)<{
-  $photosView?: 'grid' | 'list';
-}>(({ $photosView }) => [
-  tw`mb-2`,
-  $photosView === 'list' && tw`sm:mx-16`,
-  $photosView === 'list' && tw`md:mx-40`,
-  $photosView === 'list' && tw`lg:mx-48`,
-]);
+export const PhotoUploaderTile = styled(Grid)([tw`mb-2`]);

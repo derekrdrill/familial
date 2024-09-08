@@ -23,7 +23,7 @@ type HomeProps = {
 
 const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
   const theme = useTheme();
-  const isMD = useMediaQuery(theme.breakpoints.up('md'));
+  const isSM = useMediaQuery(theme.breakpoints.up('sm'));
 
   const {
     state: { isDarkMode, user },
@@ -66,7 +66,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
       </HomeTitleAndSlideshowDiv>
       <HomeQuickSectionDiv>
         <HomeQuickSectionTitleBar homeQuickSectionTitleBarStyles={tw`mb-1`} title='Quick photos' />
-        <div tw='col-span-1 flex justify-center lg:p-2 lg:px-8'>
+        <div tw='col-span-1 flex justify-center lg:p-2'>
           <Carousel
             carouselContent={photosQuick.map(photo => ({
               id: photo._id,
@@ -90,9 +90,9 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
       </HomeQuickSectionDiv>
       <HomeQuickSectionDiv>
         <HomeQuickSectionTitleBar homeQuickSectionTitleBarStyles={tw`mb-3`} title='Quick recipes' />
-        <div tw='col-span-1 flex justify-center px-8'>
+        <div tw='col-span-1 flex justify-center'>
           <Carousel
-            carouselHeight={isMD ? 250 : 290}
+            carouselHeight={isSM ? 240 : 300}
             carouselContent={[
               {
                 id: '1',

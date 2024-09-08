@@ -265,7 +265,7 @@ export const PhotoViewerRoot = styled(Modal)<{ $isDarkMode?: boolean }>(({ $isDa
       !$isDarkMode && tw`bg-white`,
       $isDarkMode && tw`bg-gray-900`,
       tw`md:bg-gray-3A3A3A`,
-      tw`md:bg-opacity-40`,
+      tw`md:bg-opacity-80`,
     ],
   },
 ]);

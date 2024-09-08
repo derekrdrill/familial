@@ -60,7 +60,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
       $isUserAuthor={isUserAuthor}
     >
       {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
-      <PhotoCoverImageControlButtonDiv $photosView={photosView}>
+      <PhotoCoverImageControlButtonDiv>
         <PhotoCoverImageControlButton
           color='inherit'
           onClick={e => {
@@ -235,6 +235,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
         sizes='100vw'
         src={photoURL}
         width={0}
+        $isAlbumsPage={!router.pathname.includes('[albumID]')}
         $isLoading={isPhotoLoading}
         $photosView={photosView}
       />
@@ -244,7 +245,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
 
 export const PhotoCoverRoot = styled.div<{ $isLoading?: boolean; $isUserAuthor?: boolean }>(
   ({ $isLoading, $isUserAuthor }) => [
-    tw`pl-2`,
+    tw`sm:pl-2`,
     tw`py-2`,
     tw`w-full`,
     tw`cursor-pointer`,
@@ -258,35 +259,31 @@ export const PhotoCoverRoot = styled.div<{ $isLoading?: boolean; $isUserAuthor?:
 );
 
 export const PhotoCoverImage = styled(Image)<{
+  $isAlbumsPage?: boolean;
   $isLoading: boolean;
   $photosView?: 'grid' | 'list';
-}>(({ $isLoading, $photosView }) => [
-  tw`cursor-pointer`,
-  tw`rounded-2xl`,
-  !$isLoading && tw`border-2`,
-  !$isLoading && tw`border-gray-100`,
-  !$isLoading && tw`border-solid`,
-  $photosView === 'grid' && tw`h-40`,
+}>(({ $isAlbumsPage, $isLoading, $photosView }) => [
+  !$isAlbumsPage && $photosView === 'grid' && tw`h-full`,
+  !$isAlbumsPage && $photosView === 'grid' && tw`sm:h-96`,
+  !$isAlbumsPage && $photosView === 'grid' && tw`lg:h-60`,
+  !$isAlbumsPage && $photosView === 'grid' && tw`xl:h-48`,
+  $isAlbumsPage && $photosView === 'grid' && tw`h-40`,
+  $isAlbumsPage && $photosView === 'grid' && tw`md:h-48`,
   $photosView === 'grid' && tw`-mt-9`,
   $photosView === 'grid' && tw`object-cover`,
   $photosView === 'grid' && tw`w-full`,
-  $photosView === 'grid' && tw`md:h-48`,
   $photosView === 'list' && tw`h-full`,
   $photosView === 'list' && tw`w-fit`,
   $photosView === 'list' && tw`inline-block`,
+  $photosView === 'list' && tw`-translate-y-10`,
+  tw`cursor-pointer`,
+  tw`rounded-2xl`,
   {
     overflowClipMargin: 'unset',
   },
 ]);
 
-export const PhotoCoverImageControlButtonDiv = styled.div<{
-  $photosView?: 'grid' | 'list';
-}>(({ $photosView }) => [
-  $photosView === 'list' && tw`translate-y-10`,
-  tw`relative`,
-  tw`mx-2`,
-  tw`z-10`,
-]);
+export const PhotoCoverImageControlButtonDiv = styled.div([tw`relative`, tw`mx-2`, tw`z-10`]);
 
 export const PhotoCoverImageControlButton = styled(Button)<{
   $isDelete?: boolean;
