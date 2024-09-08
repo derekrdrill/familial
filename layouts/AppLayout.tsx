@@ -94,18 +94,14 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         styles={{
           body: {
             backgroundColor: isDarkMode ? 'black' : ' inherit',
+            height: isSidebarOpen || isUserSidebarOpen ? '100vh' : '100%',
+            overflowY: isSidebarOpen || isUserSidebarOpen ? 'hidden' : 'auto',
           },
         }}
       />
       <Overlay isSidebarOpen={isSidebarOpen || isUserSidebarOpen} />
-      <Header
-        isUserSidebarOpen={isUserSidebarOpen}
-        setIsUserSidebarOpen={setIsUserSidebarOpen}
-      />
-      <MenuIcon
-        isMenuIconActive={isSidebarOpen}
-        setIsMenuIconActive={setIsSidebarOpen}
-      />
+      <Header isUserSidebarOpen={isUserSidebarOpen} setIsUserSidebarOpen={setIsUserSidebarOpen} />
+      <MenuIcon isMenuIconActive={isSidebarOpen} setIsMenuIconActive={setIsSidebarOpen} />
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         padding='150px 30px'
@@ -140,7 +136,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
             </SidebarMenuLink>
           </Grid>
           <Grid item xs={12}>
-            <SidebarMenuLink href='/'>
+            <SidebarMenuLink href='/recipes'>
               <SidebarMenuText variant='h4' $isDarkMode={isDarkMode}>
                 <Grid container justifyContent='space-between'>
                   Recipes

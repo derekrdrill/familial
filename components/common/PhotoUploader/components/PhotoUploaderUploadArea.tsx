@@ -5,6 +5,7 @@ import { Button, Grid, Typography } from '@mui/material';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 
 import GlobalContext from '../../../../context/GlobalContext';
+import { useRouter } from 'next/router';
 
 type PhotoUploaderUploadAreaProps = {
   dragProps: {
@@ -25,6 +26,8 @@ export const PhotoUploaderUploadArea = ({
   isMultiple,
   onImageUpload,
 }: PhotoUploaderUploadAreaProps) => {
+  const router = useRouter();
+
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
@@ -36,6 +39,7 @@ export const PhotoUploaderUploadArea = ({
       style={{
         backgroundColor: isDragging ? '#ddebe4' : 'inherit',
       }}
+      $isAlbumsPage={!router.pathname.includes('[albumID]')}
       $isDarkMode={isDarkMode}
       {...dragProps}
     >
@@ -53,11 +57,7 @@ export const PhotoUploaderUploadArea = ({
             </Grid>
             <Grid item xs={2}>
               <Grid container justifyContent='center'>
-                <Typography
-                  color='#B3B3B3'
-                  typography='body2'
-                  variant='caption'
-                >
+                <Typography color='#B3B3B3' typography='body2' variant='caption'>
                   OR
                 </Typography>
               </Grid>
@@ -69,17 +69,16 @@ export const PhotoUploaderUploadArea = ({
           </Grid>
         </Grid>
         <Button color='info' size='small' variant='text' tw='my-4 normal-case'>
-          <Typography variant='subtitle1'>
-            Click here to add image{isMultiple && 's'}
-          </Typography>
+          <Typography variant='subtitle1'>Click here to add image{isMultiple && 's'}</Typography>
         </Button>
       </Grid>
     </PhotoUploadAreaRoot>
   );
 };
 
-export const PhotoUploadAreaRoot = styled(Grid)<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
+export const PhotoUploadAreaRoot = styled(Grid)<{ $isAlbumsPage?: boolean; $isDarkMode?: boolean }>(
+  ({ $isAlbumsPage, $isDarkMode }) => [
+    $isAlbumsPage && tw`mt-8`,
     $isDarkMode && tw`border-[0.5px]`,
     $isDarkMode && tw`!bg-gray-900`,
     $isDarkMode && tw`border-gray-700`,
@@ -87,10 +86,9 @@ export const PhotoUploadAreaRoot = styled(Grid)<{ $isDarkMode?: boolean }>(
     tw`border-dashed`,
     tw`max-h-40`,
     tw`max-w-screen-2xl`,
+    tw`mx-8`,
     tw`pb-4`,
     tw`pt-6`,
-    tw`mx-8`,
-    tw`lg:mt-4`,
   ],
 );
 

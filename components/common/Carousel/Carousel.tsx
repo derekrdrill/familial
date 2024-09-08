@@ -34,7 +34,7 @@ const Carousel = ({
   shouldMouseWheelScroll = true,
 }: CarouselRootProps) => {
   const getAutoPlayPlugin = (shouldAutoPlay: boolean) => {
-    if (shouldAutoPlay) return [Autoplay()];
+    if (shouldAutoPlay) return [Autoplay({ delay: 3200 })];
     return [];
   };
 
@@ -101,10 +101,7 @@ const CarouselContentContainer = styled.div<{ $height?: number }>(
   ],
 );
 
-const CarouselContentItemContainer = styled.div<{}>(({}) => [
-  tw`min-w-fit`,
-  tw`mx-2`,
-]);
+const CarouselContentItemContainer = styled.div<{}>(({}) => [tw`min-w-fit`, tw`mr-2`]);
 
 const CarouselRoot = styled.section<{ $height?: number }>(({ $height }) => [
   tw`min-w-full`,

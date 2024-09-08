@@ -1,15 +1,11 @@
 import React from 'react';
-import { NextRouter, useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { Button, Grid, Typography } from '@mui/material';
 import { ImageListType as PhotoListType } from 'react-images-uploading';
 import tw, { TwStyle } from 'twin.macro';
 
 import GlobalContext from '../../../../context/GlobalContext';
-import {
-  GlobalReducerAction,
-  GlobalReducerActionEnum,
-} from '../../../../context/GlobalReducer';
+import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
 import { DrillyTypography } from '../../../../styles/globals';
 import { PhotoUploadData } from '../types/PhotoUploaderData';
@@ -18,7 +14,6 @@ export const handlePhotoUpload = async (
   photoList: PhotoListType,
   photoUploadData: PhotoUploadData[] | undefined,
   dispatch: React.Dispatch<GlobalReducerAction>,
-  router: NextRouter,
 ) => {
   photoList.forEach(async (photo, photoKey) => {
     await fetch('/api/photo-uploader/blob', {
@@ -71,7 +66,6 @@ export const PhotoUploaderActionButtons = ({
   isAbleToSubmitUpload,
   onImageRemoveAll,
 }: PhotoUploaderActionButtonsProps) => {
-  const router = useRouter();
   const {
     dispatch,
     state: { isDarkMode, photoList, photoUploadData, selectedPhotoAlbum, photos },
@@ -170,7 +164,7 @@ export const PhotoUploaderActionButtons = ({
                 payload: {
                   modalItem: {
                     handleSubmit: async () =>
-                      handlePhotoUpload(photoList, photoUploadData, dispatch, router),
+                      handlePhotoUpload(photoList, photoUploadData, dispatch),
                     isExitHidden: true,
                     isModalOpen: true,
                     modalBody: (
@@ -215,11 +209,13 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
 }>(({ $isDarkMode, $isPhotoAlbumSelected }) => [
   tw`!sticky`,
   tw`justify-end`,
+  tw`mt-4`,
   tw`pb-4`,
   tw`pt-4`,
   tw`px-6`,
   tw`top-20`,
   tw`z-10`,
+  tw`lg:mt-8`,
   tw`lg:mx-0`,
   tw`lg:pt-2`,
   tw`lg:px-8`,

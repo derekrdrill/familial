@@ -28,7 +28,7 @@ const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserProfilePro
           onClick={() => setIsUserSidebarOpen(!isUserSidebarOpen)}
           size='small'
           tw='m-1'
-          variant={isDarkMode ? 'outlined' : 'text'}
+          variant='outlined'
         >
           <Typography variant='h5'>&#10539;</Typography>
         </Button>
