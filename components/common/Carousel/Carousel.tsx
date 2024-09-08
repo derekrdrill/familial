@@ -34,7 +34,8 @@ const Carousel = ({
   shouldMouseWheelScroll = true,
 }: CarouselRootProps) => {
   const getAutoPlayPlugin = (shouldAutoPlay: boolean) => {
-    if (shouldAutoPlay) return [Autoplay({ delay: 3200 })];
+    if (shouldAutoPlay)
+      return [Autoplay({ delay: 3200, stopOnFocusIn: false, stopOnInteraction: false })];
     return [];
   };
 

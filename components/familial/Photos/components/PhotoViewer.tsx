@@ -65,7 +65,7 @@ export const PhotoViewer = ({
       <>
         {photoURL && (
           <div tw='md:flex md:justify-between'>
-            <div tw='bg-[#00000099] w-full md:w-2/3'>
+            <div tw='bg-[#000000] md:bg-[#00000099] w-full md:w-2/3'>
               <div tw='flex items-center justify-center md:h-screen'>
                 <div tw='absolute flex flex-col gap-2 left-2 top-2'>
                   {isPhotoViewerBackBtnShown && (
@@ -260,13 +260,5 @@ export const PhotoViewerRoot = styled(Modal)<{ $isDarkMode?: boolean }>(({ $isDa
   tw`block`,
   tw`h-full`,
   tw`overflow-y-auto`,
-  {
-    '.MuiBackdrop-root': [
-      !$isDarkMode && tw`bg-white`,
-      $isDarkMode && tw`bg-gray-900`,
-      tw`md:bg-gray-3A3A3A`,
-      tw`md:bg-opacity-80`,
-    ],
-  },
 ]);
 
