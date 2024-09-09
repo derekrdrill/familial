@@ -112,17 +112,17 @@ export const PhotoViewer = ({
                   height={0}
                   sizes='100vw'
                   src={photoURL}
-                  tw='max-h-[700px] hidden w-fit md:inline-block'
+                  tw='max-h-[700px] object-fill w-fit'
                   width={0}
                 />
-                <Image
+                {/* <Image
                   alt='selected-image'
                   height={0}
                   sizes='100vw'
                   src={photoURL}
-                  tw='max-h-[500px] inline-block w-fit md:hidden'
+                  tw='max-h-[700px] inline-block object-fill w-fit md:hidden'
                   width={0}
-                />
+                /> */}
               </div>
             </div>
             <PhotoViewerActionsPanel $isDarkMode={isDarkMode}>
@@ -268,5 +268,6 @@ export const PhotoViewerRoot = styled(Modal)<{ $isDarkMode?: boolean }>(({ $isDa
   tw`block`,
   tw`h-full`,
   tw`overflow-y-auto`,
+  tw`top-0`,
 ]);
 
