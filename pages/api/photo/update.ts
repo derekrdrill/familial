@@ -8,10 +8,10 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
   await conn();
 
   const newPhotoTitle = JSON.parse(req.body).newPhotoTitle;
-  const photoID = JSON.parse(req.body).photoID;
+  const photoId = JSON.parse(req.body).photoId;
 
   await Photos.updateOne(
-    { _id: new mongoose.Types.ObjectId(photoID) },
+    { _id: new mongoose.Types.ObjectId(photoId) },
     { $set: { title: newPhotoTitle } },
   );
 

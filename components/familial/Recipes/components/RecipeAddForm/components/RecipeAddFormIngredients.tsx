@@ -139,6 +139,7 @@ const RecipeAddFormIngredients = ({
                     setRows: setIngredientsRows,
                   })
                 }
+                tw='mt-9'
                 $variant='error'
               >
                 <p tw='text-xl lg:hidden'>Delete</p>
@@ -157,6 +158,7 @@ const RecipeAddFormIngredients = ({
                     setRows: setIngredientsRows,
                   })
                 }
+                tw='mt-9'
                 $variant='primary'
               >
                 <p tw='text-xl lg:hidden'>Add</p>

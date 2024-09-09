@@ -104,6 +104,7 @@ const RecipeAddFormSteps = ({
                       setRows: setStepRows,
                     })
                   }
+                  tw='mt-9'
                   $variant='error'
                 >
                   <span tw='text-xl lg:hidden'>Delete</span>
@@ -120,6 +121,7 @@ const RecipeAddFormSteps = ({
                       setRows: setStepRows,
                     })
                   }
+                  tw='mt-9'
                   $variant='primary'
                 >
                   <span tw='text-xl lg:hidden'>Add</span>

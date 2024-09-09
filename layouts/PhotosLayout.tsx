@@ -219,14 +219,17 @@ const PhotosLayout = ({
             )}
           </Grid>
         </PhotoInfoAndActionsContainer>
-        {!router.pathname.includes('[albumID]') ? (
+        {!router.query.albumID ? (
           <Grid container>
             {albums?.map(
               album =>
                 !!album?.photos?.length && (
                   <Grid key={album.albumName} item xs={6} sm={4} md={3} lg={2}>
                     <Grid container tw='h-fit mb-1'>
-                      <PhotoCover photoListItem={album} photoURL={album.photos[0].url} />
+                      <PhotoCover
+                        photoListItem={album}
+                        photoURL={album.albumCoverURL ?? album.photos[0].url}
+                      />
                     </Grid>
                     <Typography color={isDarkMode ? 'white' : 'inherit'} variant='subtitle1'>
                       {album.albumName}

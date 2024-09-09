@@ -1,32 +1,32 @@
 import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
-import { TextField, Typography, TypographyOwnProps } from '@mui/material';
+import { TextField, Typography, TypographyProps } from '@mui/material';
 
 export const DrillyButton = styled.button<{
   $isDisabled?: boolean;
   $variant?: 'error' | 'primary' | 'success';
-}>(({ $isDisabled, $variant, ...props }) => [
+  $styles?: TwStyle;
+}>(({ $isDisabled, $variant, $styles }) => [
   $variant === 'error' && tw`bg-error border-error text-error`,
   $variant === 'primary' && tw`bg-primary border-primary text-primary`,
   $variant === 'success' && tw`bg-success border-success text-success`,
-  props.disabled && tw`bg-gray-4E4E4E border-gray-4E4E4E cursor-not-allowed text-gray-4E4E4E`,
-  !props.disabled && tw`hover:bg-opacity-30`,
+  $isDisabled && tw`bg-gray-4E4E4E border-gray-4E4E4E cursor-not-allowed text-gray-4E4E4E`,
+  !$isDisabled && tw`hover:bg-opacity-30`,
   tw`bg-opacity-20`,
   tw`border`,
   tw`flex`,
   tw`justify-center`,
   tw`mb-3`,
-  tw`mt-9`,
   tw`pb-0.5`,
   tw`px-2`,
   tw`rounded-lg`,
   tw`text-lg`,
-  tw`w-1/2`,
   tw`lg:px-0.5`,
-  tw`lg:w-fit`,
+  tw`w-fit`,
+  $styles,
 ]);
 
-export const DrillyTypography = styled(Typography)<{ $isDarkMode?: boolean } & TypographyOwnProps>(
+export const DrillyTypography = styled(Typography)<{ $isDarkMode?: boolean } & TypographyProps>(
   ({ $isDarkMode }) => [$isDarkMode && tw`text-white`, tw`break-words`, tw`[word-wrap:break-word]`],
 );
 
