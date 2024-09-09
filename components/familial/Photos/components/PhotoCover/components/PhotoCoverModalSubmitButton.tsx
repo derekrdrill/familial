@@ -23,7 +23,7 @@ export const PhotoCoverModalSubmitButton = ({
     <div tw='col-span-12 flex justify-end mt-2'>
       <DrillyButton onClick={handleSubmit} tw='mt-2 py-1.5' $variant={variant}>
         {isModalLoading ? (
-          <CircularProgress color='error' />
+          <CircularProgress color={variant} />
         ) : (
           <DrillyTypography color={isDarkMode ? 'white' : 'inherit'}>{buttonText}</DrillyTypography>
         )}
