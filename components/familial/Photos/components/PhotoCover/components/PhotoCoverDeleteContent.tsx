@@ -58,7 +58,7 @@ export const PhotoCoverDeleteContent = ({
 
             await fetch('/api/photo/delete', {
               method: 'DELETE',
-              body: JSON.stringify(photoId),
+              body: JSON.stringify({ albumName: photoAlbumName, photoId }),
             })
               .then(async res => {
                 const newPhotos = await res.json();
