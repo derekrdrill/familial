@@ -64,7 +64,7 @@ export const PhotoViewer = ({
     <PhotoViewerRoot open={isPhotoViewerOpen} $isDarkMode={isDarkMode}>
       <>
         {photoURL && (
-          <div tw='md:flex md:justify-between'>
+          <PhotoViewerContentContainer $isDarkMode={isDarkMode}>
             <div tw='bg-[#000000] md:bg-[#00000099] w-full md:w-2/3'>
               <div tw='flex items-center justify-center md:h-screen'>
                 <div tw='absolute flex flex-col gap-2 left-2 top-2'>
@@ -217,7 +217,7 @@ export const PhotoViewer = ({
                 ))}
               </div>
             </PhotoViewerActionsPanel>
-          </div>
+          </PhotoViewerContentContainer>
         )}
       </>
     </PhotoViewerRoot>
@@ -254,6 +254,14 @@ export const PhotoViewerCommentInput = styled(TextField)<{ $isDarkMode?: boolean
     },
   ],
 );
+
+const PhotoViewerContentContainer = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`bg-white`,
+  $isDarkMode && tw`bg-gray-900`,
+  tw`min-h-screen`,
+  tw`md:flex`,
+  tw`md:justify-between`,
+]);
 
 export const PhotoViewerRoot = styled(Modal)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
   tw`absolute`,
