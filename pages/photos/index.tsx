@@ -41,7 +41,7 @@ export const getServerSideProps = async () => {
     const albums = await AlbumsData.find().sort({ albumName: 1 });
     const photos = await PhotosData.find().sort({ uploadedAt: -1 });
 
-    const albumsMapped = albums.map(album => ({
+    const albumsMapped: Albums[] = albums.map(album => ({
       _id: album._id.toString(),
       albumCoverURL: album.albumCoverURL,
       albumName: album.albumName,
