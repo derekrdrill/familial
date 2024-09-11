@@ -1,16 +1,15 @@
 import React from 'react';
-import tw from 'twin.macro';
-import { InputLabel } from '@mui/material';
 
 import GlobalContext from '../../../../context/GlobalContext';
-import { DrillyTextField, DrillyTypography } from '../../../../styles/globals';
+import { TextInput } from '../../../common/TextInput/TextInput';
+import { DrillyTypography } from '../../../../styles/globals';
 
 type AddNewMemberProps = {};
 
 export const AddNewMember = ({}: AddNewMemberProps) => {
   const handleAddNewUserSubmit = async () => {
-    try {
-      if (emailAddress !== '' && phoneNumber !== '' && firstName !== '' && lastName !== '') {
+    if (emailAddress !== '' && phoneNumber !== '' && firstName !== '' && lastName !== '') {
+      try {
         await fetch('/api/user/auth/add', {
           method: 'POST',
           body: JSON.stringify({
@@ -20,9 +19,29 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
             phoneNumber,
           }),
         }).then(async res => console.log(await res.json()));
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      let errors: { id: string; error: string }[] = [];
+
+      if (!firstName ?? firstName === '') {
+        errors = [...errors, ...[{ id: 'firstName', error: 'Please enter a first name' }]];
+      }
+
+      if (!lastName ?? lastName === '') {
+        errors = [...errors, ...[{ id: 'lastName', error: 'Please enter a last name' }]];
+      }
+
+      if (!phoneNumber ?? phoneNumber === '') {
+        errors = [...errors, ...[{ id: 'phoneNumber', error: 'Please enter a phone number' }]];
+      }
+
+      if (!emailAddress ?? emailAddress === '') {
+        errors = [...errors, ...[{ id: 'emailAddress', error: 'Please enter an email address' }]];
+      }
+
+      setErrors(errors);
     }
   };
 
@@ -30,10 +49,11 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
-  const [emailAddress, setEmailAddress] = React.useState<string>('');
-  const [phoneNumber, setPhoneNumber] = React.useState<string>('');
-  const [firstName, setFirstName] = React.useState<string>('');
-  const [lastName, setLastName] = React.useState<string>('');
+  const [emailAddress, setEmailAddress] = React.useState<string | undefined>('');
+  const [phoneNumber, setPhoneNumber] = React.useState<string | undefined>('');
+  const [firstName, setFirstName] = React.useState<string | undefined>('');
+  const [lastName, setLastName] = React.useState<string | undefined>('');
+  const [errors, setErrors] = React.useState<{ id: string; error: string }[]>([]);
 
   return (
     <div tw='grid gap-4 mx-8 md:mx-32 lg:mx-64 xl:mx-96 mt-16 w-full'>
@@ -44,75 +64,47 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
         This new member will be notified via email or SMS to login to Familial :)
       </DrillyTypography>
       <div>
-        <InputLabel htmlFor='firstName'>
-          <DrillyTypography $isDarkMode={isDarkMode}>First name</DrillyTypography>
-        </InputLabel>
-        <DrillyTextField
-          id='firstName'
-          fullWidth
-          onChange={e => setFirstName(e.target.value)}
-          placeholder='Enter first name'
-          size='small'
-          value={firstName}
-          $bgColor={tw`bg-gray-D9D9D9`}
-          $bgColorDark={tw`bg-gray-3D3D3D`}
-          $hasBorder={false}
-          // $hasError={ingredientRowKey === 0 && !!errors.find(error => error.id === 'ingredients')}
-          $isDarkMode={isDarkMode}
+        <TextInput
+          hasError={!!errors.find(error => error.id === 'firstName')}
+          setTextInputValue={setFirstName}
+          textInputId='firstName'
+          textInputLabel='First name'
+          textInputValue={firstName}
+          textInputSize='small'
+          textInputPlaceholder='Enter first name'
         />
       </div>
       <div>
-        <InputLabel htmlFor='lastName'>
-          <DrillyTypography $isDarkMode={isDarkMode}>Last name</DrillyTypography>
-        </InputLabel>
-        <DrillyTextField
-          id='lastName'
-          fullWidth
-          onChange={e => setLastName(e.target.value)}
-          placeholder='Enter last name'
-          size='small'
-          value={lastName}
-          $bgColor={tw`bg-gray-D9D9D9`}
-          $bgColorDark={tw`bg-gray-3D3D3D`}
-          $hasBorder={false}
-          // $hasError={ingredientRowKey === 0 && !!errors.find(error => error.id === 'ingredients')}
-          $isDarkMode={isDarkMode}
+        <TextInput
+          hasError={!!errors.find(error => error.id === 'lastName')}
+          setTextInputValue={setLastName}
+          textInputId='lastName'
+          textInputLabel='Last name'
+          textInputValue={lastName}
+          textInputSize='small'
+          textInputPlaceholder='Enter last name'
         />
       </div>
       <div>
-        <InputLabel htmlFor='phoneNumber'>
-          <DrillyTypography $isDarkMode={isDarkMode}>Phone number</DrillyTypography>
-        </InputLabel>
-        <DrillyTextField
-          id='phoneNumber'
-          fullWidth
-          onChange={e => setPhoneNumber(e.target.value)}
-          placeholder='Enter phone number'
-          size='small'
-          value={phoneNumber}
-          $bgColor={tw`bg-gray-D9D9D9`}
-          $bgColorDark={tw`bg-gray-3D3D3D`}
-          $hasBorder={false}
-          // $hasError={ingredientRowKey === 0 && !!errors.find(error => error.id === 'ingredients')}
-          $isDarkMode={isDarkMode}
+        <TextInput
+          hasError={!!errors.find(error => error.id === 'phoneNumber')}
+          setTextInputValue={setPhoneNumber}
+          textInputId='phoneNumber'
+          textInputLabel='Phone number'
+          textInputValue={phoneNumber}
+          textInputSize='small'
+          textInputPlaceholder='Enter phone number'
         />
       </div>
       <div>
-        <InputLabel htmlFor='email'>
-          <DrillyTypography $isDarkMode={isDarkMode}>Email</DrillyTypography>
-        </InputLabel>
-        <DrillyTextField
-          id='email'
-          fullWidth
-          onChange={e => setEmailAddress(e.target.value)}
-          placeholder='Enter email'
-          size='small'
-          value={emailAddress}
-          $bgColor={tw`bg-gray-D9D9D9`}
-          $bgColorDark={tw`bg-gray-3D3D3D`}
-          $hasBorder={false}
-          // $hasError={ingredientRowKey === 0 && !!errors.find(error => error.id === 'ingredients')}
-          $isDarkMode={isDarkMode}
+        <TextInput
+          hasError={!!errors.find(error => error.id === 'emailAddress')}
+          setTextInputValue={setEmailAddress}
+          textInputId='email'
+          textInputLabel='Email'
+          textInputValue={emailAddress}
+          textInputSize='small'
+          textInputPlaceholder='Enter email'
         />
       </div>
       <div tw='flex justify-end'>
