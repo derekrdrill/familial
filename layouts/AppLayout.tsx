@@ -28,11 +28,9 @@ import Modal from '../components/common/Modal/Modal';
 import Overlay from '../components/common/Overlay/Overlay';
 import Sidebar from '../components/common/Sidebar/Sidebar';
 import UserProfile from '../components/familial/UserProfile/UserProfile';
+import { FullPageLoader } from '../components/common/Loaders';
 
-export const getUserData = async (
-  user,
-  dispatch: React.Dispatch<GlobalReducerAction>,
-) => {
+export const getUserData = async (user, dispatch: React.Dispatch<GlobalReducerAction>) => {
   const { id, firstName, lastName, primaryPhoneNumber } = user.user;
 
   if (id && firstName && lastName && primaryPhoneNumber) {
@@ -68,9 +66,25 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
     state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
 
+  const [isRouteChangeLoading, setIsRouteChangeLoading] = React.useState<boolean>(false);
+  const [isUserInfoLoading, setIsUserInfoLoading] = React.useState<boolean>(true);
   const [isSidebarOpen, setIsSidebarOpen] = React.useState<boolean>(false);
-  const [isUserSidebarOpen, setIsUserSidebarOpen] =
-    React.useState<boolean>(false);
+  const [isUserSidebarOpen, setIsUserSidebarOpen] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    router.events.on('routeChangeStart', () => setIsRouteChangeLoading(true));
+    router.events.on('routeChangeComplete', () => {
+      setTimeout(() => {
+        setIsRouteChangeLoading(false);
+      }, 1000);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (user) {
+      setIsUserInfoLoading(false);
+    }
+  }, [user]);
 
   React.useEffect(() => {
     setIsSidebarOpen(false);
@@ -94,12 +108,20 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         styles={{
           body: {
             backgroundColor: isDarkMode ? 'black' : ' inherit',
-            height: isSidebarOpen || isUserSidebarOpen ? '100vh' : '100%',
-            overflowY: isSidebarOpen || isUserSidebarOpen ? 'hidden' : 'auto',
+            height: isSidebarOpen || isUserSidebarOpen || isRouteChangeLoading ? '100vh' : '100%',
+            overflowY:
+              isSidebarOpen || isUserSidebarOpen || isRouteChangeLoading ? 'hidden' : 'auto',
           },
         }}
       />
-      <Overlay isSidebarOpen={isSidebarOpen || isUserSidebarOpen} />
+      <Overlay
+        isSidebarOpen={
+          isRouteChangeLoading || isSidebarOpen || isUserInfoLoading || isUserSidebarOpen
+        }
+        opacity={isRouteChangeLoading ? 0.9 : 0.6}
+        zIndex={isRouteChangeLoading ? 10 : 5}
+      />
+      <FullPageLoader isLoading={isRouteChangeLoading || isUserInfoLoading} />
       <Header isUserSidebarOpen={isUserSidebarOpen} setIsUserSidebarOpen={setIsUserSidebarOpen} />
       <MenuIcon isMenuIconActive={isSidebarOpen} setIsMenuIconActive={setIsSidebarOpen} />
       <Sidebar
@@ -161,9 +183,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
       </Sidebar>
       <Alert />
       <Modal />
-      <Body>
-        <Component {...pageProps} />
-      </Body>
+      <Body>{!isUserInfoLoading && <Component {...pageProps} />}</Body>
     </>
   );
 };

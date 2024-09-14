@@ -10,14 +10,18 @@ export const getZIndex = (isSidebarOpen: boolean) => (isSidebarOpen ? 4 : 1);
 
 type OverlayProps = {
   isSidebarOpen: boolean;
+  opacity?: number;
+  zIndex?: number;
 };
 
-const Overlay = ({ isSidebarOpen }: GridProps & OverlayProps) => (
+const Overlay = ({ isSidebarOpen, opacity = 0.6, zIndex }: GridProps & OverlayProps) => (
   <OverlayRoot
     display={{
       xs: getOverlayDisplay(isSidebarOpen),
     }}
     sx={{ zIndex: getZIndex(isSidebarOpen) }}
+    $opacity={opacity}
+    $zIndex={zIndex}
   />
 );
 
