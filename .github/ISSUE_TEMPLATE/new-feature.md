@@ -23,4 +23,4 @@ Add any other context or screenshots about the feature request here.
 {past Figma url here}
 
 **Acceptance Criteria**
-The final expectation of this effort, written with user-story format of 'As a user, I should...'
+As a user, I should...
