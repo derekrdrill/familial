@@ -76,7 +76,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
     router.events.on('routeChangeComplete', () => {
       setTimeout(() => {
         setIsRouteChangeLoading(false);
-      }, 1000);
+      }, 250);
     });
   }, []);
 
