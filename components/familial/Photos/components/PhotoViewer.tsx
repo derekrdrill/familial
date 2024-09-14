@@ -143,6 +143,7 @@ export const PhotoViewer = ({
                       })
                     }
                     hasUserLiked={hasUserLiked}
+                    reactions={photoLikes}
                     reactionType='like'
                   />
                   <PhotoReactionButton
@@ -157,6 +158,7 @@ export const PhotoViewer = ({
                       })
                     }
                     hasUserLoved={hasUserLoved}
+                    reactions={photoLoves}
                     reactionType='love'
                   />
                   <PhotoReactionButton
@@ -171,6 +173,7 @@ export const PhotoViewer = ({
                       })
                     }
                     hasUserSmiled={hasUserSmiled}
+                    reactions={photoSmiles}
                     reactionType='smile'
                   />
                 </div>

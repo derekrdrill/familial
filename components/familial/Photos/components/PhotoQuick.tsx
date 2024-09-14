@@ -99,6 +99,7 @@ const PhotoQuick = ({
               });
             }}
             hasUserLiked={hasUserLiked}
+            reactions={photoLikes}
             reactionType='like'
           />
         </div>
@@ -117,6 +118,7 @@ const PhotoQuick = ({
               });
             }}
             hasUserLoved={hasUserLoved}
+            reactions={photoLoves}
             reactionType='love'
           />
         </div>
@@ -135,6 +137,7 @@ const PhotoQuick = ({
               });
             }}
             hasUserSmiled={hasUserSmiled}
+            reactions={photoSmiles}
             reactionType='smile'
           />
         </div>
