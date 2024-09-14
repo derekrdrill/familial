@@ -1,15 +1,19 @@
 import React from 'react';
 import tw from 'twin.macro';
 import styled from '@emotion/styled';
+import { Tooltip } from '@mui/material';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { DrillyTypography } from '../../../../styles/globals';
+import { getUserInitials } from '../../../../helpers';
 import { PhotoReaction } from '../../../../types';
-import { Tooltip } from '@mui/material';
 
 type PhotoCommentProps = { isUserCommentAuthor: boolean; photoComment: PhotoReaction };
 
-export const PhotoComment = ({ isUserCommentAuthor, photoComment }: PhotoCommentProps) => {
+export const PhotoComment = ({
+  isUserCommentAuthor,
+  photoComment: { authorName: name, comment },
+}: PhotoCommentProps) => {
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
@@ -17,10 +21,8 @@ export const PhotoComment = ({ isUserCommentAuthor, photoComment }: PhotoComment
   return (
     <PhotoCommentContainer $isUserCommentAuthor={isUserCommentAuthor}>
       <PhotoCommentAuthor $isUserCommentAuthor={isUserCommentAuthor}>
-        <Tooltip title={photoComment.authorName}>
-          <DrillyTypography tw='cursor-default'>
-            {`${photoComment.authorName?.charAt(0)}${photoComment.authorName?.charAt(photoComment.authorName?.indexOf(' ') + 1)}`}
-          </DrillyTypography>
+        <Tooltip title={name}>
+          <DrillyTypography tw='cursor-default'>{getUserInitials({ name })}</DrillyTypography>
         </Tooltip>
       </PhotoCommentAuthor>
       <PhotoCommentText
@@ -29,9 +31,9 @@ export const PhotoComment = ({ isUserCommentAuthor, photoComment }: PhotoComment
         $isUserCommentAuthor={isUserCommentAuthor}
       >
         <div tw='flex flex-col'>
-          {photoComment.comment?.text}
+          {comment?.text}
           <PhotoCommentDate variant='caption' $isUserCommentAuthor={isUserCommentAuthor}>
-            {new Date(photoComment.comment?.date ?? '').toLocaleString()}
+            {new Date(comment?.date ?? '').toLocaleString()}
           </PhotoCommentDate>
         </div>
       </PhotoCommentText>
