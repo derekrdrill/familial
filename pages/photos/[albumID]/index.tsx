@@ -1,7 +1,5 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import mongoose from 'mongoose';
-import ImageUploading, { ImageListType as PhotoListType } from 'react-images-uploading';
 
 import conn from '../../../data/connection';
 import {
@@ -9,23 +7,9 @@ import {
   Photos as PhotosData,
   Users as UsersData,
 } from '../../../data/models';
-import { Albums, PhotoReaction, Photos as PhotosType, User } from '../../../types';
-
-import GlobalContext from '../../../context/GlobalContext';
-import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';
 
 import PhotosLayout from '../../../layouts/PhotosLayout';
-
-const handlePhotoUploadingChange = (
-  photoListData: PhotoListType,
-  dispatch: React.Dispatch<GlobalReducerAction>,
-) =>
-  dispatch({
-    type: GlobalReducerActionEnum.SET_PHOTO_LIST,
-    payload: {
-      photoList: photoListData,
-    },
-  });
+import { Albums, PhotoReaction, Photos as PhotosType, User } from '../../../types';
 
 type AlbumIDIndexProps = {
   albumsData: Albums[];
@@ -34,51 +18,13 @@ type AlbumIDIndexProps = {
 };
 
 const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) => {
-  const router = useRouter();
-
-  const {
-    dispatch,
-    state: { photoList },
-  } = React.useContext(GlobalContext);
-
-  React.useEffect(() => {
-    dispatch({
-      type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
-      payload: {
-        selectedPhotoAlbum: albumsData.find(album => album._id === router.query.albumID),
-      },
-    });
-  }, [albumsData]);
-
-  React.useEffect(() => {
-    if (!!!router.query.p) {
-      dispatch({
-        type: GlobalReducerActionEnum.SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN,
-        payload: {
-          isPhotoViewerBackBtnShown: false,
-        },
-      });
-    }
-  }, [router]);
-
   return (
-    photoList && (
-      <ImageUploading
-        multiple
-        onChange={photoListData => handlePhotoUploadingChange(photoListData, dispatch)}
-        value={photoList}
-      >
-        {({ onImageUpload }) => (
-          <PhotosLayout
-            albumsData={albumsData}
-            onImageUpload={onImageUpload}
-            photoAlbumLength={photosData.length}
-            photosData={photosData}
-            photosLayoutTitle={albumName}
-          />
-        )}
-      </ImageUploading>
-    )
+    <PhotosLayout
+      albumsData={albumsData}
+      photoAlbumLength={photosData.length}
+      photosData={photosData}
+      photosLayoutTitle={albumName}
+    />
   );
 };
 
