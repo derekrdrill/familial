@@ -1,24 +1,34 @@
 import React from 'react';
 import { SignOutButton } from '@clerk/nextjs';
-import tw from 'twin.macro';
-import styled from '@emotion/styled';
 import { Button, Grid, Typography } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import GlobalContext from '../../../context/GlobalContext';
+import { GlobalReducerActionEnum } from '../../../context/GlobalReducer';
 
-import { DrillyTypography } from '../../../styles/globals';
-import Link from 'next/link';
+import {
+  UserProfileAvatar,
+  UserProfileAvatarClear,
+  UserProfileAvatarEdit,
+  UserProfileAvatarSave,
+  UserProfileDetails,
+} from './';
 
 type UserProfileProps = {
   isUserSidebarOpen: boolean;
   setIsUserSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserProfileProps) => {
+export const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserProfileProps) => {
   const {
-    state: { isDarkMode, user },
+    dispatch,
+    state: { photoList },
   } = React.useContext(GlobalContext);
+
+  React.useEffect(() => {
+    if (!!photoList?.length) {
+      dispatch({ type: GlobalReducerActionEnum.RESET_MODAL_ITEM, payload: {} });
+    }
+  }, [photoList]);
 
   return (
     <>
@@ -33,27 +43,14 @@ const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserProfilePro
           <Typography variant='h5'>&#10539;</Typography>
         </Button>
       </Grid>
-      <DrillyTypography
-        variant='h4'
-        textAlign='center'
-        $isDarkMode={isDarkMode}
-      >{`${user?.firstName} ${user?.lastName}`}</DrillyTypography>
-      <DrillyTypography variant='h6' textAlign='center' $isDarkMode={isDarkMode}>
-        {user?.userName}
-      </DrillyTypography>
-      {user?.isAdmin && (
-        <Link href='/admin/add-new-member' onClick={() => setIsUserSidebarOpen(false)}>
-          <DrillyTypography
-            textAlign='center'
-            tw='text-info-dark text-xs underline'
-            variant='subtitle2'
-          >
-            Admin settings
-          </DrillyTypography>
-        </Link>
-      )}
+      <UserProfileDetails setIsUserSidebarOpen={setIsUserSidebarOpen} />
       <Grid container justifyContent='center' tw='mt-14'>
-        <UserProfileAvatar sx={{ fontSize: '200px' }} $isDarkMode={isDarkMode} />
+        <UserProfileAvatar />
+      </Grid>
+      <Grid container justifyContent='center' tw='mt-4'>
+        <UserProfileAvatarClear />
+        <UserProfileAvatarEdit />
+        <UserProfileAvatarSave />
       </Grid>
       <Grid container justifyContent='center' tw='absolute bottom-5'>
         <SignOutButton tw='w-full bg-gray-300 opacity-60 hover:opacity-100 rounded-lg m-3 p-2' />
@@ -61,9 +58,3 @@ const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserProfilePro
     </>
   );
 };
-
-export default UserProfile;
-
-export const UserProfileAvatar = styled(AccountCircleIcon)<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [$isDarkMode && tw`text-gray-300`, !$isDarkMode && tw`text-gray-600`],
-);

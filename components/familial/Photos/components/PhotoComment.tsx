@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import tw from 'twin.macro';
 import styled from '@emotion/styled';
 import { Tooltip } from '@mui/material';
@@ -12,7 +13,7 @@ type PhotoCommentProps = { isUserCommentAuthor: boolean; photoComment: PhotoReac
 
 export const PhotoComment = ({
   isUserCommentAuthor,
-  photoComment: { authorName: name, comment },
+  photoComment: { authorAvatarUrl, authorName: name, comment },
 }: PhotoCommentProps) => {
   const {
     state: { isDarkMode },
@@ -20,9 +21,23 @@ export const PhotoComment = ({
 
   return (
     <PhotoCommentContainer $isUserCommentAuthor={isUserCommentAuthor}>
-      <PhotoCommentAuthor $isUserCommentAuthor={isUserCommentAuthor}>
+      <PhotoCommentAuthor
+        $hasAvatarUrl={!!authorAvatarUrl}
+        $isUserCommentAuthor={isUserCommentAuthor}
+      >
         <Tooltip title={name}>
-          <DrillyTypography tw='cursor-default'>{getUserInitials({ name })}</DrillyTypography>
+          {!!authorAvatarUrl ? (
+            <Image
+              alt={authorAvatarUrl}
+              height={0}
+              sizes='100vw'
+              src={authorAvatarUrl}
+              tw='h-8 object-cover rounded-2xl min-w-[32px]'
+              width={0}
+            />
+          ) : (
+            <DrillyTypography tw='cursor-default'>{getUserInitials({ name })}</DrillyTypography>
+          )}
         </Tooltip>
       </PhotoCommentAuthor>
       <PhotoCommentText
@@ -41,20 +56,21 @@ export const PhotoComment = ({
   );
 };
 
-export const PhotoCommentAuthor = styled.div<{ $isUserCommentAuthor: boolean }>(
-  ({ $isUserCommentAuthor }) => [
-    $isUserCommentAuthor && tw`order-2`,
-    $isUserCommentAuthor && tw`bg-amber-500`,
-    !$isUserCommentAuthor && tw`bg-indigo-300`,
-    tw`flex`,
-    tw`h-8`,
-    tw`items-center`,
-    tw`justify-center`,
-    tw`my-2`,
-    tw`px-1`,
-    tw`rounded-2xl`,
-  ],
-);
+export const PhotoCommentAuthor = styled.div<{
+  $hasAvatarUrl?: boolean;
+  $isUserCommentAuthor: boolean;
+}>(({ $hasAvatarUrl, $isUserCommentAuthor }) => [
+  $isUserCommentAuthor && tw`order-2`,
+  $isUserCommentAuthor && !$hasAvatarUrl && tw`bg-amber-500`,
+  !$isUserCommentAuthor && !$hasAvatarUrl && tw`bg-indigo-300`,
+  tw`flex`,
+  tw`h-8`,
+  tw`items-center`,
+  tw`justify-center`,
+  tw`my-2`,
+  tw`px-1`,
+  tw`rounded-2xl`,
+]);
 
 export const PhotoCommentContainer = styled.div<{ $isUserCommentAuthor: boolean }>(
   ({ $isUserCommentAuthor }) => [

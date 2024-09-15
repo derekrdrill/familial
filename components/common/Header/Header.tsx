@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -30,7 +31,7 @@ type HeaderType = {
 
 const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
   const {
-    state: { isDarkMode },
+    state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
 
   const [isSearchIconShown, setIsSearchIconShown] = React.useState<boolean>(true);
@@ -51,19 +52,10 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
                 md: isSearchIconShown ? 'inline-block' : 'none',
               }}
             >
-              <Grid
-                container
-                justifyContent={{ xs: 'center', md: 'flex-start' }}
-              >
+              <Grid container justifyContent={{ xs: 'center', md: 'flex-start' }}>
                 <Link href='/'>
                   <Grid container>
-                    <HeaderLogo
-                      src={
-                        isDarkMode
-                          ? '/logoMobileDarkMode.png'
-                          : '/logoMobile.png'
-                      }
-                    />
+                    <HeaderLogo src={isDarkMode ? '/logoMobileDarkMode.png' : '/logoMobile.png'} />
                   </Grid>
                 </Link>
               </Grid>
@@ -128,7 +120,17 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
               onClick={() => setIsUserSidebarOpen(!isUserSidebarOpen)}
               $isDarkMode={isDarkMode}
             >
-              <AccountCircleIcon />
+              {user?.avatarURL && (
+                <Image
+                  alt={user?.avatarURL}
+                  height={0}
+                  sizes='100vw'
+                  src={user.avatarURL}
+                  tw='h-8 object-cover rounded-3xl w-8'
+                  width={0}
+                />
+              )}
+              {!user?.avatarURL && <AccountCircleIcon tw='h-8 w-8' />}
             </HeaderProfileButton>
           </Grid>
         </Grid>

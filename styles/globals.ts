@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
+import Image from 'next/image';
 import { TextField, Typography, TypographyProps } from '@mui/material';
 
 export const DrillyButton = styled.button<{
@@ -66,4 +67,19 @@ export const DrillyTextField = styled(TextField)<{
       },
     },
   },
+]);
+
+export const DrillySelectableImage = styled(Image)<{
+  $isNoPhotoSelected?: boolean;
+  $isSelected?: boolean;
+}>(({ $isNoPhotoSelected, $isSelected }) => [
+  ($isNoPhotoSelected || $isSelected) && tw`opacity-100`,
+  ($isNoPhotoSelected || !$isSelected) && tw`hover:opacity-70`,
+  !$isNoPhotoSelected && !$isSelected && tw`opacity-70`,
+  !$isNoPhotoSelected && $isSelected && tw`border-4 border-success`,
+  tw`cursor-pointer`,
+  tw`h-40`,
+  tw`rounded`,
+  tw`w-full`,
+  tw`object-contain`,
 ]);

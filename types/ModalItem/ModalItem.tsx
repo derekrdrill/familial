@@ -1,5 +1,5 @@
 export type ModalItem = {
-  handleSubmit: Function | null;
+  handleSubmit?: Function | null;
   isModalOpen: boolean;
   modalBody: React.ReactNode;
   modalTitle: string;

@@ -4,8 +4,12 @@ import mongoose from 'mongoose';
 import ImageUploading, { ImageListType as PhotoListType } from 'react-images-uploading';
 
 import conn from '../../../data/connection';
-import { Albums as AlbumsData, Photos as PhotosData } from '../../../data/models';
-import { Albums, Photos as PhotosType } from '../../../types';
+import {
+  Albums as AlbumsData,
+  Photos as PhotosData,
+  Users as UsersData,
+} from '../../../data/models';
+import { Albums, PhotoReaction, Photos as PhotosType, User } from '../../../types';
 
 import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../context/GlobalReducer';
@@ -90,9 +94,35 @@ export const getServerSideProps = async context => {
 
     const albums = await AlbumsData.find().sort({ albumName: 1 });
 
-    const photos = await PhotosData.find({
-      albumName: album.albumName,
-    }).sort({ uploadedAt: -1 });
+    const photos: PhotosType[] = await PhotosData.aggregate([
+      { $limit: 100000 },
+      { $match: { albumName: album.albumName } },
+      { $sort: { uploadedAt: -1 } },
+    ]);
+
+    const users: User[] = await UsersData.find();
+
+    const photosWithReactionUpdates = photos.map(photo => {
+      const getAvatarUrl = ({ reactions }: { reactions?: PhotoReaction[] }) =>
+        reactions
+          ?.map(reaction => ({
+            ...reaction,
+            ...{
+              authorAvatarUrl: users.find(user => user.userID === reaction.authorId)?.avatarURL,
+            },
+          }))
+          .sort((a, b) => (a.authorName > b.authorName ? 1 : a.authorName < b.authorName ? -1 : 0));
+
+      return {
+        ...photo,
+        ...{
+          likes: getAvatarUrl({ reactions: photo.likes }),
+          loves: getAvatarUrl({ reactions: photo.loves }),
+          smiles: getAvatarUrl({ reactions: photo.smiles }),
+          comments: getAvatarUrl({ reactions: photo.comments }),
+        },
+      };
+    });
 
     const albumsMapped = albums.map(album => ({
       _id: album._id.toString(),
@@ -111,7 +141,7 @@ export const getServerSideProps = async context => {
       props: {
         albumsData: JSON.parse(JSON.stringify(albumsMapped)),
         albumName: album.albumName,
-        photosData: JSON.parse(JSON.stringify(photos)),
+        photosData: JSON.parse(JSON.stringify(photosWithReactionUpdates)),
       },
     };
   } catch (error) {
