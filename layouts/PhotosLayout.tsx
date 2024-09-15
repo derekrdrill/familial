@@ -1,52 +1,60 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import styled from '@emotion/styled';
-import tw, { TwStyle } from 'twin.macro';
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import ImageUploading, { ImageListType as PhotoListType } from 'react-images-uploading';
+import tw from 'twin.macro';
 
-import AddAPhotoTwoTone from '@mui/icons-material/AddAPhotoTwoTone';
-import AppsIcon from '@mui/icons-material/Apps';
-import ListIcon from '@mui/icons-material/List';
-import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
+import styled from '@emotion/styled';
+import { Grid } from '@mui/material';
 
 import GlobalContext from '../context/GlobalContext';
 
-import { PhotoCover } from '../components/familial/Photos';
+import {
+  PhotoAlbums,
+  PhotoAlbumPhotos,
+  PhotoAlbumsBackButton,
+  PhotoInfoAndActions,
+  PhotoViewer,
+} from '../components/familial/Photos';
 import PhotoUploader from '../components/common/PhotoUploader';
-import { PhotoAlbumsBackButton, PhotoViewer } from '../components/familial/Photos';
 import { Albums, Photos } from '../types';
-import { GlobalReducerActionEnum } from '../context/GlobalReducer';
+import { GlobalReducerAction, GlobalReducerActionEnum } from '../context/GlobalReducer';
 
-import { DrillyTypography } from '../styles/globals';
+const handlePhotoUploadingChange = (
+  photoListData: PhotoListType,
+  dispatch: React.Dispatch<GlobalReducerAction>,
+) =>
+  dispatch({
+    type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+    payload: {
+      photoList: photoListData,
+    },
+  });
 
 type PhotosLayoutProps = {
   albumsData: Albums[];
-  onImageUpload?: () => void;
   photosData: Photos[];
   photosLayoutTitle: string;
-  photoAlbumLength?: number;
 };
 
-const PhotosLayout = ({
-  albumsData,
-  onImageUpload,
-  photoAlbumLength,
-  photosData,
-  photosLayoutTitle,
-}: PhotosLayoutProps) => {
+const PhotosLayout = ({ albumsData, photosData, photosLayoutTitle }: PhotosLayoutProps) => {
   const router = useRouter();
 
   const {
     dispatch,
-    state: { albums, isDarkMode, photosView, photos },
+    state: { isDarkMode, photoList },
   } = React.useContext(GlobalContext);
-
-  const [isScrollBtnShown, setIsScrollBtnShown] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     dispatch({
       type: GlobalReducerActionEnum.SET_ALBUMS,
       payload: { albums: albumsData },
+    });
+
+    dispatch({
+      type: GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM,
+      payload: {
+        selectedPhotoAlbum: albumsData.find(album => album._id === router.query.albumID),
+      },
     });
   }, [albumsData]);
 
@@ -56,6 +64,17 @@ const PhotosLayout = ({
       payload: { photos: photosData },
     });
   }, [photosData]);
+
+  React.useEffect(() => {
+    if (!!!router.query.p) {
+      dispatch({
+        type: GlobalReducerActionEnum.SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN,
+        payload: {
+          isPhotoViewerBackBtnShown: false,
+        },
+      });
+    }
+  }, [router]);
 
   // React.useEffect(() => {
   //   const handleScroll = () => {
@@ -78,273 +97,42 @@ const PhotosLayout = ({
   const photoCurrent = photosData?.find(photo => photo._id === router.query.p);
 
   return (
-    <>
-      <PhotoAlbumsBackButton />
-      <PhotoUploader />
-      <PhotoViewer
-        isPhotoViewerOpen={!!router.query.p}
-        photoComments={photoCurrent?.comments}
-        photoId={photoCurrent?._id}
-        photoLikes={photoCurrent?.likes}
-        photoLoves={photoCurrent?.loves}
-        photoSmiles={photoCurrent?.smiles}
-        photoTitle={photoCurrent?.title}
-        photoURL={photoCurrent?.url}
-      />
-      <PhotosMainContainer $isDarkMode={isDarkMode}>
-        <PhotoInfoAndActionsContainer item xs={12} $isDarkMode={isDarkMode}>
-          <Grid container justifyContent='space-between'>
-            <PhotosLayoutTitleContainer item $isAlbumOpened={!!!router.query.albumID}>
-              <div tw='flex flex-col gap-2'>
-                <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
-                  {photosLayoutTitle}
-                </DrillyTypography>
-                {photoAlbumLength && (
-                  <DrillyTypography
-                    variant='subtitle1'
-                    $isDarkMode={isDarkMode}
-                  >{`${photoAlbumLength} photo${photoAlbumLength === 1 ? '' : 's'}`}</DrillyTypography>
-                )}
-                {isScrollBtnShown && (
-                  <PhotoAddButton
-                    onClick={onImageUpload}
-                    startIcon={<AddAPhotoTwoTone />}
-                    variant='outlined'
-                    $bgColor={tw`bg-info hover:bg-info`}
-                    $borderColor={tw`border-info hover:border-info`}
-                    $textColor={tw`text-info hover:text-info`}
-                  >
-                    Add to album
-                  </PhotoAddButton>
-                )}
-              </div>
-            </PhotosLayoutTitleContainer>
-            {!photoAlbumLength && (
-              <Button
-                color='info'
-                onClick={() => {
-                  dispatch({
-                    type: GlobalReducerActionEnum.SET_MODAL_ITEM,
-                    payload: {
-                      modalItem: {
-                        handleSubmit: async () => {
-                          const newAlbumName = (
-                            document.getElementById('album') as HTMLInputElement
-                          )?.value;
-
-                          await fetch('/api/album/add', {
-                            method: 'POST',
-                            body: newAlbumName,
-                          })
-                            .then(async res => {
-                              const newAlbums = await res.json();
-
-                              dispatch({
-                                type: GlobalReducerActionEnum.SET_ALBUMS,
-                                payload: { albums: newAlbums },
-                              });
-                            })
-                            .catch(e => {
-                              console.log(e);
-                            });
-                        },
-                        isExitHidden: true,
-                        isModalOpen: true,
-                        modalBody: (
-                          <TextField
-                            id='album'
-                            fullWidth
-                            placeholder='Enter album name'
-                            size='small'
-                            variant='outlined'
-                          />
-                        ),
-                        modalTitle: 'Add new album',
-                        submitSuccessMessage: (
-                          <>
-                            <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
-                              New album added!
-                            </DrillyTypography>
-                            <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
-                              Album will not appear here until photos are added
-                            </DrillyTypography>
-                          </>
-                        ),
-                      },
-                    },
-                  });
-                }}
-                startIcon={<PhotoSizeSelectActualTwoToneIcon />}
-                tw='mt-2 normal-case'
-                variant={isDarkMode ? 'outlined' : 'text'}
-              >
-                Add album
-              </Button>
-            )}
-            {photoAlbumLength && (
-              <Grid item tw='hidden md:inline-block'>
-                <Grid container spacing={1} justifyContent='flex-end'>
-                  <Grid item xs={7} md={6}>
-                    <PhotosViewButton
-                      fullWidth
-                      onClick={() =>
-                        dispatch({
-                          type: GlobalReducerActionEnum.SET_PHOTOS_VIEW,
-                          payload: { photosView: 'grid' },
-                        })
-                      }
-                      startIcon={<AppsIcon />}
-                      $isActive={photosView === 'grid'}
-                    >
-                      Grid
-                    </PhotosViewButton>
-                  </Grid>
-                  <Grid item xs={7} md={6}>
-                    <PhotosViewButton
-                      fullWidth
-                      onClick={() =>
-                        dispatch({
-                          type: GlobalReducerActionEnum.SET_PHOTOS_VIEW,
-                          payload: { photosView: 'list' },
-                        })
-                      }
-                      startIcon={<ListIcon />}
-                      $isActive={photosView === 'list'}
-                    >
-                      List
-                    </PhotosViewButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-            )}
-          </Grid>
-        </PhotoInfoAndActionsContainer>
-        {!router.query.albumID ? (
-          <Grid container>
-            {albums?.map(
-              album =>
-                !!album?.photos?.length && (
-                  <Grid key={album.albumName} item xs={6} sm={4} md={3} lg={2}>
-                    <Grid container tw='h-fit mb-1'>
-                      <PhotoCover
-                        photoListItem={album}
-                        photoURL={album.albumCoverURL ?? album.photos[0].url}
-                      />
-                    </Grid>
-                    <Typography color={isDarkMode ? 'white' : 'inherit'} variant='subtitle1'>
-                      {album.albumName}
-                    </Typography>
-                    <Typography
-                      color={isDarkMode ? 'white' : 'inherit'}
-                      variant='subtitle2'
-                    >{`${album.photos.length} photo${album.photos.length > 1 ? 's' : ''}`}</Typography>
-                  </Grid>
-                ),
-            )}
-          </Grid>
-        ) : (
-          <Grid container>
-            <PhotoUploaderTile
-              item
-              onClick={onImageUpload}
-              xs={12}
-              sm={photosView === 'list' ? 12 : 6}
-              md={photosView === 'list' ? 12 : 4}
-              lg={photosView === 'list' ? 12 : 2}
-            >
-              <PhotoAlbumsAddTextContainer
-                container
-                tw='w-full'
-                $isDarkMode={isDarkMode}
-                $photosView={photosView}
-              >
-                <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
-                  Add to album <AddAPhotoTwoTone />
-                </DrillyTypography>
-              </PhotoAlbumsAddTextContainer>
-            </PhotoUploaderTile>
-            {photos?.map(photoListItem => (
-              <>
-                {photosView === 'list' && (
-                  <Grid
-                    item
-                    xs={0}
-                    sm={2}
-                    md={3}
-                    lg={4}
-                    display={{ xs: 'none', sm: 'inline-block' }}
-                  />
-                )}
-                <Grid
-                  item
-                  xs={12}
-                  sm={photosView === 'list' ? 8 : 6}
-                  md={photosView === 'list' ? 6 : 4}
-                  lg={photosView === 'list' ? 4 : 2}
-                  tw='flex justify-center'
-                >
-                  <Grid container>
-                    <PhotoCover
-                      key={photoListItem._id}
-                      photoListItem={photoListItem}
-                      photoURL={photoListItem.url}
-                    />
-                  </Grid>
-                </Grid>
-                {photosView === 'list' && (
-                  <Grid
-                    item
-                    xs={0}
-                    sm={2}
-                    md={3}
-                    lg={4}
-                    display={{ xs: 'none', sm: 'inline-block' }}
-                  />
-                )}
-              </>
-            ))}
-          </Grid>
+    !!photoList && (
+      <ImageUploading
+        multiple
+        onChange={photoListData => handlePhotoUploadingChange(photoListData, dispatch)}
+        value={photoList}
+      >
+        {({ onImageUpload }) => (
+          <>
+            <PhotoAlbumsBackButton />
+            <PhotoUploader />
+            <PhotoViewer
+              isPhotoViewerOpen={!!router.query.p}
+              photoComments={photoCurrent?.comments}
+              photoId={photoCurrent?._id}
+              photoLikes={photoCurrent?.likes}
+              photoLoves={photoCurrent?.loves}
+              photoSmiles={photoCurrent?.smiles}
+              photoTitle={photoCurrent?.title}
+              photoURL={photoCurrent?.url}
+            />
+            <PhotosMainContainer $isDarkMode={isDarkMode}>
+              <PhotoInfoAndActions
+                onImageUpload={onImageUpload}
+                photosLayoutTitle={photosLayoutTitle}
+              />
+              <PhotoAlbums />
+              <PhotoAlbumPhotos onImageUpload={onImageUpload} />
+            </PhotosMainContainer>
+          </>
         )}
-      </PhotosMainContainer>
-    </>
+      </ImageUploading>
+    )
   );
 };
 
 export default PhotosLayout;
-
-export const PhotoAddButton = styled(Button)<{
-  $bgColor: TwStyle;
-  $borderColor: TwStyle;
-  $textColor: TwStyle;
-}>(({ $bgColor, $borderColor, $textColor }) => [
-  tw`!bg-opacity-20`,
-  tw`normal-case`,
-  tw`shadow-none`,
-  tw`hover:!bg-opacity-30`,
-  tw`hover:shadow-none`,
-  $bgColor,
-  $borderColor,
-  $textColor,
-]);
-
-export const PhotoInfoAndActionsContainer = styled(Grid)<{
-  $isDarkMode?: boolean;
-}>(({ $isDarkMode }) => [
-  !$isDarkMode && tw`bg-gray-100`,
-  $isDarkMode && tw`bg-black`,
-  tw`py-4`,
-  tw`sticky`,
-  tw`top-20`,
-  tw`z-20`,
-  tw`lg:top-16`,
-]);
-
-export const PhotosLayoutTitleContainer = styled(Grid)<{
-  $isAlbumOpened: boolean;
-}>(({ $isAlbumOpened }) => [
-  $isAlbumOpened && tw`flex`,
-  $isAlbumOpened && tw`[align-items: flex-end]`,
-]);
 
 export const PhotosMainContainer = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
   !$isDarkMode && tw`bg-gray-100`,
@@ -360,38 +148,3 @@ export const PhotosMainContainer = styled(Grid)<{ $isDarkMode?: boolean }>(({ $i
   tw`md:mx-8`,
 ]);
 
-export const PhotosViewButton = styled(Button)<{
-  $isActive?: boolean;
-}>(({ $isActive }) => [
-  tw`hover:bg-gray-200`,
-  tw`bg-gray-300`,
-  tw`opacity-60`,
-  tw`text-gray-800`,
-  tw`normal-case`,
-  $isActive && tw`bg-purple-600`,
-  $isActive && tw`hover:bg-purple-500`,
-  $isActive && tw`hover:text-purple-200`,
-  $isActive && tw`text-purple-200`,
-]);
-
-export const PhotoAlbumsAddTextContainer = styled(Grid)<{
-  $isDarkMode?: boolean;
-  $photosView?: 'grid' | 'list';
-}>(({ $isDarkMode, $photosView }) => [
-  !$isDarkMode && tw`bg-gray-200`,
-  $isDarkMode && tw`bg-gray-900`,
-  $photosView === 'grid' && tw`rounded-lg`,
-  $photosView === 'grid' && tw`sm:rounded-2xl`,
-  $photosView === 'grid' && tw`sm:pl-3`,
-  $photosView === 'grid' && tw`sm:pt-3`,
-  $photosView === 'list' && tw`rounded-lg`,
-  $photosView === 'list' && tw`sm:pt-6`,
-  $photosView === 'list' && tw`sm:pb-6`,
-  tw`cursor-pointer`,
-  tw`h-full`,
-  tw`px-3`,
-  tw`py-3`,
-  tw`hover:opacity-80`,
-]);
-
-export const PhotoUploaderTile = styled(Grid)([tw`mb-2`]);
