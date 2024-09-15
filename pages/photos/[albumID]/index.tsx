@@ -19,12 +19,7 @@ type AlbumIDIndexProps = {
 
 const AlbumIDIndex = ({ albumsData, albumName, photosData }: AlbumIDIndexProps) => {
   return (
-    <PhotosLayout
-      albumsData={albumsData}
-      photoAlbumLength={photosData.length}
-      photosData={photosData}
-      photosLayoutTitle={albumName}
-    />
+    <PhotosLayout albumsData={albumsData} photosData={photosData} photosLayoutTitle={albumName} />
   );
 };
 
