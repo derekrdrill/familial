@@ -32,7 +32,7 @@ const DarkMode = (props: DarkModeProps) => {
       }}
       $isDarkMode={isDarkMode}
     >
-      {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+      {isDarkMode ? <LightModeIcon tw='h-8 w-8' /> : <DarkModeIcon tw='h-8 w-8' />}
     </DarkModeRoot>
   );
 };

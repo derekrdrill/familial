@@ -6,4 +6,5 @@ export type User = {
   userID: string;
   userName: string;
   phoneNumber?: string;
+  avatarURL?: string;
 };

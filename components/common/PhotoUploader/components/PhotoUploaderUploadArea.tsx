@@ -18,6 +18,7 @@ type PhotoUploaderUploadAreaProps = {
   isDragging: boolean;
   isMultiple: boolean;
   onImageUpload: () => void;
+  photoUploadComponent: React.ReactNode;
 };
 
 export const PhotoUploaderUploadArea = ({
@@ -25,6 +26,7 @@ export const PhotoUploaderUploadArea = ({
   isDragging,
   isMultiple,
   onImageUpload,
+  photoUploadComponent,
 }: PhotoUploaderUploadAreaProps) => {
   const router = useRouter();
 
@@ -41,55 +43,63 @@ export const PhotoUploaderUploadArea = ({
       }}
       $isAlbumsPage={!router.pathname.includes('[albumID]')}
       $isDarkMode={isDarkMode}
+      $hasPhotoUploadComponent={!!photoUploadComponent}
       {...dragProps}
     >
-      <Grid container justifyContent='center'>
-        <Grid container display={{ xs: 'none', sm: 'inline-block' }}>
-          <Grid container justifyContent='center' tw='mb-3'>
-            <Typography color='#B3B3B3' typography='h6' variant='caption'>
-              <PhotoUploadAreaIcon /> Drag and drop file{isMultiple && 's'} here
-            </Typography>
-          </Grid>
-          <Grid container>
-            <Grid item xs={12} sm={2} />
-            <Grid item xs={5} sm={3} tw='pt-2'>
-              <hr />
+      {photoUploadComponent ?? (
+        <Grid container justifyContent='center'>
+          <Grid container display={{ xs: 'none', sm: 'inline-block' }}>
+            <Grid container justifyContent='center' tw='mb-3'>
+              <Typography color='#B3B3B3' typography='h6' variant='caption'>
+                <PhotoUploadAreaIcon /> Drag and drop file{isMultiple && 's'} here
+              </Typography>
             </Grid>
-            <Grid item xs={2}>
-              <Grid container justifyContent='center'>
-                <Typography color='#B3B3B3' typography='body2' variant='caption'>
-                  OR
-                </Typography>
+            <Grid container>
+              <Grid item xs={12} sm={2} />
+              <Grid item xs={5} sm={3} tw='pt-2'>
+                <hr />
               </Grid>
+              <Grid item xs={2}>
+                <Grid container justifyContent='center'>
+                  <Typography color='#B3B3B3' typography='body2' variant='caption'>
+                    OR
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid item xs={5} sm={3} tw='pt-2'>
+                <hr />
+              </Grid>
+              <Grid item xs={12} sm={2} />
             </Grid>
-            <Grid item xs={5} sm={3} tw='pt-2'>
-              <hr />
-            </Grid>
-            <Grid item xs={12} sm={2} />
           </Grid>
+          <Button color='info' size='small' variant='text' tw='my-4 normal-case'>
+            <Typography variant='subtitle1'>Click here to add image{isMultiple && 's'}</Typography>
+          </Button>
         </Grid>
-        <Button color='info' size='small' variant='text' tw='my-4 normal-case'>
-          <Typography variant='subtitle1'>Click here to add image{isMultiple && 's'}</Typography>
-        </Button>
-      </Grid>
+      )}
     </PhotoUploadAreaRoot>
   );
 };
 
-export const PhotoUploadAreaRoot = styled(Grid)<{ $isAlbumsPage?: boolean; $isDarkMode?: boolean }>(
-  ({ $isAlbumsPage, $isDarkMode }) => [
-    $isAlbumsPage && tw`mt-8`,
-    $isDarkMode && tw`border-[0.5px]`,
-    $isDarkMode && tw`!bg-gray-900`,
-    $isDarkMode && tw`border-gray-700`,
-    !$isDarkMode && tw`border-2`,
-    tw`border-dashed`,
-    tw`max-h-40`,
-    tw`max-w-screen-2xl`,
-    tw`mx-8`,
-    tw`pb-4`,
-    tw`pt-6`,
-  ],
+export const PhotoUploadAreaRoot = styled(Grid)<{
+  $hasPhotoUploadComponent?: boolean;
+  $isAlbumsPage?: boolean;
+  $isDarkMode?: boolean;
+}>(
+  ({ $hasPhotoUploadComponent, $isAlbumsPage, $isDarkMode }) =>
+    !$hasPhotoUploadComponent && [
+      $isAlbumsPage && tw`mt-8`,
+      $isDarkMode && tw`border-[0.5px]`,
+      $isDarkMode && tw`!bg-gray-900`,
+      $isDarkMode && tw`border-gray-700`,
+      !$isDarkMode && tw`border-2`,
+      tw`border-dashed`,
+      tw`max-h-40`,
+      tw`max-w-screen-2xl`,
+      tw`mx-8`,
+      tw`pb-4`,
+      tw`pt-6`,
+    ],
 );
 
 export const PhotoUploadAreaIcon = styled(DriveFolderUploadIcon)([tw`-translate-y-0.5`]);

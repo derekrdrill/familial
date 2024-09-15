@@ -1,5 +1,8 @@
 import * as React from 'react';
+import tw from 'twin.macro';
+import Image from 'next/image';
 import ImageUploading, { ImageListType as PhotoListType } from 'react-images-uploading';
+import styled from '@emotion/styled';
 
 import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../context/GlobalReducer';
@@ -10,16 +13,19 @@ import {
   PhotoUploaderPhotosListMobile,
   PhotoUploaderUploadArea,
 } from '../PhotoUploader';
+import { TwStyle } from 'twin.macro';
 
 type PhotoUploadProps = {
   isMultiple?: boolean;
+  photoUploaderComponent?: React.ReactNode;
 };
 
-export const PhotoUploader = ({ isMultiple = true }: PhotoUploadProps) => {
+export const PhotoUploader = ({ isMultiple = true, photoUploaderComponent }: PhotoUploadProps) => {
   const {
     dispatch,
     state: { photoList, photoUploadData, selectedPhotoAlbum, user },
   } = React.useContext(GlobalContext);
+
   const [isAbleToSubmitUpload, setIsAbleToSubmitUpload] = React.useState<boolean>(false);
 
   const handlePhotoUploadingChange = (photoListData: PhotoListType) =>
@@ -70,47 +76,50 @@ export const PhotoUploader = ({ isMultiple = true }: PhotoUploadProps) => {
   }, [photoList]);
 
   React.useEffect(() => {
-    setIsAbleToSubmitUpload(
-      !photoUploadData?.find(photo => !photo.title || !photo.albumName),
-    );
+    setIsAbleToSubmitUpload(!photoUploadData?.find(photo => !photo.title || !photo.albumName));
   }, [photoUploadData]);
 
   return (
     photoList && (
-      <ImageUploading
-        multiple={isMultiple}
-        onChange={handlePhotoUploadingChange}
-        value={photoList}
-      >
-        {({
-          dragProps,
-          isDragging,
-          onImageUpload,
-          onImageRemoveAll,
-          onImageRemove,
-        }) => (
+      <ImageUploading multiple={isMultiple} onChange={handlePhotoUploadingChange} value={photoList}>
+        {({ dragProps, isDragging, onImageUpload, onImageRemoveAll, onImageRemove }) => (
           <>
-            <PhotoUploaderActionButtons
-              isAbleToSubmitUpload={isAbleToSubmitUpload}
-              onImageRemoveAll={onImageRemoveAll}
-            />
+            {isMultiple && (
+              <PhotoUploaderActionButtons
+                isAbleToSubmitUpload={isAbleToSubmitUpload}
+                onImageRemoveAll={onImageRemoveAll}
+              />
+            )}
             <PhotoUploaderUploadArea
               dragProps={dragProps}
               isDragging={isDragging}
               isMultiple={isMultiple}
               onImageUpload={onImageUpload}
+              photoUploadComponent={photoUploaderComponent}
             />
-            <PhotoUploaderPhotosListDesktop
-              handleInputChange={handleInputChange}
-              onImageRemove={onImageRemove}
-            />
-            <PhotoUploaderPhotosListMobile
-              handleInputChange={handleInputChange}
-              onImageRemove={onImageRemove}
-            />
+            {isMultiple && (
+              <PhotoUploaderPhotosListDesktop
+                handleInputChange={handleInputChange}
+                onImageRemove={onImageRemove}
+              />
+            )}
+            {isMultiple && (
+              <PhotoUploaderPhotosListMobile
+                handleInputChange={handleInputChange}
+                onImageRemove={onImageRemove}
+              />
+            )}
           </>
         )}
       </ImageUploading>
     )
   );
 };
+
+const PhotoUploaderImageContainer = styled.div<{ $styles: TwStyle }>(({ $styles }) => [
+  tw`flex`,
+  tw`justify-center`,
+  $styles,
+]);
+
+const PhotoUploaderImage = styled(Image)<{ $styles: TwStyle }>(({ $styles }) => [$styles]);

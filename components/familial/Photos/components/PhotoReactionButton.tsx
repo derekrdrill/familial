@@ -1,6 +1,8 @@
 import React from 'react';
-import tw from 'twin.macro';
+import Image from 'next/image';
 import styled from '@emotion/styled';
+import tw from 'twin.macro';
+
 import { IconButton, Tooltip } from '@mui/material';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -50,16 +52,29 @@ export const PhotoReactionButton = ({
             <DrillyTypography component='h1' tw='capitalize' variant='h6' $isDarkMode={isDarkMode}>
               {reactionType}s
             </DrillyTypography>
-            {reactionsSortedByName?.map(reaction => (
-              <div tw='flex gap-2 justify-between'>
-                <PhotoReationTooltipInitials>
-                  {getUserInitials({ name: reaction.authorName })}
-                </PhotoReationTooltipInitials>
-                <DrillyTypography component='p' variant='subtitle1' $isDarkMode={isDarkMode}>
-                  {reaction.authorName}
-                </DrillyTypography>
-              </div>
-            ))}
+            {reactionsSortedByName?.map(reaction => {
+              return (
+                <div tw='flex gap-2 justify-between'>
+                  {!!reaction.authorAvatarUrl ? (
+                    <Image
+                      alt={reaction.authorAvatarUrl}
+                      height={0}
+                      sizes='100vw'
+                      src={reaction.authorAvatarUrl}
+                      tw='h-6 object-cover rounded-xl w-6'
+                      width={0}
+                    />
+                  ) : (
+                    <PhotoReationTooltipInitials>
+                      {getUserInitials({ name: reaction.authorName })}
+                    </PhotoReationTooltipInitials>
+                  )}
+                  <DrillyTypography component='p' variant='subtitle1' $isDarkMode={isDarkMode}>
+                    {reaction.authorName}
+                  </DrillyTypography>
+                </div>
+              );
+            })}
           </>
         )
       }

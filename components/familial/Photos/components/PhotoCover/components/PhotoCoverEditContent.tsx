@@ -1,13 +1,11 @@
 import React from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import tw from 'twin.macro';
-import styled from '@emotion/styled';
 
 import GlobalContext from '../../../../../../context/GlobalContext';
 
 import { TextInput } from '../../../../../common/TextInput/TextInput';
-import { DrillyTypography } from '../../../../../../styles/globals';
+import { DrillySelectableImage, DrillyTypography } from '../../../../../../styles/globals';
 
 import { handlePhotoAlbumEditClick, handlePhotoEditClick } from '../helpers';
 import { Photos } from '../../../../../../types';
@@ -88,7 +86,7 @@ export const PhotoCoverEditContent = ({
           <div tw='gap-1 grid grid-cols-2 max-h-80 overflow-auto md:grid-cols-4'>
             {albumPhotos?.map(albumPhoto => (
               <div key={albumPhoto._id} tw='col-span-1'>
-                <PhotoCoverSelectImage
+                <DrillySelectableImage
                   alt={albumPhoto.title}
                   height={0}
                   onClick={() =>
@@ -146,18 +144,3 @@ export const PhotoCoverEditContent = ({
     </>
   );
 };
-
-const PhotoCoverSelectImage = styled(Image)<{
-  $isNoPhotoSelected?: boolean;
-  $isSelected?: boolean;
-}>(({ $isNoPhotoSelected, $isSelected }) => [
-  ($isNoPhotoSelected || $isSelected) && tw`opacity-100`,
-  ($isNoPhotoSelected || !$isSelected) && tw`hover:opacity-70`,
-  !$isNoPhotoSelected && !$isSelected && tw`opacity-70`,
-  !$isNoPhotoSelected && $isSelected && tw`border-4 border-success`,
-  tw`cursor-pointer`,
-  tw`h-40`,
-  tw`rounded`,
-  tw`w-full`,
-  tw`object-contain`,
-]);

@@ -27,21 +27,14 @@ import MenuIcon from '../components/common/MenuIcon/MenuIcon';
 import Modal from '../components/common/Modal/Modal';
 import Overlay from '../components/common/Overlay/Overlay';
 import Sidebar from '../components/common/Sidebar/Sidebar';
-import UserProfile from '../components/familial/UserProfile/UserProfile';
+import UserProfile from '../components/familial/UserProfile';
 import { FullPageLoader } from '../components/common/Loaders';
 
 export const getUserData = async (user, dispatch: React.Dispatch<GlobalReducerAction>) => {
   const { id, firstName, lastName, primaryPhoneNumber } = user.user;
 
   if (id && firstName && lastName && primaryPhoneNumber) {
-    const params = new URLSearchParams({
-      userID: id,
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: primaryPhoneNumber.toString(),
-    });
-
-    await fetch(`/api/user/get?${params}`).then(async res => {
+    await fetch(`/api/user/get/${id}`).then(async res => {
       const user = await res.json();
 
       dispatch({
@@ -72,7 +65,10 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
   const [isUserSidebarOpen, setIsUserSidebarOpen] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    router.events.on('routeChangeStart', () => setIsRouteChangeLoading(true));
+    router.events.on('routeChangeStart', () => {
+      dispatch({ type: GlobalReducerActionEnum.SET_PHOTO_LIST, payload: { photoList: [] } });
+      setIsRouteChangeLoading(true);
+    });
     router.events.on('routeChangeComplete', () => {
       setTimeout(() => {
         setIsRouteChangeLoading(false);
