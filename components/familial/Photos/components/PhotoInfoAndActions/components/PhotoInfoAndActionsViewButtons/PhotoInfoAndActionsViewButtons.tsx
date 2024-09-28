@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import tw from 'twin.macro';
 import styled from '@emotion/styled';
 import { Button, Grid } from '@mui/material';
@@ -9,13 +10,14 @@ import GlobalContext from '../../../../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../../../../context/GlobalReducer';
 
 const PhotoInfoAndActionsViewButtons = () => {
+  const router = useRouter();
   const {
     dispatch,
-    state: { albums, photosView },
+    state: { photosView },
   } = React.useContext(GlobalContext);
 
   return (
-    albums?.length && (
+    !!router.query.albumID && (
       <Grid item tw='hidden md:inline-block'>
         <Grid container spacing={1} justifyContent='flex-end'>
           <Grid item xs={7} md={6}>

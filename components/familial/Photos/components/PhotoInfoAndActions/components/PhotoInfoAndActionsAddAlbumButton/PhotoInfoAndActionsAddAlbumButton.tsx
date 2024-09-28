@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Button, TextField } from '@mui/material';
 import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
 
@@ -8,13 +9,14 @@ import { GlobalReducerActionEnum } from '../../../../../../../context/GlobalRedu
 import { DrillyTypography } from '../../../../../../../styles/globals';
 
 const PhotoInfoAndActionsAddAlbumButton = () => {
+  const router = useRouter();
   const {
     dispatch,
-    state: { albums, isDarkMode },
+    state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
   return (
-    !albums?.length && (
+    !router.query.albumID && (
       <Button
         color='info'
         onClick={() => {
