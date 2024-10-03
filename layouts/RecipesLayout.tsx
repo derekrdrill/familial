@@ -159,7 +159,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
                       />
                     ),
                   }))}
-                  carouselHeight={isMD ? 250 : 290}
+                  carouselHeight={isMD ? 250 : 300}
                 />
               </div>
             </div>
