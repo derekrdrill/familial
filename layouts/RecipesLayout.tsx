@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import SearchIcon from '@mui/icons-material/Search';
-import { Menu, MenuItem } from '@mui/material';
+import { CircularProgress, Menu, MenuItem } from '@mui/material';
 import tw from 'twin.macro';
 
 import GlobalContext from '../context/GlobalContext';
@@ -40,6 +40,8 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
   } = React.useContext(GlobalContext);
 
   const [isAddMenuOpen, setIsAddMenuOpen] = React.useState<boolean>(false);
+  const [isRecipeSearchLoading, setIsRecipeSearchLoading] = React.useState<boolean>(false);
+  const [recipesSearched, setRecipesSearched] = React.useState<Recipe[]>();
 
   React.useEffect(() => {
     const recipeRandomMetadataKeys = Object.keys(recipeRandom);
@@ -76,48 +78,93 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         <RecipeSearch
           fullWidth
           placeholder='Search for a recipe'
+          onChange={async e => {
+            setIsRecipeSearchLoading(true);
+
+            await fetch(`/api/recipe/get?searchValue=${e.target.value}`).then(async res => {
+              const recipesSearched = await res.json();
+
+              if (!!recipesSearched.length) {
+                setRecipesSearched(recipesSearched);
+              } else {
+                setRecipesSearched(undefined);
+              }
+            });
+
+            setIsRecipeSearchLoading(false);
+          }}
           InputProps={{
             startAdornment: <SearchIcon />,
+            endAdornment: isRecipeSearchLoading && <CircularProgress />,
           }}
           $isDarkMode={isDarkMode}
         />
       </div>
       <div tw='lg:mx-12'>
-        <RecipeRandom />
-        <div tw='my-24'>
-          <DrillyTypography
-            tw='font-bold font-main mb-7 ml-2 text-2xl'
-            variant='h2'
-            $isDarkMode={isDarkMode}
-          >
-            Newly added
-          </DrillyTypography>
-          <div tw='col-span-1 flex justify-center'>
-            <Carousel
-              carouselContent={recipes.map(recipe => ({
-                id: recipe._id ?? '',
-                component: (
-                  <RecipeCard
-                    recipeAuthor={recipe.author ?? ''}
-                    recipeCardContainerStyles={tw`w-96 md:w-80`}
-                    recipeId={recipe._id}
-                    recipeIngredients={getRecipeIngredientStringArray({
-                      recipeIngredientData: recipe.ingredients,
-                    }).join(', ')}
-                    recipePhotoSrc={recipe.imageUrl}
-                    recipeSteps={getRecipeStepsStringArray({ recipeSteps: recipe.steps }).join(
-                      ', ',
-                    )}
-                    recipeTemp={recipe.temperature}
-                    recipeTime={recipe.time}
-                    recipeTitle={recipe.title}
-                  />
-                ),
-              }))}
-              carouselHeight={isMD ? 250 : 290}
-            />
+        {recipesSearched && (
+          <div tw='gap-2 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+            <div tw='col-span-full'>
+              <DrillyTypography component='h2' variant='body1'>
+                {`${recipesSearched.length} recipe${recipesSearched.length === 1 ? '' : 's'} found`}
+              </DrillyTypography>
+            </div>
+            {recipesSearched.map(recipe => (
+              <div tw='col-span-1'>
+                <RecipeCard
+                  recipeAuthor={recipe.author ?? ''}
+                  recipeId={recipe._id}
+                  recipeIngredients={getRecipeIngredientStringArray({
+                    recipeIngredientData: recipe.ingredients,
+                  }).join(', ')}
+                  recipePhotoSrc={recipe.imageUrl}
+                  recipeSteps={getRecipeStepsStringArray({ recipeSteps: recipe.steps }).join(', ')}
+                  recipeTemp={recipe.temperature}
+                  recipeTime={recipe.time}
+                  recipeTitle={recipe.title}
+                />
+              </div>
+            ))}
           </div>
-        </div>
+        )}
+        {!recipesSearched && (
+          <>
+            <RecipeRandom />
+            <div tw='my-24'>
+              <DrillyTypography
+                tw='font-bold font-main mb-7 ml-2 text-2xl'
+                variant='h2'
+                $isDarkMode={isDarkMode}
+              >
+                Newly added
+              </DrillyTypography>
+              <div tw='col-span-1 flex justify-center'>
+                <Carousel
+                  carouselContent={recipes.map(recipe => ({
+                    id: recipe._id ?? '',
+                    component: (
+                      <RecipeCard
+                        recipeAuthor={recipe.author ?? ''}
+                        recipeCardContainerStyles={tw`w-96 md:w-80`}
+                        recipeId={recipe._id}
+                        recipeIngredients={getRecipeIngredientStringArray({
+                          recipeIngredientData: recipe.ingredients,
+                        }).join(', ')}
+                        recipePhotoSrc={recipe.imageUrl}
+                        recipeSteps={getRecipeStepsStringArray({ recipeSteps: recipe.steps }).join(
+                          ', ',
+                        )}
+                        recipeTemp={recipe.temperature}
+                        recipeTime={recipe.time}
+                        recipeTitle={recipe.title}
+                      />
+                    ),
+                  }))}
+                  carouselHeight={isMD ? 250 : 290}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
