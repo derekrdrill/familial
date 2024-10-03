@@ -8,7 +8,7 @@ import { DrillyTextField, DrillyTypography } from '../../../../../../styles/glob
 import { COOK_TYPES } from '../constants';
 import { Cookbook } from '../../../../../../types';
 
-type RecipeAddFormDetailsProps = {
+type RecipeDetailsFormProps = {
   allCookbooks: Cookbook[];
   cookbook: string;
   cookTime: string;
@@ -23,7 +23,7 @@ type RecipeAddFormDetailsProps = {
   temperature: string;
 };
 
-const RecipeAddFormDetails = ({
+const RecipeDetailsForm = ({
   allCookbooks,
   cookbook,
   cookTime,
@@ -36,16 +36,13 @@ const RecipeAddFormDetails = ({
   setRecipeName,
   setTemperature,
   temperature,
-}: RecipeAddFormDetailsProps) => {
+}: RecipeDetailsFormProps) => {
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
   return (
     <>
-      <DrillyTypography tw='font-main mt-5 text-2xl' variant='h2' $isDarkMode={isDarkMode}>
-        Details
-      </DrillyTypography>
       <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-3'>
         <div>
           <InputLabel htmlFor='recipeName'>
@@ -151,4 +148,4 @@ const RecipeAddFormDetails = ({
   );
 };
 
-export default RecipeAddFormDetails;
+export default RecipeDetailsForm;

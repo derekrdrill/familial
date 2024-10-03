@@ -1,0 +1,203 @@
+import React from 'react';
+import Link from 'next/link';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import PrintIcon from '@mui/icons-material/Print';
+
+import GlobalContext from '../../../../../context/GlobalContext';
+
+import RecipeDetails from './components/RecipeDetails';
+import RecipeDetailsForm from './components/RecipeDetailsForm';
+import RecipeDetailShimmer from './components/RecipeDetailShimmer';
+import RecipeImageUpload from './components/RecipeImageUpload';
+import RecipeIngredientsForm from './components/RecipeIngredientsForm';
+import RecipeIngredientsList from './components/RecipeIngredientsList';
+import RecipeStepsForm from './components/RecipeStepsForm';
+import RecipeStepsList from './components/RecipeStepsList';
+
+import { useRecipeDetail } from './hooks/useRecipeDetail';
+import {
+  RecipeDetailActionButtonsContainer,
+  RecipeDetailsContainer,
+  RecipeDetailPrintButton,
+  RecipeDetailTypography,
+  RecipeIngredientsOrStepsContainer,
+} from './styles';
+
+import { Cookbook } from '../../../../../types';
+import { DrillyButton, DrillyTypography } from '../../../../../styles/globals';
+
+type RecipeAddFormProps = {
+  cookbooks: Cookbook[];
+  recipeId?: string;
+};
+
+export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
+  const {
+    state: { isDarkMode, photoList },
+  } = React.useContext(GlobalContext);
+
+  const [isRecipeDetailLoading, setIsRecipeDetailLoading] = React.useState<boolean>(false);
+
+  const hasRecipeId = !!recipeId;
+
+  const {
+    cookbook,
+    cookTime,
+    cookType,
+    errors,
+    ingredientsRows,
+    newRecipeData,
+    recipeImageUrl,
+    recipeName,
+    stepRows,
+    temperature,
+    handleAddRowClick,
+    handleDeleteRowClick,
+    handleRowChange,
+    handleSubmit,
+    setCookTime,
+    setCookType,
+    setCookbook,
+    setIngredientsRows,
+    setRecipeImage,
+    setRecipeName,
+    setStepRows,
+    setTemperature,
+  } = useRecipeDetail({ recipeId });
+
+  React.useEffect(() => {
+    setRecipeImage(!!photoList?.length ? photoList : undefined);
+  }, [photoList]);
+
+  React.useEffect(() => {
+    if (!!recipeId) {
+      setIsRecipeDetailLoading(true);
+    }
+  }, [recipeId]);
+
+  React.useEffect(() => {
+    if (!!recipeName) {
+      setIsRecipeDetailLoading(false);
+    }
+  }, [recipeName]);
+
+  return (
+    <div tw='grid grid-cols-12 mx-10 my-8 w-full'>
+      {isRecipeDetailLoading && <RecipeDetailShimmer />}
+      {!isRecipeDetailLoading && (
+        <>
+          <RecipeDetailActionButtonsContainer $isDarkMode={isDarkMode}>
+            <Link href='/recipes' tw='flex gap-1 text-primary hover:underline'>
+              <KeyboardDoubleArrowLeftIcon />
+              Go back to all recipes
+            </Link>
+            {hasRecipeId && (
+              <RecipeDetailPrintButton onClick={() => window.print()}>
+                Print
+                <PrintIcon />
+              </RecipeDetailPrintButton>
+            )}
+          </RecipeDetailActionButtonsContainer>
+          <RecipeDetailsContainer tw='col-span-full' $isEditingOrAddingRecipe={!hasRecipeId}>
+            <RecipeDetailTypography
+              tw='font-bold font-main text-3xl'
+              variant='h1'
+              $isCentered={!!recipeId}
+              $isDarkMode={isDarkMode}
+            >
+              {hasRecipeId ? recipeName : 'New recipe'}
+            </RecipeDetailTypography>
+          </RecipeDetailsContainer>
+          <RecipeDetailsContainer
+            tw='col-span-full gap-2 grid'
+            $isEditingOrAddingRecipe={!hasRecipeId}
+          >
+            <RecipeDetailTypography
+              tw='font-main mt-5 text-2xl'
+              variant='h2'
+              $isCentered={false}
+              $isDarkMode={isDarkMode}
+            >
+              Details
+            </RecipeDetailTypography>
+            {hasRecipeId ? (
+              <RecipeDetails
+                cookbook={cookbook}
+                cookType={cookType}
+                cookTime={cookTime}
+                recipeImageUrl={recipeImageUrl ?? ''}
+                temperature={temperature}
+              />
+            ) : (
+              <RecipeDetailsForm
+                allCookbooks={cookbooks}
+                cookbook={cookbook}
+                cookTime={cookTime}
+                cookType={cookType}
+                errors={errors}
+                recipeName={recipeName}
+                setCookbook={setCookbook}
+                setCookTime={setCookTime}
+                setCookType={setCookType}
+                setRecipeName={setRecipeName}
+                setTemperature={setTemperature}
+                temperature={temperature}
+              />
+            )}
+          </RecipeDetailsContainer>
+          <div tw='col-span-full flex mt-4 -translate-x-8 xl:col-span-4 xl:justify-center xl:translate-y-6 xl:-translate-x-4'>
+            <RecipeImageUpload shouldShowImageUpload={!hasRecipeId} />
+          </div>
+          <div tw='lg:col-span-3 xl:col-span-4'></div>
+          <RecipeIngredientsOrStepsContainer
+            tw='col-span-full gap-2 grid'
+            $isEditingOrAddingRecipe={!hasRecipeId}
+          >
+            <DrillyTypography tw='font-main mt-5 text-2xl' variant='h2' $isDarkMode={isDarkMode}>
+              Ingredients
+            </DrillyTypography>
+            {hasRecipeId ? (
+              <RecipeIngredientsList ingredientsRows={ingredientsRows} />
+            ) : (
+              <RecipeIngredientsForm
+                errors={errors}
+                handleAddRowClick={handleAddRowClick}
+                handleDeleteRowClick={handleDeleteRowClick}
+                handleRowChange={handleRowChange}
+                ingredientsRows={ingredientsRows}
+                setIngredientsRows={setIngredientsRows}
+              />
+            )}
+          </RecipeIngredientsOrStepsContainer>
+          <RecipeIngredientsOrStepsContainer
+            tw='col-span-full gap-2 grid'
+            $isEditingOrAddingRecipe={!hasRecipeId}
+          >
+            <DrillyTypography tw='font-main mt-5 text-2xl' variant='h2' $isDarkMode={isDarkMode}>
+              Steps
+            </DrillyTypography>
+            {hasRecipeId ? (
+              <RecipeStepsList stepRows={stepRows} />
+            ) : (
+              <RecipeStepsForm
+                errors={errors}
+                handleAddRowClick={handleAddRowClick}
+                handleDeleteRowClick={handleDeleteRowClick}
+                handleRowChange={handleRowChange}
+                setStepRows={setStepRows}
+                stepRows={stepRows}
+              />
+            )}
+          </RecipeIngredientsOrStepsContainer>
+          {!hasRecipeId && (
+            <div tw='col-span-full flex justify-end'>
+              <DrillyButton onClick={handleSubmit} tw='py-2 mt-9' $variant='success'>
+                Submit
+              </DrillyButton>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};

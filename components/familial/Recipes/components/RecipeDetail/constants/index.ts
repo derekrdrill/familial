@@ -12,8 +12,14 @@ const COOK_TYPES = [
 
 const MEASUREMENT_TYPES = [
   'Select measurement type...',
+  'Bag',
+  'Bottle',
+  'Bundle',
+  'Can',
+  'Cup',
   'Gram',
   'Gallon',
+  'Half',
   'Liter',
   'Milliter',
   'Pint',
@@ -22,6 +28,7 @@ const MEASUREMENT_TYPES = [
   'Quart',
   'Tablespoon',
   'Teaspoon',
+  'Whole',
 ];
 
 const RECIPE_FORM_DEFAULTS = {
@@ -37,7 +44,7 @@ const RECIPE_FORM_DEFAULTS = {
 const RECIPE_INGREDIENTS_DEFAULTS = [
   {
     ingredient: '',
-    ingredientMeasurementType: 'Select measurement type...',
+    ingredientMeasurement: 'Select measurement type...',
     ingredientQuantity: 0,
   },
 ];

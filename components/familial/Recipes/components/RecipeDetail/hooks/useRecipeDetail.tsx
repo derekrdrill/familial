@@ -1,8 +1,10 @@
 import React from 'react';
+import { ImageListType } from 'react-images-uploading';
+import { useRouter } from 'next/router';
+
 import GlobalContext from '../../../../../../context/GlobalContext';
 import { Cookbook, Recipe } from '../../../../../../types';
 import { RecipeAddFormIngredient, RecipeAddFormStep } from '../types';
-import { useRouter } from 'next/router';
 
 import {
   RECIPE_FORM_DEFAULTS,
@@ -10,9 +12,14 @@ import {
   RECIPE_STEPS_DEFAULTS,
 } from '../constants';
 
-import { getRecipeFormErrors, getRecipeIngredients, getRecipeSteps } from '../helpers';
+import { getRecipeFormErrors } from '../helpers';
+import { RecipeIngredient } from '../../../../../../types/Recipe/Recipe';
 
-export const useRecipeAddForm = () => {
+interface useRecipeDetailProps {
+  recipeId?: string;
+}
+
+export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   const router = useRouter();
   const {
     state: { user },
@@ -27,6 +34,9 @@ export const useRecipeAddForm = () => {
     RECIPE_INGREDIENTS_DEFAULTS,
   );
   const [newRecipeData, setNewRecipeData] = React.useState<Recipe>(RECIPE_FORM_DEFAULTS);
+  const [recipeAuthor, setRecipeAuthor] = React.useState<string>();
+  const [recipeImage, setRecipeImage] = React.useState<ImageListType>();
+  const [recipeImageUrl, setRecipeImageUrl] = React.useState<string>();
   const [recipeName, setRecipeName] = React.useState<string>('');
   const [stepRows, setStepRows] = React.useState<RecipeAddFormStep[]>(RECIPE_STEPS_DEFAULTS);
   const [temperature, setTemperature] = React.useState('');
@@ -57,6 +67,32 @@ export const useRecipeAddForm = () => {
     setRows(newRows);
   };
 
+  const handleGetRecipeById = async ({ recipeId }: { recipeId: string }) => {
+    await fetch(`/api/recipe/get?recipeId=${recipeId}`).then(async res => {
+      const recipe = await res.json();
+
+      setRecipeAuthor(recipe.author);
+      setCookbook(recipe.cookbook);
+      setIngredientsRows(
+        (recipe.ingredients as RecipeIngredient[]).map(ingredient => ({
+          ...ingredient,
+          ...{
+            ingredientMeasurement:
+              ingredient.ingredientMeasurement?.charAt(0).toUpperCase() +
+              ingredient.ingredientMeasurement?.slice(1),
+          },
+        })),
+      );
+      setStepRows(recipe.steps);
+      setRecipeName(recipe.title);
+
+      if (recipe.imageUrl) setRecipeImageUrl(recipe.imageUrl);
+      if (recipe.temperature) setTemperature(recipe.temperature);
+      if (recipe.time) setCookTime(recipe.time);
+      if (recipe.type) setCookType(recipe.type);
+    });
+  };
+
   const handleRowChange = ({
     rowKeyToChange,
     rowField,
@@ -72,7 +108,7 @@ export const useRecipeAddForm = () => {
   }) => {
     let newRows = [...rows];
     newRows[rowKeyToChange][rowField] = rowFieldValue;
-    setRows(newRows);
+    setRows(rows);
   };
 
   const handleSubmit = async () => {
@@ -81,25 +117,55 @@ export const useRecipeAddForm = () => {
     if (!!currentErrors.length) {
       setErrors(currentErrors);
     } else {
-      await fetch('/api/recipe/add', {
-        method: 'POST',
-        body: JSON.stringify(newRecipeData),
-      });
+      if (recipeImage) {
+        const photoFile = !!recipeImage?.length ? recipeImage[0].file : null;
+        const photoFileType = photoFile ? photoFile?.type : 'application/octet-stream';
+
+        if (photoFile) {
+          await fetch('/api/photo-uploader/blob', {
+            method: 'POST',
+            headers: {
+              'content-type': photoFileType,
+            },
+            body: photoFile,
+          })
+            .then(async res => {
+              const { url } = await res.json();
+              const newRecipe = { ...newRecipeData, ...{ imageUrl: url } };
+
+              await fetch('/api/recipe/add', {
+                body: JSON.stringify(newRecipe),
+                method: 'POST',
+              });
+            })
+            .catch(e => console.log(e));
+        }
+      } else {
+        await fetch('/api/recipe/add', {
+          body: JSON.stringify(newRecipeData),
+          method: 'POST',
+        });
+      }
 
       router.push('/recipes');
     }
   };
 
   React.useEffect(() => {
+    if (recipeId) {
+      handleGetRecipeById({ recipeId });
+    }
+  }, [recipeId]);
+
+  React.useEffect(() => {
     if (user) {
       setNewRecipeData({
         ...newRecipeData,
         ...{
-          author: user?.firstName,
-          authorId: user?.userID,
+          author: recipeAuthor ?? user?.firstName,
           cookbook: cookbook,
-          ingredients: getRecipeIngredients({ ingredientsRows }),
-          steps: getRecipeSteps({ stepRows }),
+          ingredients: ingredientsRows,
+          steps: stepRows,
           temperature: temperature,
           time: cookTime,
           title: recipeName,
@@ -121,6 +187,8 @@ export const useRecipeAddForm = () => {
     errors,
     ingredientsRows,
     newRecipeData,
+    recipeImage,
+    recipeImageUrl,
     recipeName,
     stepRows,
     temperature,
@@ -131,6 +199,7 @@ export const useRecipeAddForm = () => {
     setErrors,
     setIngredientsRows,
     setNewRecipeData,
+    setRecipeImage,
     setRecipeName,
     setStepRows,
     setTemperature,

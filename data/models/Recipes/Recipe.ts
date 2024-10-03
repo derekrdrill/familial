@@ -3,8 +3,15 @@ import mongoose from 'mongoose';
 export const RecipeSchema = new mongoose.Schema({
   author: String,
   cookbook: String,
-  ingredients: [String],
-  steps: [String],
+  ingredients: [
+    {
+      ingredient: String,
+      ingredientMeasurement: String,
+      ingredientQuantity: Number,
+    },
+  ],
+  imageUrl: String,
+  steps: [{ step: String }],
   temperature: String,
   time: String,
   title: String,

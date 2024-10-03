@@ -5,21 +5,24 @@ import { IconButton } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
 import GlobalContext from '../../../../context/GlobalContext';
+import { useRouter } from 'next/router';
 
 type RecipeCardType = {
   recipeAuthor: string;
   recipeCardContainerStyles?: TwStyle;
+  recipeId?: string;
   recipeIngredients: string;
   recipePhotoSrc?: string;
   recipeSteps: string;
-  recipeTemp: string;
-  recipeTime: string;
+  recipeTemp?: string;
+  recipeTime?: string;
   recipeTitle: string;
 };
 
 const RecipeCard = ({
   recipeAuthor,
   recipeCardContainerStyles,
+  recipeId,
   recipeIngredients,
   recipePhotoSrc,
   recipeSteps,
@@ -27,12 +30,16 @@ const RecipeCard = ({
   recipeTime,
   recipeTitle,
 }: RecipeCardType) => {
+  const router = useRouter();
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
   return (
-    <RecipeCardRootDiv $styles={recipeCardContainerStyles}>
+    <RecipeCardRootDiv
+      onClick={() => router.push(`/recipes/${recipeId}`)}
+      $styles={recipeCardContainerStyles}
+    >
       <RecipeCardHeaderDiv $isDarkMode={isDarkMode}>
         <RecipeCardHeaderTitleDiv>
           <RecipeCardHeaderTitleH3 $isDarkMode={isDarkMode}>{recipeTitle}</RecipeCardHeaderTitleH3>
@@ -45,7 +52,7 @@ const RecipeCard = ({
         </IconButton>
       </RecipeCardHeaderDiv>
       <RecipeCardBodyDiv $isDarkMode={isDarkMode}>
-        <RecipeCardInfoColDiv>
+        <RecipeCardInfoColDiv hasRecipePhotoSrc={!!recipePhotoSrc}>
           <RecipeCardInfoRootDiv>
             <RecipeCardInfoParagraph>
               <RecipeCardInfoSubtitle>Temp: </RecipeCardInfoSubtitle>
@@ -67,7 +74,7 @@ const RecipeCard = ({
         </RecipeCardInfoColDiv>
         {recipePhotoSrc && (
           <RecipeCardImageDiv>
-            <RecipeCardImage alt='recipe-image' src='/dinner2.webp' />
+            <RecipeCardImage alt='recipe-image' src={recipePhotoSrc} />
           </RecipeCardImageDiv>
         )}
       </RecipeCardBodyDiv>
@@ -75,7 +82,13 @@ const RecipeCard = ({
   );
 };
 
-const RecipeCardHeaderTitleDiv = styled.div([tw`flex`, tw`gap-1`]);
+const RecipeCardHeaderTitleDiv = styled.div([
+  tw`flex`,
+  tw`flex-col`,
+  tw`gap-0`,
+  tw`lg:flex-row`,
+  tw`lg:gap-1`,
+]);
 const RecipeCardInfoColDiv = styled.div<{ hasRecipePhotoSrc?: boolean }>(
   ({ hasRecipePhotoSrc }) => [
     !hasRecipePhotoSrc && tw`col-span-3`,
@@ -102,20 +115,20 @@ const RecipeCardRootDiv = styled.div<{ $styles?: TwStyle }>(({ $styles }) => [
   tw`h-60`,
   tw`rounded-xl`,
   tw`md:h-48`,
+  tw`hover:cursor-pointer`,
+  tw`hover:opacity-90`,
   $styles,
 ]);
 
-const RecipeCardBodyDiv = styled.div<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    !$isDarkMode && tw`bg-gray-D9D9D9`,
-    $isDarkMode && tw`bg-gray-696969`,
-    tw`gap-0`,
-    tw`grid`,
-    tw`grid-cols-3`,
-    tw`min-h-full`,
-    tw`rounded-b-lg`,
-  ],
-);
+const RecipeCardBodyDiv = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`bg-gray-D9D9D9`,
+  $isDarkMode && tw`bg-gray-696969`,
+  tw`gap-0`,
+  tw`grid`,
+  tw`grid-cols-3`,
+  tw`min-h-full`,
+  tw`rounded-b-lg`,
+]);
 
 const RecipeCardHeaderAddedBySpan = styled.span<{
   $isDarkMode?: boolean;
@@ -126,14 +139,15 @@ const RecipeCardHeaderAddedBySpan = styled.span<{
   tw`translate-y-1`,
 ]);
 
-const RecipeCardHeaderTitleH3 = styled.h3<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    !$isDarkMode && tw`text-inherit`,
-    $isDarkMode && tw`text-white`,
-    tw`text-xl`,
-    tw`lg:text-base`,
-  ],
-);
+const RecipeCardHeaderTitleH3 = styled.h3<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`text-inherit`,
+  $isDarkMode && tw`text-white`,
+  tw`max-h-8`,
+  tw`text-ellipsis`,
+  tw`text-xl`,
+  tw`whitespace-nowrap`,
+  tw`lg:text-base`,
+]);
 
 const RecipeCardHeaderDiv = styled.div<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [
