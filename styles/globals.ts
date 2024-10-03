@@ -41,37 +41,50 @@ export const DrillyTextField = styled(TextField)<{
   $hasBorder?: boolean;
   $hasError?: boolean;
   $isDarkMode?: boolean;
+  $isFocused?: boolean;
   $isRounded?: boolean;
-}>(({ $bgColor, $bgColorDark, $hasBorder = true, $hasError, $isDarkMode, $isRounded }) => [
-  tw`rounded-lg`,
-  {
-    '.MuiFormLabel-root': [$isDarkMode && tw`text-white`],
-    '.MuiInputBase-root': [
-      $bgColor && $bgColor,
-      $bgColorDark && $isDarkMode && $bgColorDark,
-      $isDarkMode && tw`text-white`,
-      $hasError && tw`border border-error`,
-      {
-        svg: [$isDarkMode && tw`text-white`],
-      },
-    ],
-    '.MuiOutlinedInput-root': {
-      fieldset: [
-        $hasBorder && [
-          $isRounded ? tw`rounded-3xl` : tw`rounded-lg`,
-          {
-            border: `1px lightgrey ${$isDarkMode ? '!important' : ''}`,
-          },
-        ],
+}>(
+  ({
+    $bgColor,
+    $bgColorDark,
+    $hasBorder = true,
+    $hasError,
+    $isDarkMode,
+    $isFocused,
+    $isRounded,
+  }) => [
+    tw`rounded-lg`,
+    {
+      '.MuiFormLabel-root': [$isDarkMode && tw`text-white`],
+      '.MuiInputBase-root': [
+        $bgColor && $bgColor,
+        $bgColorDark && $isDarkMode && $bgColorDark,
+        $isDarkMode && tw`text-white`,
+        $hasBorder && [tw`border-[1px]`, tw`border-gray-B6B6B6`],
+        $hasBorder && $isFocused && [tw`border-2`, tw`border-primary`],
+        $hasError && tw`border border-error`,
+        {
+          svg: [$isDarkMode && tw`text-white`],
+        },
       ],
-      input: {
-        '::placeholder': {
-          color: $isDarkMode ? 'white' : 'inherit',
+      '.MuiOutlinedInput-root': {
+        fieldset: [
+          $hasBorder && [
+            $isRounded ? tw`rounded-3xl` : tw`rounded-lg`,
+            {
+              border: `1px lightgrey ${$isDarkMode ? '!important' : ''}`,
+            },
+          ],
+        ],
+        input: {
+          '::placeholder': {
+            color: $isDarkMode ? 'white' : 'inherit',
+          },
         },
       },
     },
-  },
-]);
+  ],
+);
 
 export const DrillySelectableImage = styled(Image)<{
   $isNoPhotoSelected?: boolean;

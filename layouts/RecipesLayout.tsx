@@ -60,6 +60,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
   } = React.useContext(GlobalContext);
 
   const [isAddMenuOpen, setIsAddMenuOpen] = React.useState<boolean>(false);
+  const [isRecipeSearchTextFocused, setIsRecipeSearchTextFocused] = React.useState<boolean>(false);
   const [isRecipeSearchLoading, setIsRecipeSearchLoading] = React.useState<boolean>(false);
   const [recipeSearchValue, setRecipeSearchValue] = React.useState<string>();
   const [recipesSearched, setRecipesSearched] = React.useState<Recipe[]>();
@@ -107,12 +108,16 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         <RecipeSearch
           fullWidth
           placeholder='Search for a recipe'
+          onBlur={() => setIsRecipeSearchTextFocused(false)}
           onChange={async e => setRecipeSearchValue(e.target.value)}
+          onFocus={() => setIsRecipeSearchTextFocused(true)}
           InputProps={{
             startAdornment: <SearchIcon />,
             endAdornment: isRecipeSearchLoading && <CircularProgress />,
           }}
+          $hasBorder
           $isDarkMode={isDarkMode}
+          $isFocused={isRecipeSearchTextFocused}
         />
       </div>
       <div tw='lg:mx-12'>
