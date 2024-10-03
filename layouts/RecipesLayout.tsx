@@ -33,10 +33,12 @@ const handleSearchValueChange = async ({
 }) => {
   setIsRecipeSearchLoading(true);
 
-  await fetch(`/api/recipe/get?searchValue=${searchValue}`).then(async res => {
-    const recipesSearched = await res.json();
-    setRecipesSearched(recipesSearched);
-  });
+  setTimeout(async () => {
+    await fetch(`/api/recipe/get?searchValue=${searchValue}`).then(async res => {
+      const recipesSearched = await res.json();
+      setRecipesSearched(recipesSearched);
+    });
+  }, 200);
 
   setIsRecipeSearchLoading(false);
 };
