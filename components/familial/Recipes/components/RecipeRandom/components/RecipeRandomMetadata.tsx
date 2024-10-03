@@ -1,10 +1,7 @@
 import React from 'react';
 import GlobalContext from '../../../../../../context/GlobalContext';
 import { DrillyTypography } from '../../../../../../styles/globals';
-import {
-  getRecipeIngredientStringArray,
-  getRecipeStepsStringArray,
-} from '../../RecipeDetail/helpers';
+import { getRecipeIngredientStringArray, getRecipeStepsStringArray } from '../../../helpers';
 import {
   RecipeIngredient,
   RecipeIngredientOrStep,

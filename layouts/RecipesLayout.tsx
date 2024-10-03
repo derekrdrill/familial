@@ -17,10 +17,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { GlobalReducerActionEnum } from '../context/GlobalReducer';
 import RecipeRandom from '../components/familial/Recipes/components/RecipeRandom/RecipeRandom';
+import RecipeSearchResults from '../components/familial/Recipes/components/RecipeSearchResults/RecipeSearchResults';
 import {
   getRecipeIngredientStringArray,
   getRecipeStepsStringArray,
-} from '../components/familial/Recipes/components/RecipeDetail/helpers';
+} from '../components/familial/Recipes/helpers';
 
 const handleSearchValueChange = async ({
   searchValue,
@@ -116,30 +117,10 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
       </div>
       <div tw='lg:mx-12'>
         {!!recipeSearchValue && !!recipesSearched && (
-          <div tw='gap-2 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            <div tw='col-span-full'>
-              <DrillyTypography component='h2' variant='body1' $isDarkMode={isDarkMode}>
-                {`${recipesSearched.length} recipe${recipesSearched.length === 1 ? '' : 's'} found`}
-              </DrillyTypography>
-            </div>
-            {recipesSearched.map(recipe => (
-              <div tw='col-span-1'>
-                <RecipeCard
-                  recipeAuthor={recipe.author ?? ''}
-                  recipeCardContainerStyles={tw`mb-16`}
-                  recipeId={recipe._id}
-                  recipeIngredients={getRecipeIngredientStringArray({
-                    recipeIngredientData: recipe.ingredients,
-                  }).join(', ')}
-                  recipePhotoSrc={recipe.imageUrl}
-                  recipeSteps={getRecipeStepsStringArray({ recipeSteps: recipe.steps }).join(', ')}
-                  recipeTemp={recipe.temperature}
-                  recipeTime={recipe.time}
-                  recipeTitle={recipe.title}
-                />
-              </div>
-            ))}
-          </div>
+          <RecipeSearchResults
+            isRecipeSearchLoading={isRecipeSearchLoading}
+            recipesSearched={recipesSearched}
+          />
         )}
         {!recipeSearchValue && (
           <>
