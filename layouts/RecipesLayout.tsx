@@ -33,12 +33,12 @@ const handleSearchValueChange = async ({
 }) => {
   setIsRecipeSearchLoading(true);
 
-  setTimeout(async () => {
+  async () => {
     await fetch(`/api/recipe/get?searchValue=${searchValue}`).then(async res => {
       const recipesSearched = await res.json();
       setRecipesSearched(recipesSearched);
     });
-  }, 200);
+  };
 
   setIsRecipeSearchLoading(false);
 };
@@ -80,13 +80,11 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
 
   React.useEffect(() => {
     if (!!recipeSearchValue) {
-      if (recipeSearchValue.length > 2) {
-        handleSearchValueChange({
-          searchValue: recipeSearchValue,
-          setIsRecipeSearchLoading: setIsRecipeSearchLoading,
-          setRecipesSearched: setRecipesSearched,
-        });
-      }
+      handleSearchValueChange({
+        searchValue: recipeSearchValue,
+        setIsRecipeSearchLoading: setIsRecipeSearchLoading,
+        setRecipesSearched: setRecipesSearched,
+      });
     } else {
       setRecipesSearched(undefined);
     }
