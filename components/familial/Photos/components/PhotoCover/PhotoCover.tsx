@@ -12,6 +12,7 @@ import { GlobalReducerActionEnum } from '../../../../../context/GlobalReducer';
 import { PhotoCoverModal } from './components/PhotoCoverModal';
 
 import { Photos } from '../../../../../types';
+import { Shimmer } from 'react-shimmer';
 
 type PhotoCoverProps = {
   photoListItem: {
@@ -64,35 +65,39 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
         $isAlbumsPage={!router.pathname.includes('[albumID]')}
         $isUserAuthor={isUserAuthor}
       >
-        {isPhotoLoading && <CircularProgress tw='z-10 relative top-14 left-5' />}
-        <PhotoCoverImageControlButtonDiv>
-          <PhotoCoverImageControlButton
-            color='inherit'
-            onClick={e => {
-              e.stopPropagation();
-              setPhotoCoverModalType('delete');
-            }}
-            variant='outlined'
-            $isDelete
-            $isUserAuthor={isUserAuthor}
-            $isLoading={isPhotoLoading}
-          >
-            <DeleteForever />
-          </PhotoCoverImageControlButton>
-          <PhotoCoverImageControlButton
-            color='inherit'
-            onClick={e => {
-              e.stopPropagation();
-              setPhotoCoverModalType('edit');
-            }}
-            variant='outlined'
-            $isEdit
-            $isUserAuthor={isUserAuthor}
-            $isLoading={isPhotoLoading}
-          >
-            <EditTwoToneIcon />
-          </PhotoCoverImageControlButton>
-        </PhotoCoverImageControlButtonDiv>
+        {isPhotoLoading && <Shimmer height={200} width={200} />}
+        {!isPhotoLoading && (
+          <>
+            <PhotoCoverImageControlButtonDiv>
+              <PhotoCoverImageControlButton
+                color='inherit'
+                onClick={e => {
+                  e.stopPropagation();
+                  setPhotoCoverModalType('delete');
+                }}
+                variant='outlined'
+                $isDelete
+                $isUserAuthor={isUserAuthor}
+                $isLoading={isPhotoLoading}
+              >
+                <DeleteForever />
+              </PhotoCoverImageControlButton>
+              <PhotoCoverImageControlButton
+                color='inherit'
+                onClick={e => {
+                  e.stopPropagation();
+                  setPhotoCoverModalType('edit');
+                }}
+                variant='outlined'
+                $isEdit
+                $isUserAuthor={isUserAuthor}
+                $isLoading={isPhotoLoading}
+              >
+                <EditTwoToneIcon />
+              </PhotoCoverImageControlButton>
+            </PhotoCoverImageControlButtonDiv>
+          </>
+        )}
         <PhotoCoverImage
           alt='album-cover'
           height={0}
@@ -149,6 +154,7 @@ export const PhotoCoverImage = styled(Image)<{
   !$isAlbumsPage && $photosView === 'grid' && tw`xl:h-48`,
   $isAlbumsPage && $photosView === 'grid' && tw`h-40`,
   $isAlbumsPage && $photosView === 'grid' && tw`md:h-48`,
+  $isLoading && tw`invisible`,
   $photosView === 'grid' && tw`-mt-9`,
   $photosView === 'grid' && tw`object-cover`,
   $photosView === 'grid' && tw`w-full`,
