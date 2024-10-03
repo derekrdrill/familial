@@ -9,6 +9,7 @@ import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
 import { PhotoReaction } from '../../../../types';
 import { PhotoReactionButton } from './PhotoReactionButton';
+import { Shimmer } from 'react-shimmer';
 
 type PhotoQuickProps = {
   photoAlbumID: string;
@@ -36,6 +37,8 @@ const PhotoQuick = ({
     dispatch,
     state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
+
+  const [isPhotoQuickLoading, setIsPhotoQuickLoading] = React.useState<boolean>(true);
 
   const {
     handleReactionClick,
@@ -70,14 +73,16 @@ const PhotoQuick = ({
       $isDarkMode={isDarkMode}
     >
       <div tw='bg-white relative top-2'>
+        {isPhotoQuickLoading && <Shimmer height={240} width={210} />}
         <PhotoQuickImage
           alt='album-cover'
           height={0}
           loading='lazy'
-          onLoad={() => null}
+          onLoad={() => setIsPhotoQuickLoading(false)}
           sizes='100vw'
           src={photoUrl}
           width={0}
+          $isPhotoQuickLoading={isPhotoQuickLoading}
         />
       </div>
       <PhotoQuickTitleText title={photoTitle} $isDarkMode={isDarkMode}>
@@ -149,47 +154,44 @@ const PhotoQuick = ({
   );
 };
 
-const PhotoQuickAddedByText = styled.p<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    !$isDarkMode && tw`text-gray-777777`,
-    $isDarkMode && tw`text-gray-B6B6B6`,
-    tw`text-right`,
-    tw`text-xs`,
-  ],
-);
-
-const PhotoQuickTitleText = styled.p<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    !$isDarkMode && tw`text-black`,
-    $isDarkMode && tw`text-gray-DADADA`,
-    tw`mt-3`,
-    tw`text-xl`,
-    tw`text-center`,
-    tw`md:text-base`,
-    tw`truncate`,
-  ],
-);
-
-const PhotoQuickRoot = styled.div<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    !$isDarkMode && tw`bg-gray-DADADA`,
-    $isDarkMode && tw`bg-gray-696969`,
-    tw`cursor-pointer`,
-    tw`px-2`,
-    tw`rounded-sm`,
-    tw`w-full`,
-  ],
-);
-
-const PhotoQuickImage = styled(Image)([
-  tw`h-80`,
-  tw`object-cover`,
-  tw`w-full`,
-  tw`md:h-52`,
-  {
-    overflowClipMargin: 'unset',
-  },
+const PhotoQuickAddedByText = styled.p<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`text-gray-777777`,
+  $isDarkMode && tw`text-gray-B6B6B6`,
+  tw`text-right`,
+  tw`text-xs`,
 ]);
+
+const PhotoQuickTitleText = styled.p<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`text-black`,
+  $isDarkMode && tw`text-gray-DADADA`,
+  tw`mt-3`,
+  tw`text-xl`,
+  tw`text-center`,
+  tw`md:text-base`,
+  tw`truncate`,
+]);
+
+const PhotoQuickRoot = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`bg-gray-DADADA`,
+  $isDarkMode && tw`bg-gray-696969`,
+  tw`cursor-pointer`,
+  tw`px-2`,
+  tw`rounded-sm`,
+  tw`w-full`,
+]);
+
+const PhotoQuickImage = styled(Image)<{ $isPhotoQuickLoading: boolean }>(
+  ({ $isPhotoQuickLoading }) => [
+    $isPhotoQuickLoading && tw`invisible`,
+    tw`h-80`,
+    tw`object-cover`,
+    tw`w-full`,
+    tw`md:h-52`,
+    {
+      overflowClipMargin: 'unset',
+    },
+  ],
+);
 
 
 export { PhotoQuick };

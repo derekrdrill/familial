@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, CircularProgress, Grid, Modal as ModalComponent, Typography } from '@mui/material';
+import tw from 'twin.macro';
+import { CircularProgress, Grid, Modal as ModalComponent, Typography } from '@mui/material';
 
 import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../context/GlobalReducer';
@@ -73,7 +74,7 @@ const Modal = () => {
                   {modalBody}
                 </Grid>
               </ModalRow>
-              <ModalRow columnSpacing={2} container isBottom justifyContent='flex-end'>
+              <ModalRow gap={1} container isBottom justifyContent='flex-end'>
                 <Grid item>
                   {!isCancelHidden && (
                     <DrillyButton
@@ -82,6 +83,7 @@ const Modal = () => {
                         /* istanbul ignore next */
                         () => dispatch(setModalItem(null, false, null, ''))
                       }
+                      $styles={tw`lg:px-4`}
                       $variant='primary'
                     >
                       {cancelButtonText ?? 'Cancel'}
@@ -119,6 +121,7 @@ const Modal = () => {
                           }, submitButtonLoadingDelay ?? 0);
                         }
                       }
+                      $styles={tw`lg:px-4`}
                       $variant='success'
                     >
                       {isModalLoading ? (

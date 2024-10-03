@@ -1,12 +1,13 @@
 import React from 'react';
+import tw from 'twin.macro';
 import { useRouter } from 'next/router';
-import { Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
 
 import GlobalContext from '../../../../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../../../../context/GlobalReducer';
 
-import { DrillyTypography } from '../../../../../../../styles/globals';
+import { DrillyTextField, DrillyTypography } from '../../../../../../../styles/globals';
 
 const PhotoInfoAndActionsAddAlbumButton = () => {
   const router = useRouter();
@@ -47,12 +48,16 @@ const PhotoInfoAndActionsAddAlbumButton = () => {
                 isExitHidden: true,
                 isModalOpen: true,
                 modalBody: (
-                  <TextField
+                  <DrillyTextField
                     id='album'
                     fullWidth
                     placeholder='Enter album name'
                     size='small'
                     variant='outlined'
+                    $hasBorder
+                    $bgColor={tw`bg-gray-D9D9D9`}
+                    $bgColorDark={tw`bg-gray-3D3D3D`}
+                    $isDarkMode={isDarkMode}
                   />
                 ),
                 modalTitle: 'Add new album',

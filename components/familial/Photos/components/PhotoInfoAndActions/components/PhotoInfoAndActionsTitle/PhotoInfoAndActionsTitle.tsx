@@ -21,6 +21,8 @@ const PhotoInfoAndActionsTitle = ({
 }: PhotoInfoAndActionsTitleProps) => {
   const router = useRouter();
 
+  const hasAlbumId = router.query.albumID;
+
   const {
     state: { albums, isDarkMode },
   } = React.useContext(GlobalContext);
@@ -34,7 +36,7 @@ const PhotoInfoAndActionsTitle = ({
         <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
           {photosLayoutTitle}
         </DrillyTypography>
-        {photoAlbumLength && (
+        {hasAlbumId && photoAlbumLength && (
           <DrillyTypography
             variant='subtitle1'
             $isDarkMode={isDarkMode}
