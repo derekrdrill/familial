@@ -180,6 +180,7 @@ const RecipeAddButton = styled.button<{ $isDarkMode?: boolean }>(({ $isDarkMode 
   $isDarkMode && tw`!bg-opacity-40`,
   $isDarkMode && tw`hover:!bg-opacity-60`,
   tw`border`,
+  tw`mb-4`,
   tw`px-4`,
   tw`py-1`,
   tw`rounded-lg`,
