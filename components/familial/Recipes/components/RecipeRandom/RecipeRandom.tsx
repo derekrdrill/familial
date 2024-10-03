@@ -36,7 +36,7 @@ export default function RecipeRandom() {
           />
           <div tw='flex flex-col gap-3'>
             <div>
-              <DrillyTypography component='h2' tw='font-main text-4xl' $isDarkMode={isDarkMode}>
+              <DrillyTypography component='h2' tw='font-main text-3xl' $isDarkMode={isDarkMode}>
                 {recipeRandom?.title}
               </DrillyTypography>
               <DrillyTypography component='p' tw='font-main text-xl' $isDarkMode={isDarkMode}>

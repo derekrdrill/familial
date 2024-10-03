@@ -99,14 +99,10 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
           <MenuItem onClick={() => router.push('/recipes/add-new')}>Recipe</MenuItem>
         </RecipeAddMenu>
       </div>
-      <DrillyTypography
-        tw='font-main mt-4 text-4xl text-center'
-        variant='h1'
-        $isDarkMode={isDarkMode}
-      >
+      <DrillyTypography tw='font-main text-4xl text-center' variant='h1' $isDarkMode={isDarkMode}>
         Recipes
       </DrillyTypography>
-      <div tw='mt-10 md:mx-40 lg:mx-72 xl:mx-96'>
+      <div tw='mt-4 md:mx-40 lg:mx-72 xl:mx-96'>
         <RecipeSearch
           fullWidth
           placeholder='Search for a recipe'
@@ -148,7 +144,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         {!recipeSearchValue && (
           <>
             <RecipeRandom />
-            <div tw='my-24'>
+            <div tw='mb-24 mt-12'>
               <DrillyTypography
                 tw='font-bold font-main mb-7 ml-2 text-2xl'
                 variant='h2'
@@ -204,7 +200,7 @@ const RecipeAddButton = styled.button<{ $isDarkMode?: boolean }>(({ $isDarkMode 
   $isDarkMode && tw`hover:!bg-opacity-60`,
   tw`border`,
   tw`px-4`,
-  tw`py-2`,
+  tw`py-1`,
   tw`rounded-lg`,
 ]);
 
@@ -213,9 +209,9 @@ const RecipeAddMenu = styled(Menu)({
     tw`absolute`,
     tw`!left-auto`,
     tw`!right-10`,
-    tw`!top-[156px]`,
+    tw`!top-[148px]`,
     tw`w-[124px]`,
-    tw`lg:!top-36`,
+    tw`lg:!top-[136px]`,
   ],
 });
 
