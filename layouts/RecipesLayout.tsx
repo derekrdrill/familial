@@ -22,6 +22,25 @@ import {
   getRecipeStepsStringArray,
 } from '../components/familial/Recipes/components/RecipeDetail/helpers';
 
+const handleSearchValueChange = async ({
+  searchValue,
+  setIsRecipeSearchLoading,
+  setRecipesSearched,
+}: {
+  searchValue: string;
+  setIsRecipeSearchLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setRecipesSearched: React.Dispatch<React.SetStateAction<Recipe[] | undefined>>;
+}) => {
+  setIsRecipeSearchLoading(true);
+
+  await fetch(`/api/recipe/get?searchValue=${searchValue}`).then(async res => {
+    const recipesSearched = await res.json();
+    setRecipesSearched(recipesSearched);
+  });
+
+  setIsRecipeSearchLoading(false);
+};
+
 type RecipesLayoutProps = {
   children: React.ReactNode;
   recipes: Recipe[];
@@ -41,6 +60,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
 
   const [isAddMenuOpen, setIsAddMenuOpen] = React.useState<boolean>(false);
   const [isRecipeSearchLoading, setIsRecipeSearchLoading] = React.useState<boolean>(false);
+  const [recipeSearchValue, setRecipeSearchValue] = React.useState<string>();
   const [recipesSearched, setRecipesSearched] = React.useState<Recipe[]>();
 
   React.useEffect(() => {
@@ -55,6 +75,20 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
       payload: { recipeRandom: recipeRandomMetadata },
     });
   }, [recipeRandom]);
+
+  React.useEffect(() => {
+    if (!!recipeSearchValue) {
+      if (recipeSearchValue.length > 2) {
+        handleSearchValueChange({
+          searchValue: recipeSearchValue,
+          setIsRecipeSearchLoading: setIsRecipeSearchLoading,
+          setRecipesSearched: setRecipesSearched,
+        });
+      }
+    } else {
+      setRecipesSearched(undefined);
+    }
+  }, [recipeSearchValue]);
 
   return (
     <div tw='px-8 w-full lg:pt-9'>
@@ -78,20 +112,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         <RecipeSearch
           fullWidth
           placeholder='Search for a recipe'
-          onChange={async e => {
-            if (!!e.target.value) {
-              setIsRecipeSearchLoading(true);
-
-              await fetch(`/api/recipe/get?searchValue=${e.target.value}`).then(async res => {
-                const recipesSearched = await res.json();
-                setRecipesSearched(recipesSearched);
-              });
-
-              setIsRecipeSearchLoading(false);
-            } else {
-              setRecipesSearched(undefined);
-            }
-          }}
+          onChange={async e => setRecipeSearchValue(e.target.value)}
           InputProps={{
             startAdornment: <SearchIcon />,
             endAdornment: isRecipeSearchLoading && <CircularProgress />,
