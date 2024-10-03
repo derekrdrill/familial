@@ -184,6 +184,7 @@ const RecipeAddButton = styled.button<{ $isDarkMode?: boolean }>(({ $isDarkMode 
   tw`px-4`,
   tw`py-1`,
   tw`rounded-lg`,
+  tw`md:mb-0`,
 ]);
 
 const RecipeAddMenu = styled(Menu)({
