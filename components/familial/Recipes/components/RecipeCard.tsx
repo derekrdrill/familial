@@ -41,12 +41,12 @@ const RecipeCard = ({
       $styles={recipeCardContainerStyles}
     >
       <RecipeCardHeaderDiv $isDarkMode={isDarkMode}>
-        <RecipeCardHeaderTitleDiv>
+        <div>
           <RecipeCardHeaderTitleH3 $isDarkMode={isDarkMode}>{recipeTitle}</RecipeCardHeaderTitleH3>
           <RecipeCardHeaderAddedBySpan $isDarkMode={isDarkMode}>
             by {recipeAuthor}
           </RecipeCardHeaderAddedBySpan>
-        </RecipeCardHeaderTitleDiv>
+        </div>
         <IconButton color='error' tw='p-0'>
           <FavoriteBorder />
         </IconButton>
@@ -82,13 +82,6 @@ const RecipeCard = ({
   );
 };
 
-const RecipeCardHeaderTitleDiv = styled.div([
-  tw`flex`,
-  tw`flex-col`,
-  tw`gap-0`,
-  tw`lg:flex-row`,
-  tw`lg:gap-1`,
-]);
 const RecipeCardInfoColDiv = styled.div<{ hasRecipePhotoSrc?: boolean }>(
   ({ hasRecipePhotoSrc }) => [
     !hasRecipePhotoSrc && tw`col-span-3`,

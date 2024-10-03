@@ -17,10 +17,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { GlobalReducerActionEnum } from '../context/GlobalReducer';
 import RecipeRandom from '../components/familial/Recipes/components/RecipeRandom/RecipeRandom';
+import RecipeSearchResults from '../components/familial/Recipes/components/RecipeSearchResults/RecipeSearchResults';
 import {
   getRecipeIngredientStringArray,
   getRecipeStepsStringArray,
-} from '../components/familial/Recipes/components/RecipeDetail/helpers';
+} from '../components/familial/Recipes/helpers';
 
 const handleSearchValueChange = async ({
   searchValue,
@@ -33,12 +34,10 @@ const handleSearchValueChange = async ({
 }) => {
   setIsRecipeSearchLoading(true);
 
-  setTimeout(async () => {
-    await fetch(`/api/recipe/get?searchValue=${searchValue}`).then(async res => {
-      const recipesSearched = await res.json();
-      setRecipesSearched(recipesSearched);
-    });
-  }, 200);
+  await fetch(`/api/recipe/get?searchValue=${searchValue}`).then(async res => {
+    const recipesSearched = await res.json();
+    setRecipesSearched(recipesSearched);
+  });
 
   setIsRecipeSearchLoading(false);
 };
@@ -80,13 +79,11 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
 
   React.useEffect(() => {
     if (!!recipeSearchValue) {
-      if (recipeSearchValue.length > 2) {
-        handleSearchValueChange({
-          searchValue: recipeSearchValue,
-          setIsRecipeSearchLoading: setIsRecipeSearchLoading,
-          setRecipesSearched: setRecipesSearched,
-        });
-      }
+      handleSearchValueChange({
+        searchValue: recipeSearchValue,
+        setIsRecipeSearchLoading: setIsRecipeSearchLoading,
+        setRecipesSearched: setRecipesSearched,
+      });
     } else {
       setRecipesSearched(undefined);
     }
@@ -103,14 +100,10 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
           <MenuItem onClick={() => router.push('/recipes/add-new')}>Recipe</MenuItem>
         </RecipeAddMenu>
       </div>
-      <DrillyTypography
-        tw='font-main mt-4 text-4xl text-center'
-        variant='h1'
-        $isDarkMode={isDarkMode}
-      >
+      <DrillyTypography tw='font-main text-4xl text-center' variant='h1' $isDarkMode={isDarkMode}>
         Recipes
       </DrillyTypography>
-      <div tw='mt-10 md:mx-40 lg:mx-72 xl:mx-96'>
+      <div tw='mt-4 md:mx-40 lg:mx-72 xl:mx-96'>
         <RecipeSearch
           fullWidth
           placeholder='Search for a recipe'
@@ -123,36 +116,16 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         />
       </div>
       <div tw='lg:mx-12'>
-        {!!recipesSearched && (
-          <div tw='gap-2 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-            <div tw='col-span-full'>
-              <DrillyTypography component='h2' variant='body1'>
-                {`${recipesSearched.length} recipe${recipesSearched.length === 1 ? '' : 's'} found`}
-              </DrillyTypography>
-            </div>
-            {recipesSearched.map(recipe => (
-              <div tw='col-span-1'>
-                <RecipeCard
-                  recipeAuthor={recipe.author ?? ''}
-                  recipeCardContainerStyles={tw`mb-16`}
-                  recipeId={recipe._id}
-                  recipeIngredients={getRecipeIngredientStringArray({
-                    recipeIngredientData: recipe.ingredients,
-                  }).join(', ')}
-                  recipePhotoSrc={recipe.imageUrl}
-                  recipeSteps={getRecipeStepsStringArray({ recipeSteps: recipe.steps }).join(', ')}
-                  recipeTemp={recipe.temperature}
-                  recipeTime={recipe.time}
-                  recipeTitle={recipe.title}
-                />
-              </div>
-            ))}
-          </div>
+        {!!recipeSearchValue && !!recipesSearched && (
+          <RecipeSearchResults
+            isRecipeSearchLoading={isRecipeSearchLoading}
+            recipesSearched={recipesSearched}
+          />
         )}
-        {!recipesSearched && (
+        {!recipeSearchValue && (
           <>
             <RecipeRandom />
-            <div tw='my-24'>
+            <div tw='mb-24 mt-12'>
               <DrillyTypography
                 tw='font-bold font-main mb-7 ml-2 text-2xl'
                 variant='h2'
@@ -207,9 +180,11 @@ const RecipeAddButton = styled.button<{ $isDarkMode?: boolean }>(({ $isDarkMode 
   $isDarkMode && tw`!bg-opacity-40`,
   $isDarkMode && tw`hover:!bg-opacity-60`,
   tw`border`,
+  tw`mb-4`,
   tw`px-4`,
-  tw`py-2`,
+  tw`py-1`,
   tw`rounded-lg`,
+  tw`md:mb-0`,
 ]);
 
 const RecipeAddMenu = styled(Menu)({
@@ -217,15 +192,16 @@ const RecipeAddMenu = styled(Menu)({
     tw`absolute`,
     tw`!left-auto`,
     tw`!right-10`,
-    tw`!top-[156px]`,
+    tw`!top-[148px]`,
     tw`w-[124px]`,
-    tw`lg:!top-36`,
+    tw`lg:!top-[136px]`,
   ],
 });
 
 const RecipeSearch = styled(DrillyTextField)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
   $isDarkMode && tw`text-gray-DADADA`,
+  $isDarkMode && tw`!bg-gray-4E4E4E`,
   !$isDarkMode && tw`text-gray-3A3A3A`,
-  tw`!bg-gray-D9D9D9`,
+  !$isDarkMode && tw`!bg-gray-D9D9D9`,
   tw`font-secondary`,
 ]);
