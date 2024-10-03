@@ -122,7 +122,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         {!!recipeSearchValue && !!recipesSearched && (
           <div tw='gap-2 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             <div tw='col-span-full'>
-              <DrillyTypography component='h2' variant='body1'>
+              <DrillyTypography component='h2' variant='body1' $isDarkMode={isDarkMode}>
                 {`${recipesSearched.length} recipe${recipesSearched.length === 1 ? '' : 's'} found`}
               </DrillyTypography>
             </div>
@@ -221,7 +221,8 @@ const RecipeAddMenu = styled(Menu)({
 
 const RecipeSearch = styled(DrillyTextField)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
   $isDarkMode && tw`text-gray-DADADA`,
+  $isDarkMode && tw`!bg-gray-4E4E4E`,
   !$isDarkMode && tw`text-gray-3A3A3A`,
-  tw`!bg-gray-D9D9D9`,
+  !$isDarkMode && tw`!bg-gray-D9D9D9`,
   tw`font-secondary`,
 ]);
