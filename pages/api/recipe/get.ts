@@ -2,6 +2,7 @@ import { NextApiResponse, NextApiRequest } from 'next';
 
 import conn from '../../../data/connection';
 import { Recipe, Users } from '../../../data/models';
+import { Recipe as RecipeType } from '../../../types';
 
 export default async function GET(req: NextApiRequest, res: NextApiResponse) {
   await conn();
@@ -17,7 +18,16 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
       { $match: { imageUrl: { $exists: true } } },
       { $sample: { size: 1 } },
     ]);
-    res.json(recipeRandom);
+    const recipeRandomAuthorId = recipeRandom[0].authorId;
+    const user = await Users.aggregate([{ $match: { userID: recipeRandomAuthorId } }]);
+    const userImageUrl = user[0].avatarURL;
+
+    const recipeWithAuthorImage = {
+      ...recipeRandom[0],
+      ...{ authorImageUrl: userImageUrl },
+    };
+
+    res.json(recipeWithAuthorImage);
   }
 
   if (hasRecipeId) {

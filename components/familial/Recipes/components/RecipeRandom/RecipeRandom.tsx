@@ -39,9 +39,19 @@ export default function RecipeRandom() {
               <DrillyTypography component='h2' tw='font-main text-3xl' $isDarkMode={isDarkMode}>
                 {recipeRandom?.title}
               </DrillyTypography>
-              <DrillyTypography component='p' tw='font-main text-xl' $isDarkMode={isDarkMode}>
-                by {recipeRandom?.author}
-              </DrillyTypography>
+              <div tw='flex gap-2'>
+                <DrillyTypography component='p' tw='font-main text-sm' $isDarkMode={isDarkMode}>
+                  added by {recipeRandom?.author}
+                </DrillyTypography>
+                <Image
+                  alt=''
+                  height={0}
+                  sizes='100vw'
+                  src={recipeRandom?.authorImageUrl ?? ''}
+                  tw='h-6 object-cover rounded-3xl w-6'
+                  width={0}
+                />
+              </div>
             </div>
             <div tw='flex flex-col gap-1'>
               <RecipeRandomMetadata recipeRandomKey='type' />
@@ -56,8 +66,7 @@ export default function RecipeRandom() {
                   setIsRandomRecipeLoading(true);
 
                   await fetch(`/api/recipe/get?isRandom=true`).then(async res => {
-                    const recipeRandomResponse = await res.json();
-                    const recipeRandom = recipeRandomResponse[0];
+                    const recipeRandom = await res.json();
 
                     dispatch({
                       type: GlobalReducerActionEnum.SET_RECIPE_RANDOM,
