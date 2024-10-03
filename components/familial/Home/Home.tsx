@@ -1,8 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
 import { Typography } from '@mui/material';
+import DiningTwoToneIcon from '@mui/icons-material/DiningTwoTone';
+import PhotoLibraryTwoToneIcon from '@mui/icons-material/PhotoLibraryTwoTone';
+
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -36,6 +40,14 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
           <Typography color={isDarkMode ? 'white' : 'inherit'} component='h1' variant='h4'>
             {`Welcome to your Drill Familial experience, ${user?.firstName} 🙂`}
           </Typography>
+          <div tw='flex flex-col gap-2'>
+            <HomeActionLink href='/photos' tw='w-fit' $isPrimary>
+              Go to photos <PhotoLibraryTwoToneIcon />
+            </HomeActionLink>
+            <HomeActionLink href='/recipes' tw='w-fit' $isSecondary>
+              Go to recipes <DiningTwoToneIcon />
+            </HomeActionLink>
+          </div>
         </HomeTitleColDiv>
         <HomeSlideshowColDiv>
           <Carousel
@@ -183,6 +195,25 @@ const HomeQuickSectionDiv = styled.div([
   tw`grid-cols-1`,
   tw`mt-9`,
   tw`md:mt-8`,
+]);
+
+const HomeActionLink = styled(Link)<{
+  $isPrimary?: boolean;
+  $isSecondary?: boolean;
+}>(({ $isPrimary = true, $isSecondary }) => [
+  $isPrimary && tw`bg-primary`,
+  $isPrimary && tw`border-primary`,
+  $isPrimary && tw`text-primary`,
+  $isSecondary && tw`bg-secondary`,
+  $isSecondary && tw`border-secondary`,
+  $isSecondary && tw`text-secondary`,
+  tw`bg-opacity-10`,
+  tw`border-[1px]`,
+  tw`min-w-[120px]`,
+  tw`px-2`,
+  tw`py-2`,
+  tw`rounded`,
+  tw`hover:bg-opacity-30`,
 ]);
 
 export { Home };
