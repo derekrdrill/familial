@@ -1,7 +1,7 @@
 import { NextApiResponse, NextApiRequest } from 'next';
 
 import conn from '../../../data/connection';
-import { Recipe } from '../../../data/models';
+import { Recipe, Users } from '../../../data/models';
 
 export default async function GET(req: NextApiRequest, res: NextApiResponse) {
   await conn();
@@ -22,7 +22,15 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
 
   if (hasRecipeId) {
     const recipe = await Recipe.findById(recipeId);
-    res.json(recipe);
+    const user = await Users.aggregate([{ $match: { userID: recipe.authorId } }]);
+    const userImageUrl = user[0].avatarURL;
+
+    const recipeWithAuthorImage = {
+      ...recipe._doc,
+      ...{ authorImageUrl: userImageUrl },
+    };
+
+    res.json(recipeWithAuthorImage);
   }
 
   if (hasSearchValue) {

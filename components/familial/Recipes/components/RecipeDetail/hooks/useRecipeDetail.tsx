@@ -33,8 +33,10 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   const [ingredientsRows, setIngredientsRows] = React.useState<RecipeAddFormIngredient[]>(
     RECIPE_INGREDIENTS_DEFAULTS,
   );
+  const [isRecipeDetailLoading, setIsRecipeDetailLoading] = React.useState<boolean>(false);
   const [newRecipeData, setNewRecipeData] = React.useState<Recipe>(RECIPE_FORM_DEFAULTS);
   const [recipeAuthor, setRecipeAuthor] = React.useState<string>();
+  const [recipeAuthorImageUrl, setRecipeAuthorImageUrl] = React.useState<string>();
   const [recipeImage, setRecipeImage] = React.useState<ImageListType>();
   const [recipeImageUrl, setRecipeImageUrl] = React.useState<string>();
   const [recipeName, setRecipeName] = React.useState<string>('');
@@ -86,6 +88,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
       setStepRows(recipe.steps);
       setRecipeName(recipe.title);
 
+      if (recipe.authorImageUrl) setRecipeAuthorImageUrl(recipe.authorImageUrl);
       if (recipe.imageUrl) setRecipeImageUrl(recipe.imageUrl);
       if (recipe.temperature) setTemperature(recipe.temperature);
       if (recipe.time) setCookTime(recipe.time);
@@ -186,7 +189,10 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     cookType,
     errors,
     ingredientsRows,
+    isRecipeDetailLoading,
     newRecipeData,
+    recipeAuthor,
+    recipeAuthorImageUrl,
     recipeImage,
     recipeImageUrl,
     recipeName,
@@ -198,7 +204,9 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     setCookbook,
     setErrors,
     setIngredientsRows,
+    setIsRecipeDetailLoading,
     setNewRecipeData,
+    setRecipeAuthor,
     setRecipeImage,
     setRecipeName,
     setStepRows,

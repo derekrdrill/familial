@@ -13,6 +13,8 @@ export type RecipeIngredientOrStep = RecipeIngredient | RecipeStep;
 export type Recipe = {
   _id?: string;
   author?: string;
+  authorId?: string;
+  authorImageUrl?: string;
   cookbook: string;
   imageUrl?: string;
   ingredients: RecipeIngredient[];
