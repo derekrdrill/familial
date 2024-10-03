@@ -79,19 +79,18 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
           fullWidth
           placeholder='Search for a recipe'
           onChange={async e => {
-            setIsRecipeSearchLoading(true);
+            if (!!e.target.value) {
+              setIsRecipeSearchLoading(true);
 
-            await fetch(`/api/recipe/get?searchValue=${e.target.value}`).then(async res => {
-              const recipesSearched = await res.json();
-
-              if (!!recipesSearched.length) {
+              await fetch(`/api/recipe/get?searchValue=${e.target.value}`).then(async res => {
+                const recipesSearched = await res.json();
                 setRecipesSearched(recipesSearched);
-              } else {
-                setRecipesSearched(undefined);
-              }
-            });
+              });
 
-            setIsRecipeSearchLoading(false);
+              setIsRecipeSearchLoading(false);
+            } else {
+              setRecipesSearched(undefined);
+            }
           }}
           InputProps={{
             startAdornment: <SearchIcon />,
@@ -101,7 +100,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         />
       </div>
       <div tw='lg:mx-12'>
-        {recipesSearched && (
+        {!!recipesSearched && (
           <div tw='gap-2 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             <div tw='col-span-full'>
               <DrillyTypography component='h2' variant='body1'>
@@ -112,6 +111,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
               <div tw='col-span-1'>
                 <RecipeCard
                   recipeAuthor={recipe.author ?? ''}
+                  recipeCardContainerStyles={tw`mb-16`}
                   recipeId={recipe._id}
                   recipeIngredients={getRecipeIngredientStringArray({
                     recipeIngredientData: recipe.ingredients,

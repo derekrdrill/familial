@@ -82,7 +82,13 @@ const RecipeCard = ({
   );
 };
 
-const RecipeCardHeaderTitleDiv = styled.div([tw`flex`, tw`gap-1`]);
+const RecipeCardHeaderTitleDiv = styled.div([
+  tw`flex`,
+  tw`flex-col`,
+  tw`gap-0`,
+  tw`lg:flex-row`,
+  tw`lg:gap-1`,
+]);
 const RecipeCardInfoColDiv = styled.div<{ hasRecipePhotoSrc?: boolean }>(
   ({ hasRecipePhotoSrc }) => [
     !hasRecipePhotoSrc && tw`col-span-3`,
@@ -114,17 +120,15 @@ const RecipeCardRootDiv = styled.div<{ $styles?: TwStyle }>(({ $styles }) => [
   $styles,
 ]);
 
-const RecipeCardBodyDiv = styled.div<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    !$isDarkMode && tw`bg-gray-D9D9D9`,
-    $isDarkMode && tw`bg-gray-696969`,
-    tw`gap-0`,
-    tw`grid`,
-    tw`grid-cols-3`,
-    tw`min-h-full`,
-    tw`rounded-b-lg`,
-  ],
-);
+const RecipeCardBodyDiv = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`bg-gray-D9D9D9`,
+  $isDarkMode && tw`bg-gray-696969`,
+  tw`gap-0`,
+  tw`grid`,
+  tw`grid-cols-3`,
+  tw`min-h-full`,
+  tw`rounded-b-lg`,
+]);
 
 const RecipeCardHeaderAddedBySpan = styled.span<{
   $isDarkMode?: boolean;
@@ -135,14 +139,15 @@ const RecipeCardHeaderAddedBySpan = styled.span<{
   tw`translate-y-1`,
 ]);
 
-const RecipeCardHeaderTitleH3 = styled.h3<{ $isDarkMode?: boolean }>(
-  ({ $isDarkMode }) => [
-    !$isDarkMode && tw`text-inherit`,
-    $isDarkMode && tw`text-white`,
-    tw`text-xl`,
-    tw`lg:text-base`,
-  ],
-);
+const RecipeCardHeaderTitleH3 = styled.h3<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`text-inherit`,
+  $isDarkMode && tw`text-white`,
+  tw`max-h-8`,
+  tw`text-ellipsis`,
+  tw`text-xl`,
+  tw`whitespace-nowrap`,
+  tw`lg:text-base`,
+]);
 
 const RecipeCardHeaderDiv = styled.div<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [
