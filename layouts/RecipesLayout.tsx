@@ -123,7 +123,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         />
       </div>
       <div tw='lg:mx-12'>
-        {!!recipesSearched && (
+        {!!recipesSearched && !!recipeSearchValue && (
           <div tw='gap-2 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             <div tw='col-span-full'>
               <DrillyTypography component='h2' variant='body1'>
@@ -149,7 +149,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
             ))}
           </div>
         )}
-        {!recipesSearched && (
+        {!recipesSearched && !recipeSearchValue && (
           <>
             <RecipeRandom />
             <div tw='my-24'>
