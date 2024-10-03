@@ -28,7 +28,11 @@ export const DrillyButton = styled.button<{
 ]);
 
 export const DrillyTypography = styled(Typography)<{ $isDarkMode?: boolean } & TypographyProps>(
-  ({ $isDarkMode }) => [$isDarkMode && tw`text-white`, tw`break-words`, tw`[word-wrap:break-word]`],
+  ({ $isDarkMode }) => [
+    $isDarkMode && tw`text-gray-DADADA`,
+    tw`break-words`,
+    tw`[word-wrap:break-word]`,
+  ],
 );
 
 export const DrillyTextField = styled(TextField)<{

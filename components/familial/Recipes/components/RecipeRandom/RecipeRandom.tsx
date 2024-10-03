@@ -22,7 +22,7 @@ export default function RecipeRandom() {
   const [isRandomRecipeLoading, setIsRandomRecipeLoading] = React.useState<boolean>(false);
 
   return (
-    <div tw='gap-2 grid grid-cols-1 mt-12 md:grid-cols-2 md:gap-24'>
+    <div tw='gap-4 grid grid-cols-1 mt-12 md:grid-cols-2 md:gap-8'>
       {isRandomRecipeLoading && <RecipeRandomShimmer />}
       {!isRandomRecipeLoading && (
         <>

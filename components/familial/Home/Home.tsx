@@ -34,7 +34,7 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
       <HomeTitleAndSlideshowDiv>
         <HomeTitleColDiv>
           <Typography color={isDarkMode ? 'white' : 'inherit'} component='h1' variant='h4'>
-            {`Welcome to your Drill Familial experience, ${user?.firstName} :)`}
+            {`Welcome to your Drill Familial experience, ${user?.firstName} 🙂`}
           </Typography>
         </HomeTitleColDiv>
         <HomeSlideshowColDiv>
@@ -173,17 +173,9 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
 };
 
 const HomeRoot = styled.div([tw`px-4 md:px-12`]);
-const HomeSlideshowColDiv = styled.div([
-  tw`col-span-5`,
-  tw`mt-6`,
-  tw`md:col-span-2`,
-]);
+const HomeSlideshowColDiv = styled.div([tw`col-span-5`, tw`mt-6`, tw`md:col-span-2`]);
 const HomeTitleAndSlideshowDiv = styled.div([tw`gap-3 grid grid-cols-5`]);
-const HomeTitleColDiv = styled.div([
-  tw`col-span-3 pt-20`,
-  tw`hidden`,
-  tw`md:block`,
-]);
+const HomeTitleColDiv = styled.div([tw`col-span-3`, tw`hidden`, tw`pt-20`, tw`md:block`]);
 
 const HomeQuickSectionDiv = styled.div([
   tw`gap-0`,
