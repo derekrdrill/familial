@@ -25,6 +25,7 @@ import {
 
 import { Cookbook } from '../../../../../types';
 import { DrillyButton, DrillyTypography } from '../../../../../styles/globals';
+import Image from 'next/image';
 
 type RecipeAddFormProps = {
   cookbooks: Cookbook[];
@@ -36,8 +37,6 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     state: { isDarkMode, photoList },
   } = React.useContext(GlobalContext);
 
-  const [isRecipeDetailLoading, setIsRecipeDetailLoading] = React.useState<boolean>(false);
-
   const hasRecipeId = !!recipeId;
 
   const {
@@ -46,7 +45,9 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     cookType,
     errors,
     ingredientsRows,
-    newRecipeData,
+    isRecipeDetailLoading,
+    recipeAuthor,
+    recipeAuthorImageUrl,
     recipeImageUrl,
     recipeName,
     stepRows,
@@ -59,6 +60,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     setCookType,
     setCookbook,
     setIngredientsRows,
+    setIsRecipeDetailLoading,
     setRecipeImage,
     setRecipeName,
     setStepRows,
@@ -98,15 +100,37 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
               </RecipeDetailPrintButton>
             )}
           </RecipeDetailActionButtonsContainer>
-          <RecipeDetailsContainer tw='col-span-full' $isEditingOrAddingRecipe={!hasRecipeId}>
+          <RecipeDetailsContainer
+            tw='col-span-full grid grid-cols-12'
+            $isEditingOrAddingRecipe={!hasRecipeId}
+          >
             <RecipeDetailTypography
-              tw='font-bold font-main text-3xl'
+              tw='col-span-full font-main text-3xl'
               variant='h1'
-              $isCentered={!!recipeId}
+              $isCentered={false}
               $isDarkMode={isDarkMode}
             >
               {hasRecipeId ? recipeName : 'New recipe'}
             </RecipeDetailTypography>
+            <div tw='col-span-full flex gap-2'>
+              <RecipeDetailTypography
+                tw='col-span-full'
+                $isCentered={false}
+                $isDarkMode={isDarkMode}
+              >
+                added by {recipeAuthor}
+              </RecipeDetailTypography>
+              {recipeAuthorImageUrl && (
+                <Image
+                  alt=''
+                  height={0}
+                  src={recipeAuthorImageUrl ?? ''}
+                  width={0}
+                  sizes='100vw'
+                  tw='rounded-3xl h-6 object-cover w-6'
+                />
+              )}
+            </div>
           </RecipeDetailsContainer>
           <RecipeDetailsContainer
             tw='col-span-full gap-2 grid'

@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 export const RecipeSchema = new mongoose.Schema({
   author: String,
+  authorId: String,
   cookbook: String,
   ingredients: [
     {
