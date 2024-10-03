@@ -1,4 +1,4 @@
-import { RecipeAddForm } from './components/RecipeAddForm/RecipeAddForm';
 import { RecipeCard } from './components/RecipeCard';
+import { RecipeDetail } from './components/RecipeDetail/RecipeDetail';
 
-export { RecipeAddForm, RecipeCard };
+export { RecipeCard, RecipeDetail };

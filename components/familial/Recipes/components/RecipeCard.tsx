@@ -5,21 +5,24 @@ import { IconButton } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
 import GlobalContext from '../../../../context/GlobalContext';
+import { useRouter } from 'next/router';
 
 type RecipeCardType = {
   recipeAuthor: string;
   recipeCardContainerStyles?: TwStyle;
+  recipeId?: string;
   recipeIngredients: string;
   recipePhotoSrc?: string;
   recipeSteps: string;
-  recipeTemp: string;
-  recipeTime: string;
+  recipeTemp?: string;
+  recipeTime?: string;
   recipeTitle: string;
 };
 
 const RecipeCard = ({
   recipeAuthor,
   recipeCardContainerStyles,
+  recipeId,
   recipeIngredients,
   recipePhotoSrc,
   recipeSteps,
@@ -27,12 +30,16 @@ const RecipeCard = ({
   recipeTime,
   recipeTitle,
 }: RecipeCardType) => {
+  const router = useRouter();
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
   return (
-    <RecipeCardRootDiv $styles={recipeCardContainerStyles}>
+    <RecipeCardRootDiv
+      onClick={() => router.push(`/recipes/${recipeId}`)}
+      $styles={recipeCardContainerStyles}
+    >
       <RecipeCardHeaderDiv $isDarkMode={isDarkMode}>
         <RecipeCardHeaderTitleDiv>
           <RecipeCardHeaderTitleH3 $isDarkMode={isDarkMode}>{recipeTitle}</RecipeCardHeaderTitleH3>
@@ -45,7 +52,7 @@ const RecipeCard = ({
         </IconButton>
       </RecipeCardHeaderDiv>
       <RecipeCardBodyDiv $isDarkMode={isDarkMode}>
-        <RecipeCardInfoColDiv>
+        <RecipeCardInfoColDiv hasRecipePhotoSrc={!!recipePhotoSrc}>
           <RecipeCardInfoRootDiv>
             <RecipeCardInfoParagraph>
               <RecipeCardInfoSubtitle>Temp: </RecipeCardInfoSubtitle>
@@ -67,7 +74,7 @@ const RecipeCard = ({
         </RecipeCardInfoColDiv>
         {recipePhotoSrc && (
           <RecipeCardImageDiv>
-            <RecipeCardImage alt='recipe-image' src='/dinner2.webp' />
+            <RecipeCardImage alt='recipe-image' src={recipePhotoSrc} />
           </RecipeCardImageDiv>
         )}
       </RecipeCardBodyDiv>
@@ -102,6 +109,8 @@ const RecipeCardRootDiv = styled.div<{ $styles?: TwStyle }>(({ $styles }) => [
   tw`h-60`,
   tw`rounded-xl`,
   tw`md:h-48`,
+  tw`hover:cursor-pointer`,
+  tw`hover:opacity-90`,
   $styles,
 ]);
 

@@ -5,6 +5,7 @@ import {
   ModalItem,
   PhotoUploadData,
   Photos,
+  Recipe,
   SelectedPhotoAlbum,
   User,
 } from '../types';
@@ -20,6 +21,7 @@ export type GlobalStateType = {
   photoUploadData?: PhotoUploadData[];
   photos?: Photos[];
   photosView?: 'grid' | 'list';
+  recipeRandom?: Recipe;
   selectedPhotoAlbum?: SelectedPhotoAlbum;
   selectedPhoto?: {
     _id?: string;
@@ -53,6 +55,7 @@ const GlobalState: GlobalStateType = {
   photosView: 'grid',
   photos: undefined,
   photoUploadData: [],
+  recipeRandom: undefined,
   selectedPhotoAlbum: undefined,
   selectedPhoto: undefined,
   user: undefined,

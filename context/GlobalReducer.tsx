@@ -10,6 +10,7 @@ export enum GlobalReducerActionEnum {
   SET_PHOTOS_VIEW = 'SET_PHOTOS_VIEW',
   SET_PHOTO_LIST = 'SET_PHOTO_LIST',
   SET_PHOTO_UPLOAD_DATA = 'SET_PHOTO_UPLOAD_DATA',
+  SET_RECIPE_RANDOM = 'SET_RECIPE_RANDOM',
   SET_SELECTED_PHOTO_ALBUM = 'SET_SELECTED_PHOTO_ALBUM',
   SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO',
   SET_USER = 'SET_USER',
@@ -33,6 +34,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       photos,
       photosView,
       photoUploadData,
+      recipeRandom,
       selectedPhotoAlbum,
       selectedPhoto,
       user,
@@ -90,6 +92,11 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         photoUploadData: photoUploadData,
+      };
+    case GlobalReducerActionEnum.SET_RECIPE_RANDOM:
+      return {
+        ...state,
+        recipeRandom: recipeRandom,
       };
     case GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM:
       return {

@@ -4,14 +4,18 @@ import { Cookbook as CookbookData } from '../../../data/models';
 
 import { RecipeDetail } from '../../../components/familial/Recipes';
 import { Cookbook } from '../../../types';
+import { useRouter } from 'next/router';
 
 type AddNewRecipeIndexProps = { cookbooks: Cookbook[] };
 
-const AddNewRecipeIndex = ({ cookbooks }: AddNewRecipeIndexProps) => {
-  return <RecipeDetail cookbooks={cookbooks} />;
+const RecipeIndex = ({ cookbooks }: AddNewRecipeIndexProps) => {
+  const router = useRouter();
+  const recipeId = router.query.recipeId as string;
+
+  return <RecipeDetail cookbooks={cookbooks} recipeId={recipeId} />;
 };
 
-export default AddNewRecipeIndex;
+export default RecipeIndex;
 
 export const getServerSideProps = async () => {
   try {
