@@ -1,9 +1,8 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
 
-import { InputLabel, TextField } from '@mui/material';
-import { DrillyTypography } from '../../../styles/globals';
+import { InputLabel } from '@mui/material';
+import { DrillyTextField, DrillyTypography } from '../../../styles/globals';
 import GlobalContext from '../../../context/GlobalContext';
 
 type TextInputProps = {
@@ -40,7 +39,7 @@ export const TextInput = ({
       <InputLabel htmlFor={textInputId}>
         <DrillyTypography $isDarkMode={isDarkMode}>{textInputLabel}</DrillyTypography>
       </InputLabel>
-      <TextInputRoot
+      <DrillyTextField
         id={textInputId}
         defaultValue={textInputDefaultValue}
         fullWidth
@@ -58,41 +57,3 @@ export const TextInput = ({
     </>
   );
 };
-
-export const TextInputRoot = styled(TextField)<{
-  $bgColor?: TwStyle;
-  $bgColorDark?: TwStyle;
-  $hasBorder?: boolean;
-  $hasError?: boolean;
-  $isDarkMode?: boolean;
-  $isRounded?: boolean;
-}>(({ $bgColor, $bgColorDark, $hasBorder = true, $hasError, $isDarkMode, $isRounded }) => [
-  tw`rounded-lg`,
-  {
-    '.MuiFormLabel-root': [$isDarkMode && tw`text-white`],
-    '.MuiInputBase-root': [
-      $bgColor && $bgColor,
-      $bgColorDark && $isDarkMode && $bgColorDark,
-      $isDarkMode && tw`text-white`,
-      $hasError && tw`border border-error`,
-      {
-        svg: [$isDarkMode && tw`text-white`],
-      },
-    ],
-    '.MuiOutlinedInput-root': {
-      fieldset: [
-        $hasBorder && [
-          $isRounded ? tw`rounded-3xl` : tw`rounded-lg`,
-          {
-            border: `1px lightgrey ${$isDarkMode ? '!important' : ''}`,
-          },
-        ],
-      ],
-      input: {
-        '::placeholder': {
-          color: $isDarkMode ? 'white' : 'inherit',
-        },
-      },
-    },
-  },
-]);

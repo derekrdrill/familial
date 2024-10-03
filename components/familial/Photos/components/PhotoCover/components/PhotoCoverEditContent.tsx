@@ -72,6 +72,7 @@ export const PhotoCoverEditContent = ({
       {editingModalPage === 'title' && (
         <TextInput
           setTextInputValue={setEditAlbmNameValue}
+          textInputBGColorDark={tw`bg-gray-696969`}
           textInputId='album'
           textInputLabel='Update the title'
           textInputSize='small'
