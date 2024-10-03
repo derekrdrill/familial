@@ -32,7 +32,7 @@ const RecipeSearchResults = ({
   } = React.useContext(GlobalContext);
 
   return (
-    <div tw='gap-2 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+    <div tw='gap-6 grid grid-cols-1 mt-8 sm:grid-cols-2 lg:gap-4 lg:grid-cols-3 xl:grid-cols-4'>
       {isRecipeSearchLoading && (
         <div tw='flex flex-col gap-4'>
           <Shimmer height={20} width={120} />
