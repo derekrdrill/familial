@@ -3,9 +3,12 @@ import RecipesLayout from '../../layouts/RecipesLayout';
 
 import conn from '../../data/connection';
 import { Cookbook } from '../../types';
-import { Cookbook as CookbookData } from '../../data/models';
+import {
+  Cookbook as CookbookData,
+  Recipe as RecipeData,
+  Users as UserData,
+} from '../../data/models';
 import { Recipe } from '../../types';
-import { Recipe as RecipeData } from '../../data/models';
 
 type RecipesIndexProps = {
   cookbook: Cookbook[];
@@ -27,10 +30,18 @@ export const getServerSideProps = async () => {
       { $sample: { size: 1 } },
     ]);
 
+    const user = await UserData.aggregate([{ $match: { userID: recipeRandom[0].authorId } }]);
+    const userImageUrl = user[0].avatarURL;
+
+    const recipeWithAuthorImage = {
+      ...recipeRandom[0],
+      ...{ authorImageUrl: userImageUrl },
+    };
+
     return {
       props: {
         cookbook: JSON.parse(JSON.stringify(cookbook)),
-        recipeRandom: JSON.parse(JSON.stringify(recipeRandom[0])),
+        recipeRandom: JSON.parse(JSON.stringify(recipeWithAuthorImage)),
         recipes: JSON.parse(JSON.stringify(recipes)),
       },
     };
