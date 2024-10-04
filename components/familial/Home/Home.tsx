@@ -18,14 +18,16 @@ import Carousel from '../../common/Carousel/Carousel';
 import { PhotoQuick } from '../Photos';
 import { RecipeCard } from '../Recipes';
 
-import { Photos } from '../../../types';
+import { Photos, Recipe } from '../../../types';
+import { getRecipeIngredientStringArray, getRecipeStepsStringArray } from '../Recipes/helpers';
 
 type HomeProps = {
   photosAllRandomized: Photos[];
   photosQuick: Photos[];
+  recipesQuick: Recipe[];
 };
 
-const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
+const Home = ({ photosAllRandomized, photosQuick, recipesQuick }: HomeProps) => {
   const theme = useTheme();
   const isSM = useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -105,78 +107,27 @@ const Home = ({ photosAllRandomized, photosQuick }: HomeProps) => {
         <div tw='col-span-1 flex justify-center'>
           <Carousel
             carouselHeight={isSM ? 240 : 300}
-            carouselContent={[
-              {
-                id: '1',
-                component: (
-                  <RecipeCard
-                    recipeAuthor='Derek'
-                    recipeCardContainerStyles={tw`w-96 md:w-80`}
-                    recipeIngredients='1 whole chicken, 12 yukon gold potatoes, 1 bundle of parsley, 2 wh...'
-                    recipeSteps='1) cut onions into medium pieces, 2) create bed of potatoes & onions in dutch oven, 3) place whole ch...'
-                    recipeTemp='425° F'
-                    recipeTime='40 minutes'
-                    recipeTitle='Chicken dinner'
-                  />
-                ),
-              },
-              {
-                id: '2',
-                component: (
-                  <RecipeCard
-                    recipeAuthor='Derek'
-                    recipeCardContainerStyles={tw`w-96 md:w-80`}
-                    recipeIngredients='1 whole chicken, 12 yukon gold potatoes, 1 bundle of parsley, 2 wh...'
-                    recipeSteps='1) cut onions into medium pieces, 2) create bed of potatoes & onions in dutch oven, 3) place whole ch...'
-                    recipeTemp='425° F'
-                    recipeTime='40 minutes'
-                    recipeTitle='Chicken dinner'
-                  />
-                ),
-              },
-              {
-                id: '3',
-                component: (
-                  <RecipeCard
-                    recipeAuthor='Derek'
-                    recipeCardContainerStyles={tw`w-96 md:w-80`}
-                    recipeIngredients='1 whole chicken, 12 yukon gold potatoes, 1 bundle of parsley, 2 wh...'
-                    recipeSteps='1) cut onions into medium pieces, 2) create bed of potatoes & onions in dutch oven, 3) place whole ch...'
-                    recipeTemp='425° F'
-                    recipeTime='40 minutes'
-                    recipeTitle='Chicken dinner'
-                  />
-                ),
-              },
-              {
-                id: '4',
-                component: (
-                  <RecipeCard
-                    recipeAuthor='Derek'
-                    recipeCardContainerStyles={tw`w-96 md:w-80`}
-                    recipeIngredients='1 whole chicken, 12 yukon gold potatoes, 1 bundle of parsley, 2 wh...'
-                    recipeSteps='1) cut onions into medium pieces, 2) create bed of potatoes & onions in dutch oven, 3) place whole ch...'
-                    recipeTemp='425° F'
-                    recipeTime='40 minutes'
-                    recipeTitle='Chicken dinner'
-                  />
-                ),
-              },
-              {
-                id: '5',
-                component: (
-                  <RecipeCard
-                    recipeAuthor='Derek'
-                    recipeCardContainerStyles={tw`w-96 md:w-80`}
-                    recipeIngredients='1 whole chicken, 12 yukon gold potatoes, 1 bundle of parsley, 2 wh...'
-                    recipeSteps='1) cut onions into medium pieces, 2) create bed of potatoes & onions in dutch oven, 3) place whole ch...'
-                    recipeTemp='425° F'
-                    recipeTime='40 minutes'
-                    recipeTitle='Chicken dinner'
-                  />
-                ),
-              },
-            ]}
+            carouselContent={recipesQuick.map(recipe => ({
+              id: recipe._id ?? '',
+              component: (
+                <RecipeCard
+                  recipeAuthor={recipe.author ?? ''}
+                  recipeCardContainerStyles={tw`w-96 md:w-80`}
+                  recipeCookbook={recipe.cookbook}
+                  recipeIngredients={getRecipeIngredientStringArray({
+                    recipeIngredientData: recipe.ingredients,
+                  }).join(', ')}
+                  recipeId={recipe._id}
+                  recipePhotoSrc={recipe.imageUrl}
+                  recipeSteps={getRecipeStepsStringArray({
+                    recipeSteps: recipe.steps,
+                  }).join(', ')}
+                  recipeTitle={recipe.title}
+                  recipeTemp={recipe.temperature}
+                  recipeTime={recipe.time}
+                />
+              ),
+            }))}
           />
         </div>
       </HomeQuickSectionDiv>

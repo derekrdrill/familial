@@ -3,7 +3,7 @@ import { ImageListType } from 'react-images-uploading';
 import { useRouter } from 'next/router';
 
 import GlobalContext from '../../../../../../context/GlobalContext';
-import { Cookbook, Recipe } from '../../../../../../types';
+import { Cookbook, FormError, Recipe } from '../../../../../../types';
 import { RecipeAddFormIngredient, RecipeAddFormStep } from '../types';
 
 import {
@@ -29,8 +29,8 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   const [cookbook, setCookbook] = React.useState<string>('Select a cookbook...');
   const [cookType, setCookType] = React.useState<string>('Select cook type...');
   const [cookTime, setCookTime] = React.useState<string>('');
-  const [errors, setErrors] = React.useState<{ id: string; error: string }[]>([]);
-  const [ingredientsRows, setIngredientsRows] = React.useState<RecipeAddFormIngredient[]>(
+  const [errors, setErrors] = React.useState<FormError[]>([]);
+  const [ingredients, setIngredients] = React.useState<RecipeAddFormIngredient[]>(
     RECIPE_INGREDIENTS_DEFAULTS,
   );
   const [isRecipeDetailLoading, setIsRecipeDetailLoading] = React.useState<boolean>(false);
@@ -40,7 +40,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   const [recipeImage, setRecipeImage] = React.useState<ImageListType>();
   const [recipeImageUrl, setRecipeImageUrl] = React.useState<string>();
   const [recipeName, setRecipeName] = React.useState<string>('');
-  const [stepRows, setStepRows] = React.useState<RecipeAddFormStep[]>(RECIPE_STEPS_DEFAULTS);
+  const [steps, setStepRows] = React.useState<RecipeAddFormStep[]>(RECIPE_STEPS_DEFAULTS);
   const [temperature, setTemperature] = React.useState('');
 
   const handleAddRowClick = ({
@@ -75,7 +75,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
 
       setRecipeAuthor(recipe.author);
       setCookbook(recipe.cookbook);
-      setIngredientsRows(
+      setIngredients(
         (recipe.ingredients as RecipeIngredient[]).map(ingredient => ({
           ...ingredient,
           ...{
@@ -111,7 +111,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   }) => {
     let newRows = [...rows];
     newRows[rowKeyToChange][rowField] = rowFieldValue;
-    setRows(rows);
+    setRows(newRows);
   };
 
   const handleSubmit = async () => {
@@ -167,8 +167,8 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
         ...{
           author: recipeAuthor ?? user?.firstName,
           cookbook: cookbook,
-          ingredients: ingredientsRows,
-          steps: stepRows,
+          ingredients: ingredients,
+          steps: steps,
           temperature: temperature,
           time: cookTime,
           title: recipeName,
@@ -176,7 +176,13 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
         },
       });
     }
-  }, [cookbook, cookTime, cookType, ingredientsRows, recipeName, stepRows, temperature]);
+  }, [cookbook, cookTime, cookType, ingredients, recipeName, steps, temperature]);
+
+  React.useEffect(() => {
+    if (!!errors.length) {
+      setErrors(getRecipeFormErrors({ newRecipeData }));
+    }
+  }, [newRecipeData]);
 
   return {
     handleAddRowClick,
@@ -188,7 +194,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     cookTime,
     cookType,
     errors,
-    ingredientsRows,
+    ingredients,
     isRecipeDetailLoading,
     newRecipeData,
     recipeAuthor,
@@ -196,14 +202,14 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     recipeImage,
     recipeImageUrl,
     recipeName,
-    stepRows,
+    steps,
     temperature,
     setAllCookbooks,
     setCookTime,
     setCookType,
     setCookbook,
     setErrors,
-    setIngredientsRows,
+    setIngredients,
     setIsRecipeDetailLoading,
     setNewRecipeData,
     setRecipeAuthor,

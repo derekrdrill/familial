@@ -21,7 +21,7 @@ type RecipeAddFormDeleteClick = ({
 type RecipeAddFormIngredient = {
   ingredient: string;
   ingredientMeasurement: string;
-  ingredientQuantity: number;
+  ingredientQuantity: string;
 };
 
 type RecipeAddFormRowChange = ({

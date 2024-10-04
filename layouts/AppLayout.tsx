@@ -103,7 +103,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
       <GlobalStyles
         styles={{
           body: {
-            backgroundColor: isDarkMode ? 'black' : ' inherit',
+            backgroundColor: isDarkMode ? '#282c34' : ' inherit',
             height: isSidebarOpen || isUserSidebarOpen || isRouteChangeLoading ? '100vh' : '100%',
             overflowY:
               isSidebarOpen || isUserSidebarOpen || isRouteChangeLoading ? 'hidden' : 'auto',

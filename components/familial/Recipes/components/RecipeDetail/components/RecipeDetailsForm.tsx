@@ -6,14 +6,14 @@ import GlobalContext from '../../../../../../context/GlobalContext';
 import { DrillyTextField, DrillyTypography } from '../../../../../../styles/globals';
 
 import { COOK_TYPES } from '../constants';
-import { Cookbook } from '../../../../../../types';
+import { Cookbook, FormError, Recipe } from '../../../../../../types';
 
 type RecipeDetailsFormProps = {
   allCookbooks: Cookbook[];
   cookbook: string;
   cookTime: string;
   cookType: string;
-  errors: { id: string; error: string }[];
+  errors: FormError[];
   recipeName: string;
   setCookbook: React.Dispatch<React.SetStateAction<string>>;
   setCookTime: React.Dispatch<React.SetStateAction<string>>;
@@ -41,12 +41,24 @@ const RecipeDetailsForm = ({
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
+  const recipeNameError = errors.find(error => error.id === 'title')?.error;
+  const recipeCookbookError = errors.find(error => error.id === 'cookbook')?.error;
+  const recipeCookTimeError = errors.find(error => error.id === 'time')?.error;
+  const hasRecipeNameError = !!recipeNameError;
+  const hasRecipeCookbookError = !!recipeCookbookError;
+  const hasRecipeCookTimeError = !!recipeCookTimeError;
+
   return (
     <>
       <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-3'>
         <div>
           <InputLabel htmlFor='recipeName'>
-            <DrillyTypography $isDarkMode={isDarkMode}>Recipe name *</DrillyTypography>
+            <DrillyTypography
+              $isDarkMode={isDarkMode}
+              $textColor={hasRecipeNameError ? tw`text-error` : undefined}
+            >
+              Recipe name *
+            </DrillyTypography>
           </InputLabel>
           <DrillyTextField
             id='recipeName'
@@ -57,9 +69,14 @@ const RecipeDetailsForm = ({
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
             $hasBorder={false}
-            $hasError={!!errors.find(error => error.id === 'title')}
+            $hasError={hasRecipeNameError}
             $isDarkMode={isDarkMode}
           />
+          {hasRecipeNameError && (
+            <DrillyTypography component='p' variant='caption' $textColor={tw`text-error`}>
+              {recipeNameError}
+            </DrillyTypography>
+          )}
         </div>
         <div>
           <InputLabel htmlFor='cookType'>
@@ -85,28 +102,44 @@ const RecipeDetailsForm = ({
         </div>
         <div>
           <InputLabel htmlFor='cookbook'>
-            <DrillyTypography $isDarkMode={isDarkMode}>Cookbook</DrillyTypography>
+            <DrillyTypography
+              $isDarkMode={isDarkMode}
+              $textColor={hasRecipeCookbookError ? tw`text-error` : undefined}
+            >
+              Cookbook *
+            </DrillyTypography>
           </InputLabel>
           <DrillyTextField
             id='cookbook'
             fullWidth
-            onChange={e => setCookbook(e.target.value)}
             select
             value={cookbook}
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
             $hasBorder={false}
-            $hasError={!!errors.find(error => error.id === 'cookbook')}
+            $hasError={hasRecipeCookbookError}
             $isDarkMode={isDarkMode}
           >
             {[...[{ _id: 'select', title: 'Select a cookbook...' }], ...allCookbooks]?.map(
               cookbook => (
-                <MenuItem key={cookbook._id} id={cookbook.title} value={cookbook.title}>
+                <MenuItem
+                  key={cookbook._id}
+                  id={cookbook.title}
+                  onClick={() => {
+                    setCookbook(cookbook.title);
+                  }}
+                  value={cookbook.title}
+                >
                   {cookbook.title}
                 </MenuItem>
               ),
             )}
           </DrillyTextField>
+          {hasRecipeCookbookError && (
+            <DrillyTypography component='p' variant='caption' $textColor={tw`text-error`}>
+              {recipeCookbookError}
+            </DrillyTypography>
+          )}
         </div>
       </div>
       <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-3'>
@@ -128,7 +161,12 @@ const RecipeDetailsForm = ({
         </div>
         <div>
           <InputLabel htmlFor='cookTime'>
-            <DrillyTypography $isDarkMode={isDarkMode}>Cook time</DrillyTypography>
+            <DrillyTypography
+              $isDarkMode={isDarkMode}
+              $textColor={hasRecipeCookTimeError ? tw`text-error` : undefined}
+            >
+              Cook time *
+            </DrillyTypography>
           </InputLabel>
           <DrillyTextField
             id='cookTime'
@@ -139,9 +177,14 @@ const RecipeDetailsForm = ({
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
             $hasBorder={false}
-            $hasError={!!errors.find(error => error.id === 'time')}
+            $hasError={hasRecipeCookTimeError}
             $isDarkMode={isDarkMode}
           />
+          {hasRecipeCookTimeError && (
+            <DrillyTypography component='p' variant='caption' $textColor={tw`text-error`}>
+              {recipeCookTimeError}
+            </DrillyTypography>
+          )}
         </div>
       </div>
     </>

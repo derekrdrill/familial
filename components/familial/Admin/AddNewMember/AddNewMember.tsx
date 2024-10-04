@@ -3,6 +3,7 @@ import React from 'react';
 import GlobalContext from '../../../../context/GlobalContext';
 import { TextInput } from '../../../common/TextInput/TextInput';
 import { DrillyTypography } from '../../../../styles/globals';
+import { FormError } from '../../../../types';
 
 type AddNewMemberProps = {};
 
@@ -23,21 +24,21 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
         console.log(error);
       }
     } else {
-      let errors: { id: string; error: string }[] = [];
+      let errors: FormError[] = [];
 
-      if (!firstName ?? firstName === '') {
+      if (!firstName || firstName === '') {
         errors = [...errors, ...[{ id: 'firstName', error: 'Please enter a first name' }]];
       }
 
-      if (!lastName ?? lastName === '') {
+      if (!lastName || lastName === '') {
         errors = [...errors, ...[{ id: 'lastName', error: 'Please enter a last name' }]];
       }
 
-      if (!phoneNumber ?? phoneNumber === '') {
+      if (!phoneNumber || phoneNumber === '') {
         errors = [...errors, ...[{ id: 'phoneNumber', error: 'Please enter a phone number' }]];
       }
 
-      if (!emailAddress ?? emailAddress === '') {
+      if (!emailAddress || emailAddress === '') {
         errors = [...errors, ...[{ id: 'emailAddress', error: 'Please enter an email address' }]];
       }
 
@@ -53,7 +54,7 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
   const [phoneNumber, setPhoneNumber] = React.useState<string | undefined>('');
   const [firstName, setFirstName] = React.useState<string | undefined>('');
   const [lastName, setLastName] = React.useState<string | undefined>('');
-  const [errors, setErrors] = React.useState<{ id: string; error: string }[]>([]);
+  const [errors, setErrors] = React.useState<FormError[]>([]);
 
   return (
     <div tw='grid gap-4 mx-8 md:mx-32 lg:mx-64 xl:mx-96 mt-16 w-full'>

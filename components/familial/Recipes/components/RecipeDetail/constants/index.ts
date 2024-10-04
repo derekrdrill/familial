@@ -45,7 +45,7 @@ const RECIPE_INGREDIENTS_DEFAULTS = [
   {
     ingredient: '',
     ingredientMeasurement: 'Select measurement type...',
-    ingredientQuantity: 0,
+    ingredientQuantity: '',
   },
 ];
 
@@ -59,11 +59,13 @@ const REQUIRED_FIELDS = [
   { id: 'cookbook', isSelect: true, title: 'cookbook' },
   { id: 'time', title: 'cook time' },
   {
+    fields: ['ingredient', 'ingredientQuantity'],
     id: 'ingredients',
     isMulti: true,
     title: 'ingredient',
   },
   {
+    fields: ['step'],
     id: 'steps',
     isMulti: true,
     title: 'step',

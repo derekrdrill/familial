@@ -146,6 +146,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
                       <RecipeCard
                         recipeAuthor={recipe.author ?? ''}
                         recipeCardContainerStyles={tw`w-96 md:w-80`}
+                        recipeCookbook={recipe.cookbook}
                         recipeId={recipe._id}
                         recipeIngredients={getRecipeIngredientStringArray({
                           recipeIngredientData: recipe.ingredients,

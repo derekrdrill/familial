@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 type RecipeCardType = {
   recipeAuthor: string;
   recipeCardContainerStyles?: TwStyle;
+  recipeCookbook: string;
   recipeId?: string;
   recipeIngredients: string;
   recipePhotoSrc?: string;
@@ -22,6 +23,7 @@ type RecipeCardType = {
 const RecipeCard = ({
   recipeAuthor,
   recipeCardContainerStyles,
+  recipeCookbook,
   recipeId,
   recipeIngredients,
   recipePhotoSrc,
@@ -54,22 +56,36 @@ const RecipeCard = ({
       <RecipeCardBodyDiv $isDarkMode={isDarkMode}>
         <RecipeCardInfoColDiv hasRecipePhotoSrc={!!recipePhotoSrc}>
           <RecipeCardInfoRootDiv>
-            <RecipeCardInfoParagraph>
-              <RecipeCardInfoSubtitle>Temp: </RecipeCardInfoSubtitle>
-              {recipeTemp}
-            </RecipeCardInfoParagraph>
-            <RecipeCardInfoParagraph>
-              <RecipeCardInfoSubtitle>Time to cook: </RecipeCardInfoSubtitle>
-              {recipeTime}
-            </RecipeCardInfoParagraph>
-            <RecipeCardInfoParagraph tw='max-h-12 overflow-hidden text-ellipsis whitespace-nowrap'>
-              <RecipeCardInfoSubtitle>Ingredients: </RecipeCardInfoSubtitle>
-              <span>{recipeIngredients}</span>
-            </RecipeCardInfoParagraph>
-            <RecipeCardInfoParagraph tw='max-h-12 overflow-hidden text-ellipsis whitespace-nowrap'>
-              <RecipeCardInfoSubtitle>Steps: </RecipeCardInfoSubtitle>
-              {recipeSteps}
-            </RecipeCardInfoParagraph>
+            {recipeCookbook && (
+              <RecipeCardInfoParagraph>
+                <RecipeCardInfoSubtitle>Cookbook: </RecipeCardInfoSubtitle>
+                {recipeCookbook}
+              </RecipeCardInfoParagraph>
+            )}
+            {recipeTemp && (
+              <RecipeCardInfoParagraph>
+                <RecipeCardInfoSubtitle>Temp: </RecipeCardInfoSubtitle>
+                {recipeTemp}
+              </RecipeCardInfoParagraph>
+            )}
+            {recipeTime && (
+              <RecipeCardInfoParagraph>
+                <RecipeCardInfoSubtitle>Time to cook: </RecipeCardInfoSubtitle>
+                {recipeTime}
+              </RecipeCardInfoParagraph>
+            )}
+            {recipeIngredients && (
+              <RecipeCardInfoParagraph tw='max-h-12 overflow-hidden text-ellipsis whitespace-nowrap'>
+                <RecipeCardInfoSubtitle>Ingredients: </RecipeCardInfoSubtitle>
+                <span>{recipeIngredients}</span>
+              </RecipeCardInfoParagraph>
+            )}
+            {recipeSteps && (
+              <RecipeCardInfoParagraph tw='max-h-12 overflow-hidden text-ellipsis whitespace-nowrap'>
+                <RecipeCardInfoSubtitle>Steps: </RecipeCardInfoSubtitle>
+                {recipeSteps}
+              </RecipeCardInfoParagraph>
+            )}
           </RecipeCardInfoRootDiv>
         </RecipeCardInfoColDiv>
         {recipePhotoSrc && (

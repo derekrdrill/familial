@@ -13,14 +13,15 @@ import {
   RecipeAddFormRowChange,
   RecipeAddFormIngredient,
 } from '../types';
+import { FormError, Recipe } from '../../../../../../types';
 
 type RecipeIngredientsFormProps = {
-  errors: { id: string; error: string }[];
+  errors: FormError[];
   handleAddRowClick: RecipeAddFormAddClick;
   handleDeleteRowClick: RecipeAddFormDeleteClick;
   handleRowChange: RecipeAddFormRowChange;
-  ingredientsRows: RecipeAddFormIngredient[];
-  setIngredientsRows: React.Dispatch<React.SetStateAction<RecipeAddFormIngredient[]>>;
+  ingredients: RecipeAddFormIngredient[];
+  setIngredients: React.Dispatch<React.SetStateAction<RecipeAddFormIngredient[]>>;
 };
 
 const RecipeIngredientsForm = ({
@@ -28,142 +29,170 @@ const RecipeIngredientsForm = ({
   handleAddRowClick,
   handleDeleteRowClick,
   handleRowChange,
-  ingredientsRows,
-  setIngredientsRows,
+  ingredients,
+  setIngredients,
 }: RecipeIngredientsFormProps) => {
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
+  const ingredientRowsErrorData = errors.find(error => error.id === 'ingredients');
+  const ingredientRowsError = ingredientRowsErrorData?.error;
+  const hasIngredientRowsError = !!ingredientRowsError;
+
   return (
-    <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
-      {ingredientsRows.map((ingredientRow, ingredientRowKey) => (
-        <React.Fragment key={ingredientRowKey}>
-          <div tw='col-span-full lg:col-span-2'>
-            <InputLabel htmlFor={`quantity-${ingredientRowKey}`}>
-              <DrillyTypography $isDarkMode={isDarkMode}>Quantity</DrillyTypography>
-            </InputLabel>
-            <DrillyTextField
-              id={`quantity-${ingredientRowKey}`}
-              fullWidth
-              onChange={e =>
-                handleRowChange({
-                  rowKeyToChange: ingredientRowKey,
-                  rowField: 'ingredientQuantity',
-                  rowFieldValue: e.currentTarget.value,
-                  rows: ingredientsRows,
-                  setRows: setIngredientsRows,
-                })
-              }
-              placeholder='Enter quantity'
-              // type='number'
-              value={ingredientRow.ingredientQuantity}
-              $bgColor={tw`bg-gray-D9D9D9`}
-              $bgColorDark={tw`bg-gray-3D3D3D`}
-              $hasBorder={false}
-              $hasError={
-                ingredientRowKey === 0 && !!errors.find(error => error.id === 'ingredients')
-              }
-              $isDarkMode={isDarkMode}
-            />
-          </div>
-          <div tw='col-span-full lg:col-span-3'>
-            <InputLabel htmlFor={`measurementType-${ingredientRowKey}`}>
-              <DrillyTypography $isDarkMode={isDarkMode}>Measurement type</DrillyTypography>
-            </InputLabel>
-            <DrillyTextField
-              id={`measurementType-${ingredientRowKey}`}
-              fullWidth
-              onChange={e =>
-                handleRowChange({
-                  rowKeyToChange: ingredientRowKey,
-                  rowField: 'ingredientMeasurement',
-                  rowFieldValue: e.target.value,
-                  rows: ingredientsRows,
-                  setRows: setIngredientsRows,
-                })
-              }
-              placeholder='Select measurement type'
-              select
-              value={ingredientRow.ingredientMeasurement}
-              $bgColor={tw`bg-gray-D9D9D9`}
-              $bgColorDark={tw`bg-gray-3D3D3D`}
-              $hasBorder={false}
-              $isDarkMode={isDarkMode}
-            >
-              {MEASUREMENT_TYPES.map(measurementType => (
-                <MenuItem key={measurementType} id={measurementType} value={measurementType}>
-                  {measurementType}
-                </MenuItem>
-              ))}
-            </DrillyTextField>
-          </div>
-          <div tw='col-span-full lg:col-span-3'>
-            <InputLabel htmlFor={`ingredient-${ingredientRowKey}`}>
-              <DrillyTypography $isDarkMode={isDarkMode}>Ingredient</DrillyTypography>
-            </InputLabel>
-            <DrillyTextField
-              id={`ingredient-${ingredientRowKey}`}
-              fullWidth
-              onChange={e =>
-                handleRowChange({
-                  rowKeyToChange: ingredientRowKey,
-                  rowField: 'ingredient',
-                  rowFieldValue: e.currentTarget.value,
-                  rows: ingredientsRows,
-                  setRows: setIngredientsRows,
-                })
-              }
-              placeholder='Enter ingredient'
-              value={ingredientRow.ingredient}
-              $bgColor={tw`bg-gray-D9D9D9`}
-              $bgColorDark={tw`bg-gray-3D3D3D`}
-              $hasBorder={false}
-              $hasError={
-                ingredientRowKey === 0 && !!errors.find(error => error.id === 'ingredients')
-              }
-              $isDarkMode={isDarkMode}
-            />
-          </div>
-          <div tw='flex col-span-full gap-2 lg:col-span-3'>
-            <DrillyButton
-              disabled={ingredientsRows.length < 2}
-              onClick={() =>
-                handleDeleteRowClick({
-                  rowKeyToDelete: ingredientRowKey,
-                  rows: ingredientsRows,
-                  setRows: setIngredientsRows,
-                })
-              }
-              tw='mt-9'
-              $variant='error'
-            >
-              <p tw='text-xl lg:hidden'>Delete</p>
-              <DeleteForeverIcon tw='mt-0.5' />
-            </DrillyButton>
-            <DrillyButton
-              disabled={ingredientsRows.length === 10}
-              onClick={() =>
-                handleAddRowClick({
-                  newRow: {
-                    ingredient: '',
-                    ingredientMeasurement: 'Select measurement type...',
-                    ingredientQuantity: 0,
-                  },
-                  rows: ingredientsRows,
-                  setRows: setIngredientsRows,
-                })
-              }
-              tw='mt-9'
-              $variant='primary'
-            >
-              <p tw='text-xl lg:hidden'>Add</p>
-              <AddIcon tw='mt-0.5' />
-            </DrillyButton>
-          </div>
-        </React.Fragment>
-      ))}
-    </div>
+    <>
+      <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
+        {ingredients.map((ingredientRow, ingredientRowKey) => {
+          const hasErrorOnRow = !!errors.find(
+            error =>
+              error.id === 'ingredients' && error.multiRowErrorKeys?.includes(ingredientRowKey),
+          );
+
+          return (
+            <React.Fragment key={ingredientRowKey}>
+              <div tw='col-span-full lg:col-span-2'>
+                <InputLabel htmlFor={`ingredientQuantity-${ingredientRowKey}`}>
+                  <DrillyTypography
+                    $isDarkMode={isDarkMode}
+                    $textColor={hasErrorOnRow ? tw`text-error` : undefined}
+                  >
+                    Quantity *
+                  </DrillyTypography>
+                </InputLabel>
+                <DrillyTextField
+                  id={`ingredientQuantity-${ingredientRowKey}`}
+                  fullWidth
+                  onBlur={() => {}}
+                  onChange={e =>
+                    handleRowChange({
+                      rowKeyToChange: ingredientRowKey,
+                      rowField: 'ingredientQuantity',
+                      rowFieldValue: e.currentTarget.value,
+                      rows: ingredients,
+                      setRows: setIngredients,
+                    })
+                  }
+                  placeholder='Enter quantity'
+                  value={ingredientRow.ingredientQuantity}
+                  $bgColor={tw`bg-gray-D9D9D9`}
+                  $bgColorDark={tw`bg-gray-3D3D3D`}
+                  $hasBorder={false}
+                  $hasError={hasErrorOnRow}
+                  $isDarkMode={isDarkMode}
+                />
+              </div>
+              <div tw='col-span-full lg:col-span-3'>
+                <InputLabel htmlFor={`ingredientMeasurement-${ingredientRowKey}`}>
+                  <DrillyTypography $isDarkMode={isDarkMode}>Measurement type</DrillyTypography>
+                </InputLabel>
+                <DrillyTextField
+                  id={`ingredientMeasurement-${ingredientRowKey}`}
+                  fullWidth
+                  onChange={e =>
+                    handleRowChange({
+                      rowKeyToChange: ingredientRowKey,
+                      rowField: 'ingredientMeasurement',
+                      rowFieldValue: e.target.value,
+                      rows: ingredients,
+                      setRows: setIngredients,
+                    })
+                  }
+                  placeholder='Select measurement type'
+                  select
+                  value={ingredientRow.ingredientMeasurement}
+                  $bgColor={tw`bg-gray-D9D9D9`}
+                  $bgColorDark={tw`bg-gray-3D3D3D`}
+                  $hasBorder={false}
+                  $isDarkMode={isDarkMode}
+                >
+                  {MEASUREMENT_TYPES.map(measurementType => (
+                    <MenuItem key={measurementType} id={measurementType} value={measurementType}>
+                      {measurementType}
+                    </MenuItem>
+                  ))}
+                </DrillyTextField>
+              </div>
+              <div tw='col-span-full lg:col-span-3'>
+                <InputLabel htmlFor={`ingredient-${ingredientRowKey}`}>
+                  <DrillyTypography
+                    $isDarkMode={isDarkMode}
+                    $textColor={hasErrorOnRow ? tw`text-error` : undefined}
+                  >
+                    Ingredient *
+                  </DrillyTypography>
+                </InputLabel>
+                <DrillyTextField
+                  id={`ingredient-${ingredientRowKey}`}
+                  fullWidth
+                  onChange={e =>
+                    handleRowChange({
+                      rowKeyToChange: ingredientRowKey,
+                      rowField: 'ingredient',
+                      rowFieldValue: e.currentTarget.value,
+                      rows: ingredients,
+                      setRows: setIngredients,
+                    })
+                  }
+                  placeholder='Enter ingredient'
+                  value={ingredientRow.ingredient}
+                  $bgColor={tw`bg-gray-D9D9D9`}
+                  $bgColorDark={tw`bg-gray-3D3D3D`}
+                  $hasBorder={false}
+                  $hasError={hasErrorOnRow}
+                  $isDarkMode={isDarkMode}
+                />
+              </div>
+              <div tw='flex col-span-full gap-2 lg:col-span-3'>
+                <DrillyButton
+                  disabled={ingredients.length < 2}
+                  onClick={() =>
+                    handleDeleteRowClick({
+                      rowKeyToDelete: ingredientRowKey,
+                      rows: ingredients,
+                      setRows: setIngredients,
+                    })
+                  }
+                  tw='mt-9'
+                  $isDisabled={ingredients.length < 2}
+                  $variant='error'
+                >
+                  <p tw='text-xl lg:hidden'>Delete</p>
+                  <DeleteForeverIcon tw='mt-0.5' />
+                </DrillyButton>
+                <DrillyButton
+                  disabled={ingredients.length === 15 || hasIngredientRowsError}
+                  onClick={() =>
+                    handleAddRowClick({
+                      newRow: {
+                        ingredient: '',
+                        ingredientMeasurement: 'Select measurement type...',
+                        ingredientQuantity: '',
+                      },
+                      rows: ingredients,
+                      setRows: setIngredients,
+                    })
+                  }
+                  tw='mt-9'
+                  $isDisabled={ingredients.length === 15 || hasIngredientRowsError}
+                  $variant='primary'
+                >
+                  <p tw='text-xl lg:hidden'>Add</p>
+                  <AddIcon tw='mt-0.5' />
+                </DrillyButton>
+              </div>
+            </React.Fragment>
+          );
+        })}
+      </div>
+      <div tw='col-span-full'>
+        {hasIngredientRowsError && (
+          <DrillyTypography $textColor={tw`text-error`} component='p' variant='caption'>
+            {ingredientRowsError}
+          </DrillyTypography>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -4,17 +4,17 @@ import { DrillyTypography } from '../../../../../../styles/globals';
 import { RecipeIngredient } from '../../../../../../types';
 
 type RecipeIngredientsListProps = {
-  ingredientsRows: RecipeIngredient[];
+  ingredients: RecipeIngredient[];
 };
 
-const RecipeIngredientsList = ({ ingredientsRows }: RecipeIngredientsListProps) => {
+const RecipeIngredientsList = ({ ingredients }: RecipeIngredientsListProps) => {
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
   return (
     <div tw='flex flex-col'>
-      {ingredientsRows.map(({ ingredient, ingredientMeasurement, ingredientQuantity }) => (
+      {ingredients.map(({ ingredient, ingredientMeasurement, ingredientQuantity }) => (
         <DrillyTypography component='p' variant='h6' $isDarkMode={isDarkMode}>
           {`${ingredientQuantity}${ingredientMeasurement ? ` ${ingredientMeasurement}` : ''} ${ingredient}`}
         </DrillyTypography>
