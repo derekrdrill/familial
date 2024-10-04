@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
-import { AppBar, Grid, Icon, IconButton, TextField } from '@mui/material';
+import { AppBar, Grid, IconButton } from '@mui/material';
 import Link from 'next/link';
 
 export const HeaderRoot = styled(AppBar)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => ({
-  backgroundColor: `${$isDarkMode ? 'black' : 'white'} !important`,
+  backgroundColor: `${$isDarkMode ? '#282c34' : 'white'} !important`,
   borderBottom: !$isDarkMode ? '1px solid #DFDFDF' : 'none',
   boxShadow: 'none !important',
   zIndex: '3 !important',

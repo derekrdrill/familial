@@ -1,7 +1,7 @@
 export type RecipeIngredient = {
   ingredient: string;
   ingredientMeasurement: string;
-  ingredientQuantity: number;
+  ingredientQuantity: string;
 };
 
 export type RecipeStep = {

@@ -1,17 +1,24 @@
 import * as React from 'react';
 import Home from '../components/familial/Home';
-import { Photos, PhotoReaction, User } from '../types';
+import { Photos, PhotoReaction, Recipe, User } from '../types';
 
 import conn from '../data/connection';
-import { Photos as PhotosData, Users } from '../data/models';
+import { Photos as PhotosData, Recipe as RecipeData, Users } from '../data/models';
 
 type IndexProps = {
   photosAllRandomized: Photos[];
   photosQuick: Photos[];
+  recipesQuick: Recipe[];
 };
 
-const Index = ({ photosAllRandomized, photosQuick }: IndexProps) => {
-  return <Home photosAllRandomized={photosAllRandomized} photosQuick={photosQuick} />;
+const Index = ({ photosAllRandomized, photosQuick, recipesQuick }: IndexProps) => {
+  return (
+    <Home
+      photosAllRandomized={photosAllRandomized}
+      photosQuick={photosQuick}
+      recipesQuick={recipesQuick}
+    />
+  );
 };
 
 export default Index;
@@ -22,6 +29,10 @@ export const getServerSideProps = async () => {
 
     const photosAllRandomized = await PhotosData.aggregate([{ $sample: { size: 100000 } }]);
     const photosQuick: Photos[] = await PhotosData.aggregate([
+      { $sort: { uploadedAt: -1 } },
+      { $limit: 10 },
+    ]);
+    const recipesQuick: Recipe[] = await RecipeData.aggregate([
       { $sort: { uploadedAt: -1 } },
       { $limit: 10 },
     ]);
@@ -52,6 +63,7 @@ export const getServerSideProps = async () => {
       props: {
         photosAllRandomized: JSON.parse(JSON.stringify(photosAllRandomized)),
         photosQuick: JSON.parse(JSON.stringify(photosQuickWithReactionUpdates)),
+        recipesQuick: JSON.parse(JSON.stringify(recipesQuick)),
       },
     };
   } catch (error) {

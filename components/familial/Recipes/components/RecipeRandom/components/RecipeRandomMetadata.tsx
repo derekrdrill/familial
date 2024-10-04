@@ -41,7 +41,9 @@ export default function RecipeRandomMetadata({ recipeRandomKey }: RecipeRandomMe
   }
 
   return (
-    recipeRandom && (
+    recipeRandom &&
+    recipeRandom[recipeRandomKey] &&
+    !recipeRandom[recipeRandomKey].includes('Select') && (
       <Tooltip
         disableHoverListener={!recipeMetadataArray.length || recipeMetadataJoin.length < 25}
         disableTouchListener={!recipeMetadataArray.length || recipeMetadataJoin.length < 25}

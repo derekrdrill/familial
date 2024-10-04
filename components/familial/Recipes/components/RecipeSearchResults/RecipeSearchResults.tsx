@@ -64,6 +64,7 @@ const RecipeSearchResults = ({
               <RecipeCard
                 recipeAuthor={recipe.author ?? ''}
                 recipeCardContainerStyles={tw`mb-16`}
+                recipeCookbook={recipe.cookbook}
                 recipeId={recipe._id}
                 recipeIngredients={getRecipeIngredientStringArray({
                   recipeIngredientData: recipe.ingredients,

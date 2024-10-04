@@ -20,7 +20,7 @@ export const RecipeDetailTypography = styled(DrillyTypography)<{ $isCentered: bo
 export const RecipeDetailActionButtonsContainer = styled.div<{ $isDarkMode?: boolean }>(
   ({ $isDarkMode }) => [
     !$isDarkMode && tw`bg-white`,
-    $isDarkMode && tw`bg-black`,
+    $isDarkMode && tw`bg-[#282c34]`,
     tw`col-span-full`,
     tw`flex`,
     tw`justify-between`,
@@ -46,3 +46,17 @@ export const RecipeDetailPrintButton = styled.button<{
   tw`rounded-lg`,
   tw`hover:bg-opacity-30`,
 ]);
+
+export const RecipeDetailSubmitButtonContainer = styled.div<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [
+    $isDarkMode && tw`bg-['#282c34']`,
+    !$isDarkMode && tw`bg-white`,
+    tw`bottom-0`,
+    tw`col-span-full`,
+    tw`flex`,
+    tw`justify-end`,
+    tw`pb-4`,
+    tw`shadow`,
+    tw`sticky`,
+  ],
+);

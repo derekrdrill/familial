@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import tw from 'twin.macro';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import PrintIcon from '@mui/icons-material/Print';
 
@@ -44,13 +45,14 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     cookTime,
     cookType,
     errors,
-    ingredientsRows,
+    ingredients,
     isRecipeDetailLoading,
+    newRecipeData,
     recipeAuthor,
     recipeAuthorImageUrl,
     recipeImageUrl,
     recipeName,
-    stepRows,
+    steps,
     temperature,
     handleAddRowClick,
     handleDeleteRowClick,
@@ -59,7 +61,8 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     setCookTime,
     setCookType,
     setCookbook,
-    setIngredientsRows,
+    setErrors,
+    setIngredients,
     setIsRecipeDetailLoading,
     setRecipeImage,
     setRecipeName,
@@ -181,15 +184,15 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
               Ingredients
             </DrillyTypography>
             {hasRecipeId ? (
-              <RecipeIngredientsList ingredientsRows={ingredientsRows} />
+              <RecipeIngredientsList ingredients={ingredients} />
             ) : (
               <RecipeIngredientsForm
                 errors={errors}
                 handleAddRowClick={handleAddRowClick}
                 handleDeleteRowClick={handleDeleteRowClick}
                 handleRowChange={handleRowChange}
-                ingredientsRows={ingredientsRows}
-                setIngredientsRows={setIngredientsRows}
+                ingredients={ingredients}
+                setIngredients={setIngredients}
               />
             )}
           </RecipeIngredientsOrStepsContainer>
@@ -201,7 +204,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
               Steps
             </DrillyTypography>
             {hasRecipeId ? (
-              <RecipeStepsList stepRows={stepRows} />
+              <RecipeStepsList steps={steps} />
             ) : (
               <RecipeStepsForm
                 errors={errors}
@@ -209,15 +212,29 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
                 handleDeleteRowClick={handleDeleteRowClick}
                 handleRowChange={handleRowChange}
                 setStepRows={setStepRows}
-                stepRows={stepRows}
+                steps={steps}
               />
             )}
           </RecipeIngredientsOrStepsContainer>
           {!hasRecipeId && (
             <div tw='col-span-full flex justify-end'>
-              <DrillyButton onClick={handleSubmit} tw='py-2 mt-9' $variant='success'>
-                Submit
-              </DrillyButton>
+              <div tw='w-fit'>
+                <DrillyButton
+                  disabled={!!errors.length}
+                  onClick={handleSubmit}
+                  tw='py-2 mt-9 w-full md:w-fit'
+                  $isDisabled={!!errors.length}
+                  $styles={tw`lg:px-2`}
+                  $variant='success'
+                >
+                  Submit
+                </DrillyButton>
+                {!!errors.length && (
+                  <DrillyTypography component='p' variant='caption' $textColor={tw`text-error`}>
+                    Please fix errors
+                  </DrillyTypography>
+                )}
+              </div>
             </div>
           )}
         </>

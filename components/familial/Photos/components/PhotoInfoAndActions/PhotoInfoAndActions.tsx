@@ -40,7 +40,7 @@ export const PhotoInfoAndActionsContainer = styled(Grid)<{
   $isDarkMode?: boolean;
 }>(({ $isDarkMode }) => [
   !$isDarkMode && tw`bg-gray-100`,
-  $isDarkMode && tw`bg-black`,
+  $isDarkMode && tw`bg-[#282c34]`,
   tw`py-4`,
   tw`sticky`,
   tw`top-20`,
