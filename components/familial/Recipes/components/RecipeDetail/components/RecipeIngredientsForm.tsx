@@ -42,7 +42,7 @@ const RecipeIngredientsForm = ({
 
   return (
     <>
-      <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
+      <div tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
         {ingredients.map((ingredientRow, ingredientRowKey) => {
           const hasErrorOnRow = !!errors.find(
             error =>
@@ -74,6 +74,7 @@ const RecipeIngredientsForm = ({
                     })
                   }
                   placeholder='Enter quantity'
+                  size='small'
                   value={ingredientRow.ingredientQuantity}
                   $bgColor={tw`bg-gray-D9D9D9`}
                   $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -100,6 +101,7 @@ const RecipeIngredientsForm = ({
                   }
                   placeholder='Select measurement type'
                   select
+                  size='small'
                   value={ingredientRow.ingredientMeasurement}
                   $bgColor={tw`bg-gray-D9D9D9`}
                   $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -135,6 +137,7 @@ const RecipeIngredientsForm = ({
                     })
                   }
                   placeholder='Enter ingredient'
+                  size='small'
                   value={ingredientRow.ingredient}
                   $bgColor={tw`bg-gray-D9D9D9`}
                   $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -153,7 +156,7 @@ const RecipeIngredientsForm = ({
                       setRows: setIngredients,
                     })
                   }
-                  tw='mt-9'
+                  tw='h-8 mt-7'
                   $isDisabled={ingredients.length < 2}
                   $variant='error'
                 >
@@ -173,7 +176,7 @@ const RecipeIngredientsForm = ({
                       setRows: setIngredients,
                     })
                   }
-                  tw='mt-9'
+                  tw='h-8 mt-7'
                   $isDisabled={ingredients.length === 15 || hasIngredientRowsError}
                   $variant='primary'
                 >

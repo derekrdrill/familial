@@ -65,6 +65,7 @@ const RecipeDetailsForm = ({
             fullWidth
             onChange={e => setRecipeName(e.currentTarget.value)}
             placeholder='Enter recipe name'
+            size='small'
             value={recipeName}
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -87,6 +88,7 @@ const RecipeDetailsForm = ({
             fullWidth
             onChange={e => setCookType(e.target.value)}
             select
+            size='small'
             value={cookType}
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -113,6 +115,7 @@ const RecipeDetailsForm = ({
             id='cookbook'
             fullWidth
             select
+            size='small'
             value={cookbook}
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -153,6 +156,7 @@ const RecipeDetailsForm = ({
             onChange={e => setTemperature(e.currentTarget.value)}
             placeholder='Enter temperature'
             value={temperature}
+            size='small'
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
             $hasBorder={false}
@@ -174,6 +178,7 @@ const RecipeDetailsForm = ({
             onChange={e => setCookTime(e.currentTarget.value)}
             placeholder='Enter cook time'
             value={cookTime}
+            size='small'
             $bgColor={tw`bg-gray-D9D9D9`}
             $bgColorDark={tw`bg-gray-3D3D3D`}
             $hasBorder={false}

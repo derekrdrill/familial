@@ -63,7 +63,7 @@ const RecipeStepsForm = ({
 
   return (
     <>
-      <div tw='col-span-full gap-2 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
+      <div tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
         {steps.map((stepRow, stepRowKey) => {
           const hasErrorOnRow = !!errors.find(
             error => error.id === 'steps' && error.multiRowErrorKeys?.includes(stepRowKey),
@@ -95,6 +95,7 @@ const RecipeStepsForm = ({
                     })
                   }
                   placeholder='Select measurement type'
+                  size='small'
                   value={stepRow.step}
                   $bgColor={tw`bg-gray-D9D9D9`}
                   $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -114,7 +115,7 @@ const RecipeStepsForm = ({
                         setRows: setStepRows,
                       })
                     }
-                    tw='mt-9'
+                    tw='h-8 mt-7'
                     $isDisabled={steps.length < 2}
                     $variant='error'
                   >
@@ -132,7 +133,7 @@ const RecipeStepsForm = ({
                         setRows: setStepRows,
                       })
                     }
-                    tw='mt-9'
+                    tw='h-8 mt-7'
                     $isDisabled={steps.length === 15 || hasStepRowsError}
                     $variant='primary'
                   >

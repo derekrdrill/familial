@@ -47,7 +47,6 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     errors,
     ingredients,
     isRecipeDetailLoading,
-    newRecipeData,
     recipeAuthor,
     recipeAuthorImageUrl,
     recipeImageUrl,
@@ -61,7 +60,6 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     setCookTime,
     setCookType,
     setCookbook,
-    setErrors,
     setIngredients,
     setIsRecipeDetailLoading,
     setRecipeImage,
@@ -87,7 +85,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
   }, [recipeName]);
 
   return (
-    <div tw='grid grid-cols-12 mx-10 my-8 w-full'>
+    <div tw='grid grid-cols-12 mx-4 mb-8 w-full md:mx-10'>
       {isRecipeDetailLoading && <RecipeDetailShimmer />}
       {!isRecipeDetailLoading && (
         <>
@@ -116,13 +114,15 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
               {hasRecipeId ? recipeName : 'New recipe'}
             </RecipeDetailTypography>
             <div tw='col-span-full flex gap-2'>
-              <RecipeDetailTypography
-                tw='col-span-full'
-                $isCentered={false}
-                $isDarkMode={isDarkMode}
-              >
-                added by {recipeAuthor}
-              </RecipeDetailTypography>
+              {recipeId && (
+                <RecipeDetailTypography
+                  tw='col-span-full'
+                  $isCentered={false}
+                  $isDarkMode={isDarkMode}
+                >
+                  added by {recipeAuthor}
+                </RecipeDetailTypography>
+              )}
               {recipeAuthorImageUrl && (
                 <Image
                   alt=''
