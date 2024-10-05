@@ -136,7 +136,7 @@ export default PhotosLayout;
 
 export const PhotosMainContainer = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
   !$isDarkMode && tw`bg-gray-100`,
-  $isDarkMode && tw`bg-transparent`,
+  $isDarkMode && tw`bg-[#282c34]`,
   tw`mt-6`,
   tw`mx-2`,
   tw`pb-4`,

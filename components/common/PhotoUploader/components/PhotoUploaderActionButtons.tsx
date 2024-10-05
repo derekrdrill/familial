@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Checkbox, Grid, InputLabel, Typography } from '@mui/material';
 import { ImageListType as PhotoListType } from 'react-images-uploading';
 import tw, { TwStyle } from 'twin.macro';
 
@@ -89,27 +89,29 @@ export const PhotoUploaderActionButtons = ({
           </Grid>
         )}
         <Grid item>
-          <PhotoUploadActionButton
-            onClick={() =>
-              dispatch({
-                type: GlobalReducerActionEnum.SET_PHOTO_LIST,
-                payload: {
-                  photoList: photoList.map(photo => ({
-                    ...photo,
-                    ...{ checked: !hasEveryPhotosSelected },
-                  })),
-                },
-              })
-            }
-            size='small'
-            variant='outlined'
-            tw='mr-2 normal-case'
-            $bgColor={tw`bg-info hover:bg-info`}
-            $borderColor={tw`border-info hover:border-info`}
-            $textColor={tw`text-info`}
-          >
-            {`${hasEveryPhotosSelected ? 'Unc' : 'C'}heck all photos`}
-          </PhotoUploadActionButton>
+          <div tw='flex mb-2 md:justify-end'>
+            <Checkbox
+              checked={photoList.every(photo => !!photo.checked)}
+              id='selectAllPhotos'
+              onChange={() =>
+                dispatch({
+                  type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+                  payload: {
+                    photoList: photoList.map(photo => ({
+                      ...photo,
+                      ...{ checked: !hasEveryPhotosSelected },
+                    })),
+                  },
+                })
+              }
+              sx={{ padding: 0 }}
+            />
+            <InputLabel htmlFor='selectAllPhotos'>
+              <DrillyTypography $isDarkMode={isDarkMode}>
+                {`${hasEveryPhotosSelected ? 'Unc' : 'C'}heck all photos`}
+              </DrillyTypography>
+            </InputLabel>
+          </div>
           <PhotoUploadActionButton
             onClick={() =>
               dispatch({
@@ -208,12 +210,9 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
   $isPhotoAlbumSelected: boolean;
 }>(({ $isDarkMode, $isPhotoAlbumSelected }) => [
   tw`!sticky`,
-  tw`justify-end`,
   tw`mt-4`,
   tw`pb-4`,
-  tw`pt-4`,
   tw`px-6`,
-  tw`top-20`,
   tw`z-10`,
   tw`lg:mt-8`,
   tw`lg:mx-0`,
@@ -221,9 +220,11 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
   tw`lg:px-8`,
   tw`lg:top-[70px]`,
   !$isDarkMode && tw`bg-white`,
-  $isDarkMode && tw`bg-black`,
-  $isPhotoAlbumSelected && tw`justify-center`,
-  $isPhotoAlbumSelected && tw`lg:justify-between`,
+  $isDarkMode && tw`bg-[#282c34]`,
+  !$isPhotoAlbumSelected && tw`md:justify-end`,
+  $isPhotoAlbumSelected && tw`justify-between`,
+  $isPhotoAlbumSelected && tw`top-[92px]`,
+  !$isPhotoAlbumSelected && tw`top-24`,
 ]);
 
 export const PhotoUploadActionButton = styled(Button)<{

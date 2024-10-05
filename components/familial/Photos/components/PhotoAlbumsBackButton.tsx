@@ -10,7 +10,7 @@ export const PhotoAlbumsBackButton = () => {
 
   return (
     isPhotoAlbumOpened && (
-      <Grid container tw='mb-2 mt-6 mx-8'>
+      <Grid container tw='mb-2 mx-8 lg:mt-6'>
         <Button
           onClick={() => {
             router.push('/photos');
