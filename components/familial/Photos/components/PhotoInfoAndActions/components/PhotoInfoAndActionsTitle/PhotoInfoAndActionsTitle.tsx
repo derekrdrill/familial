@@ -24,11 +24,11 @@ const PhotoInfoAndActionsTitle = ({
   const hasAlbumId = router.query.albumID;
 
   const {
-    state: { albums, isDarkMode },
+    state: { albums, isDarkMode, photos },
   } = React.useContext(GlobalContext);
 
   const [isScrollBtnShown, setIsScrollBtnShown] = React.useState<boolean>(false);
-  const photoAlbumLength = albums?.length;
+  const photoAlbumLength = hasAlbumId && photos?.length;
 
   return (
     <PhotosLayoutTitleContainer item $isAlbumOpened={!!!router.query.albumID}>
