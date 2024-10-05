@@ -40,14 +40,14 @@ export const PhotoInfoAndActionsContainer = styled(Grid)<{
   $isDarkMode?: boolean;
 }>(({ $isDarkMode }) => [
   !$isDarkMode && tw`bg-gray-100`,
-  !$isDarkMode && tw`top-24`,
+  !$isDarkMode && tw`top-[95px]`,
   $isDarkMode && tw`bg-[#282c34]`,
-  $isDarkMode && tw`top-[94px]`,
+  $isDarkMode && tw`top-[93px]`,
   tw`mt-4`,
   tw`pb-4`,
   tw`sticky`,
   tw`z-20`,
-  tw`lg:top-16`,
+  tw`md:top-[69px]`,
 ]);
 
 export { PhotoInfoAndActions };

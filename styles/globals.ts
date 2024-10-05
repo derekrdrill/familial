@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
 import Image from 'next/image';
-import { TextField, Typography, TypographyProps } from '@mui/material';
+import { Checkbox, TextField, Typography, TypographyProps } from '@mui/material';
 
 export const DrillyButton = styled.button<{
   $isDisabled?: boolean;
@@ -101,3 +101,11 @@ export const DrillySelectableImage = styled(Image)<{
   tw`w-full`,
   tw`object-contain`,
 ]);
+
+export const DrillyCheckbox = styled(Checkbox)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => ({
+  '&.MuiCheckbox-root': {
+    svg: {
+      path: [$isDarkMode && tw`text-white`, !$isDarkMode && tw`text-black`],
+    },
+  },
+}));

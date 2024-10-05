@@ -1,14 +1,18 @@
 import React from 'react';
 import Slider from 'react-slick';
-import tw from 'twin.macro';
-import { Button, Checkbox, Grid, IconButton, MenuItem, TextField, Typography } from '@mui/material';
+import { Grid, IconButton, InputLabel, MenuItem, Typography } from '@mui/material';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
-import { DrillyTextField } from '../../../../styles/globals';
+import {
+  DrillyButton,
+  DrillyCheckbox,
+  DrillyTextField,
+  DrillyTypography,
+} from '../../../../styles/globals';
 
 type PhotoUploaderPhotosListDesktopProps = {
   handleInputChange: Function;
@@ -36,16 +40,13 @@ export const PhotoUploaderPhotosListDesktop = ({
         xs={1}
         display={{
           xs: 'none',
-          md:
-            photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
+          md: photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
         }}
       >
         <Grid
           container
           justifyContent='flex-end'
-          display={
-            photoList?.length && photoList.length > 4 ? 'inline-flex' : 'none'
-          }
+          display={photoList?.length && photoList.length > 4 ? 'inline-flex' : 'none'}
         >
           <IconButton onClick={handlePrevSlide} tw='mt-40'>
             <SkipPreviousIcon />
@@ -54,77 +55,69 @@ export const PhotoUploaderPhotosListDesktop = ({
       </Grid>
       <Grid item xs={12} md={photoList?.length && photoList.length > 3 && 10}>
         <Grid container display={{ xs: 'none', md: 'inline-block' }}>
-          <Slider
-            dots
-            infinite={false}
-            ref={photosSliderRef}
-            slidesToShow={5}
-            slidesToScroll={1}
-          >
+          <Slider dots infinite={false} ref={photosSliderRef} slidesToShow={5} slidesToScroll={1}>
             {photoList?.map((image, imageIndex) => (
               <Grid key={image.file?.name} container tw='px-4'>
-                <Checkbox
+                <DrillyCheckbox
                   checked={!!photoList[imageIndex].checked}
                   onChange={() =>
                     dispatch({
                       type: GlobalReducerActionEnum.SET_PHOTO_LIST,
                       payload: {
-                        photoList: photoList.map(
-                          (imageCheck, imageCheckIndex) =>
-                            imageCheckIndex === imageIndex
-                              ? {
-                                  ...imageCheck,
-                                  ...{ checked: !imageCheck.checked },
-                                }
-                              : imageCheck,
+                        photoList: photoList.map((imageCheck, imageCheckIndex) =>
+                          imageCheckIndex === imageIndex
+                            ? {
+                                ...imageCheck,
+                                ...{ checked: !imageCheck.checked },
+                              }
+                            : imageCheck,
                         ),
                       },
                     })
                   }
+                  sx={{ paddingLeft: 0, paddingRight: 0, paddingTop: 0 }}
+                  $isDarkMode={isDarkMode}
                 />
                 <Grid item xs={12} tw='h-32 mb-3'>
-                  <img
-                    src={image['dataURL']}
-                    tw='h-full object-cover'
-                    width='120'
-                  />
+                  <img src={image['dataURL']} tw='h-full object-cover' width='120' />
                 </Grid>
+                <InputLabel htmlFor='title'>
+                  <DrillyTypography $isDarkMode={isDarkMode}>Title</DrillyTypography>
+                </InputLabel>
                 <DrillyTextField
                   id='title'
                   fullWidth
-                  label='Title'
-                  onChange={e =>
-                    handleInputChange(e, image.dataURL, imageIndex)
-                  }
+                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
+                  placeholder='Enter a title'
                   size='small'
                   variant='outlined'
+                  value={photoUploadData && photoUploadData[imageIndex]?.title}
                   tw='my-1'
                   $isDarkMode={isDarkMode}
                 />
+                <InputLabel htmlFor='album'>
+                  <DrillyTypography $isDarkMode={isDarkMode}>Album</DrillyTypography>
+                </InputLabel>
                 <DrillyTextField
                   fullWidth
-                  label='Album'
+                  id='album'
                   select
                   size='small'
-                  onChange={e =>
-                    handleInputChange(e, image.dataURL, imageIndex)
-                  }
+                  onChange={e => handleInputChange(e, image.dataURL, imageIndex)}
                   value={
                     selectedPhotoAlbum?.albumName ??
-                    (photoUploadData
-                      ? photoUploadData[imageIndex]?.albumName
-                      : '')
+                    (photoUploadData && photoUploadData[imageIndex]?.albumName) ??
+                    'Select an album'
                   }
                   variant='outlined'
                   tw='my-1'
                   $isDarkMode={isDarkMode}
                 >
+                  <MenuItem id='albumName' value='Select an album'>
+                    Select an album
+                  </MenuItem>
                   {albums?.map(album => (
-                    <MenuItem
-                      key={album._id}
-                      id='albumName'
-                      value={album.albumName}
-                    >
+                    <MenuItem key={album._id} id='albumName' value={album.albumName}>
                       {album.albumName}
                     </MenuItem>
                   ))}
@@ -139,9 +132,7 @@ export const PhotoUploaderPhotosListDesktop = ({
                               //   album => album.albumName === newAlbumName,
                               // );
                               const newAlbumName = (
-                                document.getElementById(
-                                  'album',
-                                ) as HTMLInputElement
+                                document.getElementById('album') as HTMLInputElement
                               )?.value;
 
                               await fetch('/api/album/add', {
@@ -166,8 +157,7 @@ export const PhotoUploaderPhotosListDesktop = ({
                                                 ...photoUpload,
                                                 ...{
                                                   albumName:
-                                                    selectedPhotoAlbum?.albumName ??
-                                                    newAlbumName,
+                                                    selectedPhotoAlbum?.albumName ?? newAlbumName,
                                                 },
                                               }
                                             : photoUpload,
@@ -203,9 +193,7 @@ export const PhotoUploaderPhotosListDesktop = ({
                     </Typography>
                   </MenuItem>
                 </DrillyTextField>
-                <Button
-                  color='error'
-                  fullWidth
+                <DrillyButton
                   onClick={() =>
                     dispatch({
                       type: GlobalReducerActionEnum.SET_MODAL_ITEM,
@@ -225,18 +213,18 @@ export const PhotoUploaderPhotosListDesktop = ({
                               <Grid item xs={2} />
                             </Grid>
                           ),
-                          modalTitle:
-                            'Are you sure you want to remove this image?',
+                          modalTitle: 'Are you sure you want to remove this image?',
                           submitButtonColor: 'error',
                           submitButtonText: 'Remove',
                         },
                       },
                     })
                   }
-                  variant={isDarkMode ? 'outlined' : 'text'}
+                  tw='w-full mt-1'
+                  $variant='error'
                 >
                   Remove
-                </Button>
+                </DrillyButton>
               </Grid>
             ))}
           </Slider>
@@ -247,15 +235,12 @@ export const PhotoUploaderPhotosListDesktop = ({
         xs={1}
         display={{
           xs: 'none',
-          md:
-            photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
+          md: photoList?.length && photoList.length > 3 ? 'inline-block' : 'none',
         }}
       >
         <Grid
           container
-          display={
-            photoList?.length && photoList.length > 4 ? 'inline-block' : 'none'
-          }
+          display={photoList?.length && photoList.length > 4 ? 'inline-block' : 'none'}
         >
           <IconButton onClick={handleNextSlide} tw='mt-40'>
             <SkipNextIcon />

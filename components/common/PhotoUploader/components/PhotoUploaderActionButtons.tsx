@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Button, Checkbox, Grid, InputLabel, Typography } from '@mui/material';
+import { Button, Grid, InputLabel, Typography } from '@mui/material';
 import { ImageListType as PhotoListType } from 'react-images-uploading';
 import tw, { TwStyle } from 'twin.macro';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 
-import { DrillyTypography } from '../../../../styles/globals';
+import { DrillyCheckbox, DrillyTypography } from '../../../../styles/globals';
 import { PhotoUploadData } from '../types/PhotoUploaderData';
 
 export const handlePhotoUpload = async (
@@ -73,6 +73,7 @@ export const PhotoUploaderActionButtons = ({
 
   const hasEveryPhotosSelected = photoList?.every(photo => photo.checked);
   const hasSomePhotosSelected = photoList?.some(photo => photo.checked);
+  const photosBeingUploaded = photoUploadData?.length;
 
   return (
     !!photoList?.length && (
@@ -83,14 +84,28 @@ export const PhotoUploaderActionButtons = ({
       >
         {!!selectedPhotoAlbum && (
           <Grid item tw='mb-2 lg:mb-0'>
-            <DrillyTypography variant='h5' $isDarkMode={isDarkMode}>
-              Adding photo(s) to: <b>{selectedPhotoAlbum?.albumName}</b>
+            <DrillyTypography $isDarkMode={isDarkMode} tw='mt-auto'>
+              Adding{' '}
+              <DrillyTypography component='span' tw='font-semibold'>
+                {photosBeingUploaded}
+              </DrillyTypography>{' '}
+              photo
+              {photosBeingUploaded === 1 ? '' : 's'} to{' '}
+              <DrillyTypography
+                component='span'
+                variant='h6'
+                tw='font-semibold'
+                $isDarkMode={isDarkMode}
+              >
+                {selectedPhotoAlbum?.albumName}
+              </DrillyTypography>{' '}
+              album
             </DrillyTypography>
           </Grid>
         )}
         <Grid item>
           <div tw='flex mb-2 md:justify-end'>
-            <Checkbox
+            <DrillyCheckbox
               checked={photoList.every(photo => !!photo.checked)}
               id='selectAllPhotos'
               onChange={() =>
@@ -105,6 +120,7 @@ export const PhotoUploaderActionButtons = ({
                 })
               }
               sx={{ padding: 0 }}
+              $isDarkMode={isDarkMode}
             />
             <InputLabel htmlFor='selectAllPhotos'>
               <DrillyTypography $isDarkMode={isDarkMode}>
@@ -224,7 +240,7 @@ export const PhotoUploadActionButtonsContainer = styled(Grid)<{
   !$isPhotoAlbumSelected && tw`md:justify-end`,
   $isPhotoAlbumSelected && tw`justify-between`,
   $isPhotoAlbumSelected && tw`top-[92px]`,
-  !$isPhotoAlbumSelected && tw`top-24`,
+  !$isPhotoAlbumSelected && tw`top-[94px]`,
 ]);
 
 export const PhotoUploadActionButton = styled(Button)<{

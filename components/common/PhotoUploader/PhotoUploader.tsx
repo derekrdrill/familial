@@ -1,8 +1,5 @@
 import * as React from 'react';
-import tw from 'twin.macro';
-import Image from 'next/image';
 import ImageUploading, { ImageListType as PhotoListType } from 'react-images-uploading';
-import styled from '@emotion/styled';
 
 import GlobalContext from '../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../context/GlobalReducer';
@@ -13,7 +10,6 @@ import {
   PhotoUploaderPhotosListMobile,
   PhotoUploaderUploadArea,
 } from '../PhotoUploader';
-import { TwStyle } from 'twin.macro';
 
 type PhotoUploadProps = {
   isMultiple?: boolean;
@@ -76,7 +72,11 @@ export const PhotoUploader = ({ isMultiple = true, photoUploaderComponent }: Pho
   }, [photoList]);
 
   React.useEffect(() => {
-    setIsAbleToSubmitUpload(!photoUploadData?.find(photo => !photo.title || !photo.albumName));
+    setIsAbleToSubmitUpload(
+      !photoUploadData?.find(
+        photo => !photo.title || !photo.albumName || photo.albumName === 'Select an album',
+      ),
+    );
   }, [photoUploadData]);
 
   return (
@@ -115,11 +115,3 @@ export const PhotoUploader = ({ isMultiple = true, photoUploaderComponent }: Pho
     )
   );
 };
-
-const PhotoUploaderImageContainer = styled.div<{ $styles: TwStyle }>(({ $styles }) => [
-  tw`flex`,
-  tw`justify-center`,
-  $styles,
-]);
-
-const PhotoUploaderImage = styled(Image)<{ $styles: TwStyle }>(({ $styles }) => [$styles]);
