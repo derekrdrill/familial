@@ -5,6 +5,7 @@ import { Grid, Typography } from '@mui/material';
 import GlobalContext from '../../../../../context/GlobalContext';
 
 import { PhotoCover } from '../PhotoCover/PhotoCover';
+import { DrillyTypography } from '../../../../../styles/globals';
 
 type Props = {};
 
@@ -18,24 +19,27 @@ const PhotoAlbums = (props: Props) => {
 
   return (
     !router.query.albumID && (
-      <Grid container>
+      <Grid container rowGap={1}>
         {albums?.map(
-          album =>
+          (album, albumKey) =>
             !!album?.photos?.length && (
               <Grid key={album.albumName} item xs={6} sm={4} md={3} lg={2}>
                 <Grid container tw='h-fit mb-1'>
                   <PhotoCover
+                    photoAlbumKey={albumKey}
                     photoListItem={album}
                     photoURL={album.albumCoverURL ?? album.photos[0].url}
                   />
                 </Grid>
-                <Typography color={isDarkMode ? 'white' : 'inherit'} variant='subtitle1'>
-                  {album.albumName}
-                </Typography>
-                <Typography
-                  color={isDarkMode ? 'white' : 'inherit'}
-                  variant='subtitle2'
-                >{`${album.photos.length} photo${album.photos.length > 1 ? 's' : ''}`}</Typography>
+                <div tw='ml-1'>
+                  <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
+                    {album.albumName}
+                  </DrillyTypography>
+                  <DrillyTypography
+                    variant='subtitle2'
+                    $isDarkMode={isDarkMode}
+                  >{`${album.photos.length} photo${album.photos.length > 1 ? 's' : ''}`}</DrillyTypography>
+                </div>
               </Grid>
             ),
         )}

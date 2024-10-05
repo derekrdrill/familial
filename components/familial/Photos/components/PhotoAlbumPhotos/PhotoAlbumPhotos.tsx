@@ -56,13 +56,11 @@ const PhotoAlbumPhotos = ({ onImageUpload }: PhotoAlbumPhotosProps) => {
               lg={photosView === 'list' ? 4 : 2}
               tw='flex justify-center'
             >
-              <Grid container>
-                <PhotoCover
-                  key={photoListItem._id}
-                  photoListItem={photoListItem}
-                  photoURL={photoListItem.url}
-                />
-              </Grid>
+              <PhotoCover
+                key={photoListItem._id}
+                photoListItem={photoListItem}
+                photoURL={photoListItem.url}
+              />
             </Grid>
             {photosView === 'list' && (
               <Grid item xs={0} sm={2} md={3} lg={4} display={{ xs: 'none', sm: 'inline-block' }} />

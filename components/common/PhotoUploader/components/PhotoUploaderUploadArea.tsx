@@ -88,7 +88,7 @@ export const PhotoUploadAreaRoot = styled(Grid)<{
 }>(
   ({ $hasPhotoUploadComponent, $isAlbumsPage, $isDarkMode }) =>
     !$hasPhotoUploadComponent && [
-      $isAlbumsPage && tw`mt-8`,
+      $isAlbumsPage && tw`md:mb-1 lg:mt-8`,
       $isDarkMode && tw`border-[0.5px]`,
       $isDarkMode && tw`!bg-gray-900`,
       $isDarkMode && tw`border-gray-700`,
@@ -96,9 +96,10 @@ export const PhotoUploadAreaRoot = styled(Grid)<{
       tw`border-dashed`,
       tw`max-h-40`,
       tw`max-w-screen-2xl`,
-      tw`mx-8`,
+      tw`mx-2`,
       tw`pb-4`,
       tw`pt-6`,
+      tw`md:mx-10`,
     ],
 );
 

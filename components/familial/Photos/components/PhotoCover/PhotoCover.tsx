@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import tw from 'twin.macro';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Button, CircularProgress } from '@mui/material';
+import { Button } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteForever from '@mui/icons-material/DeleteForever';
 
@@ -15,6 +15,7 @@ import { Photos } from '../../../../../types';
 import { Shimmer } from 'react-shimmer';
 
 type PhotoCoverProps = {
+  photoAlbumKey?: number;
   photoListItem: {
     _id?: string;
     authorId?: string;
@@ -26,7 +27,7 @@ type PhotoCoverProps = {
   photoURL: string;
 };
 
-export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
+export const PhotoCover = ({ photoAlbumKey = 0, photoListItem, photoURL }: PhotoCoverProps) => {
   const router = useRouter();
 
   const {
@@ -64,6 +65,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
         }}
         $isAlbumsPage={!router.pathname.includes('[albumID]')}
         $isUserAuthor={isUserAuthor}
+        $photoAlbumKey={photoAlbumKey}
       >
         {isPhotoLoading && <Shimmer height={180} width={230} />}
         {!isPhotoLoading && (
@@ -129,9 +131,9 @@ export const PhotoCoverRoot = styled.div<{
   $isAlbumsPage?: boolean;
   $isLoading?: boolean;
   $isUserAuthor?: boolean;
-}>(({ $isAlbumsPage, $isLoading, $isUserAuthor }) => [
-  $isAlbumsPage && tw`pl-2`,
-  tw`sm:pl-2`,
+  $photoAlbumKey: number;
+}>(({ $isAlbumsPage, $isLoading, $isUserAuthor, $photoAlbumKey }) => [
+  (!$isAlbumsPage || ($isAlbumsPage && $photoAlbumKey > 0)) && tw`ml-2`,
   tw`py-2`,
   tw`w-full`,
   tw`cursor-pointer`,
@@ -155,7 +157,7 @@ export const PhotoCoverImage = styled(Image)<{
   $isAlbumsPage && $photosView === 'grid' && tw`h-40`,
   $isAlbumsPage && $photosView === 'grid' && tw`md:h-48`,
   $isLoading && tw`invisible`,
-  $isLoading && tw`h-0`,
+  $isLoading && tw`!h-0`,
   $photosView === 'grid' && tw`-mt-9`,
   $photosView === 'grid' && tw`object-cover`,
   $photosView === 'grid' && tw`w-full`,

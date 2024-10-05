@@ -68,30 +68,13 @@ export const PhotoViewer = ({
             <div tw='bg-[#000000] md:bg-[#00000099] w-full md:w-2/3'>
               <div tw='flex items-center justify-center md:h-screen'>
                 <div tw='absolute flex flex-col gap-2 left-2 top-2'>
-                  {isPhotoViewerBackBtnShown && (
-                    <PhotoViewerButton
-                      fullWidth
-                      onClick={() => {
-                        router.replace('/');
-                      }}
-                      size='small'
-                      variant='outlined'
-                      $bgColor={tw`bg-primary hover:bg-primary`}
-                      $borderColor={tw`border-primary hover:border-primary`}
-                    >
-                      <span tw='py-1 md:py-0'>
-                        <span tw='hidden md:inline-block'>Go back home</span>
-                        <span tw='md:hidden'>
-                          <KeyboardDoubleArrowLeftIcon />
-                        </span>
-                      </span>
-                    </PhotoViewerButton>
-                  )}
                   <PhotoViewerButton
                     fullWidth
                     onClick={() => {
                       router.replace({
-                        pathname: `/photos/${router.query.albumID}`,
+                        pathname: isPhotoViewerBackBtnShown
+                          ? '/'
+                          : `/photos/${router.query.albumID}`,
                       });
                     }}
                     size='small'
