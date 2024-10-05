@@ -65,7 +65,7 @@ export const PhotoCover = ({ photoListItem, photoURL }: PhotoCoverProps) => {
         $isAlbumsPage={!router.pathname.includes('[albumID]')}
         $isUserAuthor={isUserAuthor}
       >
-        {isPhotoLoading && <Shimmer height={200} width={200} />}
+        {isPhotoLoading && <Shimmer height={180} width={230} />}
         {!isPhotoLoading && (
           <>
             <PhotoCoverImageControlButtonDiv>
@@ -155,6 +155,7 @@ export const PhotoCoverImage = styled(Image)<{
   $isAlbumsPage && $photosView === 'grid' && tw`h-40`,
   $isAlbumsPage && $photosView === 'grid' && tw`md:h-48`,
   $isLoading && tw`invisible`,
+  $isLoading && tw`h-0`,
   $photosView === 'grid' && tw`-mt-9`,
   $photosView === 'grid' && tw`object-cover`,
   $photosView === 'grid' && tw`w-full`,

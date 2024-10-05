@@ -73,7 +73,7 @@ const PhotoQuick = ({
       $isDarkMode={isDarkMode}
     >
       <div tw='bg-white relative top-2'>
-        {isPhotoQuickLoading && <Shimmer height={240} width={210} />}
+        {isPhotoQuickLoading && <Shimmer height={210} width={210} />}
         <PhotoQuickImage
           alt='album-cover'
           height={0}
@@ -183,11 +183,12 @@ const PhotoQuickRoot = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) =
 const PhotoQuickImage = styled(Image)<{ $isPhotoQuickLoading: boolean }>(
   ({ $isPhotoQuickLoading }) => [
     $isPhotoQuickLoading && tw`invisible`,
-    tw`h-80`,
-    tw`object-cover`,
-    tw`w-full`,
-    tw`md:h-52`,
-    {
+    $isPhotoQuickLoading && tw`h-0`,
+    !$isPhotoQuickLoading && tw`h-80`,
+    !$isPhotoQuickLoading && tw`object-cover`,
+    !$isPhotoQuickLoading && tw`w-full`,
+    !$isPhotoQuickLoading && tw`md:h-52`,
+    !$isPhotoQuickLoading && {
       overflowClipMargin: 'unset',
     },
   ],
