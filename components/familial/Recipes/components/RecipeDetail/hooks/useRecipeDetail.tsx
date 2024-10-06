@@ -128,12 +128,12 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   };
 
   const handleSubmit = async () => {
-    setIsRecipeFormSubmiting(true);
     const currentErrors = getRecipeFormErrors({ newRecipeData });
 
     if (!!currentErrors.length) {
       setErrors(currentErrors);
     } else {
+      setIsRecipeFormSubmiting(true);
       if (recipeImage) {
         const photoFile = !!recipeImage?.length ? recipeImage[0].file : null;
         const photoFileType = photoFile ? photoFile?.type : 'application/octet-stream';

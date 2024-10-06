@@ -42,28 +42,36 @@ export const getRecipeFormErrors = ({ newRecipeData }: { newRecipeData: Recipe }
     } else {
       let error: string | undefined;
       let errorIndeces: number[] = [];
+      let isNumericError: boolean = false;
 
       const multiRowFields: RecipeIngredientOrStep[] = newRecipeData[requiredField.id];
       const hasMultiRowFields = !!newRecipeData[requiredField.id];
 
       if (hasMultiRowFields) {
         requiredField.fields.forEach(requiedFieldItem => {
-          const hasAllFieldsFilled = multiRowFields.every(xa => !!xa[requiedFieldItem]);
-          const hasEveryFieldEmpty = multiRowFields.every(xa => !xa[requiedFieldItem]);
+          const hasAllFieldsFilled = multiRowFields.every(xa => !!xa[requiedFieldItem.id]);
+          const hasEveryFieldEmpty = multiRowFields.every(xa => !xa[requiedFieldItem.id]);
 
           if (hasEveryFieldEmpty || !hasAllFieldsFilled) {
             let newErrorIndeces: number[] = [];
 
             multiRowFields.forEach((multiRowField, multiRowFieldKey) => {
-              if (!multiRowField[requiedFieldItem]) {
+              if (!multiRowField[requiedFieldItem.id]) {
                 newErrorIndeces = [...newErrorIndeces, ...[multiRowFieldKey]];
+              }
+
+              if (!!requiedFieldItem.isNumber) {
+                const numbersOnlyRegex = /^\d+(\.\d{1,2})?$/;
+                if (!numbersOnlyRegex.test(multiRowField[requiedFieldItem.id])) {
+                  newErrorIndeces = [...newErrorIndeces, ...[multiRowFieldKey]];
+                  isNumericError = true;
+                }
               }
             });
 
-            error =
-              multiRowFields.length === 1
-                ? `Please fill in at least 1 ${requiredField.title} row`
-                : `Please finish filling in your ${requiredField.title}s or delete unecessary rows`;
+            error = isNumericError
+              ? `Numeric field(s) in the ${requiredField.title}s row must only contain numbers or decimals`
+              : `Please finish filling in your ${requiredField.title}s or delete unecessary rows`;
             errorIndeces = [...new Set([...errorIndeces, ...newErrorIndeces])];
           }
         });

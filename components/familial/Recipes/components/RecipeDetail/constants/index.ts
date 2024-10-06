@@ -60,13 +60,13 @@ const REQUIRED_FIELDS = [
   { id: 'cookbook', isSelect: true, title: 'cookbook' },
   { id: 'time', title: 'cook time' },
   {
-    fields: ['ingredient', 'ingredientQuantity'],
+    fields: [{ id: 'ingredient' }, { id: 'ingredientQuantity', isNumber: true }],
     id: 'ingredients',
     isMulti: true,
     title: 'ingredient',
   },
   {
-    fields: ['step'],
+    fields: [{ id: 'step' }],
     id: 'steps',
     isMulti: true,
     title: 'step',
