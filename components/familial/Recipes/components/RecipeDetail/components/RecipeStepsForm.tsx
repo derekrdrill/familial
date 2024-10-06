@@ -94,7 +94,7 @@ const RecipeStepsForm = ({
                       setRows: setStepRows,
                     })
                   }
-                  placeholder='Select measurement type'
+                  placeholder='Enter step'
                   size='small'
                   value={stepRow.step}
                   $bgColor={tw`bg-gray-D9D9D9`}
