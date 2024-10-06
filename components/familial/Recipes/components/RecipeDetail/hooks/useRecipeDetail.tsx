@@ -30,17 +30,30 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   const [cookType, setCookType] = React.useState<string>('Select cook type...');
   const [cookTime, setCookTime] = React.useState<string>('');
   const [errors, setErrors] = React.useState<FormError[]>([]);
-  const [ingredients, setIngredients] = React.useState<RecipeAddFormIngredient[]>(
-    RECIPE_INGREDIENTS_DEFAULTS,
-  );
+  const [ingredients, setIngredients] = React.useState<RecipeAddFormIngredient[]>([
+    {
+      ingredient: '',
+      ingredientMeasurement: 'Select measurement type...',
+      ingredientQuantity: '',
+    },
+  ]);
   const [isRecipeDetailLoading, setIsRecipeDetailLoading] = React.useState<boolean>(false);
-  const [newRecipeData, setNewRecipeData] = React.useState<Recipe>(RECIPE_FORM_DEFAULTS);
+  const [isRecipeFormSubmitting, setIsRecipeFormSubmiting] = React.useState<boolean>(false);
+  const [newRecipeData, setNewRecipeData] = React.useState<Recipe>({
+    cookbook: '',
+    ingredients: [],
+    steps: [],
+    temperature: '',
+    time: '',
+    title: '',
+    type: '',
+  });
   const [recipeAuthor, setRecipeAuthor] = React.useState<string>();
   const [recipeAuthorImageUrl, setRecipeAuthorImageUrl] = React.useState<string>();
   const [recipeImage, setRecipeImage] = React.useState<ImageListType>();
   const [recipeImageUrl, setRecipeImageUrl] = React.useState<string>();
   const [recipeName, setRecipeName] = React.useState<string>('');
-  const [steps, setStepRows] = React.useState<RecipeAddFormStep[]>(RECIPE_STEPS_DEFAULTS);
+  const [steps, setStepRows] = React.useState<RecipeAddFormStep[]>([{ step: '' }]);
   const [temperature, setTemperature] = React.useState('');
 
   const handleAddRowClick = ({
@@ -115,6 +128,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
   };
 
   const handleSubmit = async () => {
+    setIsRecipeFormSubmiting(true);
     const currentErrors = getRecipeFormErrors({ newRecipeData });
 
     if (!!currentErrors.length) {
@@ -139,6 +153,27 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
               await fetch('/api/recipe/add', {
                 body: JSON.stringify(newRecipe),
                 method: 'POST',
+              }).then(async res => {
+                await res.json();
+
+                sessionStorage.setItem(
+                  'newRecipeData',
+                  JSON.stringify({
+                    cookbook: newRecipeData.cookbook,
+                    title: newRecipeData.title,
+                  }),
+                );
+
+                setIngredients([
+                  {
+                    ingredient: '',
+                    ingredientMeasurement: 'Select measurement type...',
+                    ingredientQuantity: '',
+                  },
+                ]);
+                setIsRecipeFormSubmiting(false);
+                setStepRows([{ step: '' }]);
+                router.push('/recipes');
               });
             })
             .catch(e => console.log(e));
@@ -147,10 +182,29 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
         await fetch('/api/recipe/add', {
           body: JSON.stringify(newRecipeData),
           method: 'POST',
+        }).then(async res => {
+          await res.json();
+
+          sessionStorage.setItem(
+            'newRecipeData',
+            JSON.stringify({
+              cookbook: newRecipeData.cookbook,
+              title: newRecipeData.title,
+            }),
+          );
+
+          setIngredients([
+            {
+              ingredient: '',
+              ingredientMeasurement: 'Select measurement type...',
+              ingredientQuantity: '',
+            },
+          ]);
+          setIsRecipeFormSubmiting(false);
+          setStepRows([{ step: '' }]);
+          router.push('/recipes');
         });
       }
-
-      router.push('/recipes');
     }
   };
 
@@ -196,6 +250,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     errors,
     ingredients,
     isRecipeDetailLoading,
+    isRecipeFormSubmitting,
     newRecipeData,
     recipeAuthor,
     recipeAuthorImageUrl,
@@ -211,6 +266,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     setErrors,
     setIngredients,
     setIsRecipeDetailLoading,
+    setIsRecipeFormSubmiting,
     setNewRecipeData,
     setRecipeAuthor,
     setRecipeImage,

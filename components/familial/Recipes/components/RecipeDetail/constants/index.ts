@@ -24,6 +24,7 @@ const MEASUREMENT_TYPES = [
   'Milliter',
   'Pint',
   'Ounce',
+  'Pinch',
   'Pound',
   'Quart',
   'Tablespoon',

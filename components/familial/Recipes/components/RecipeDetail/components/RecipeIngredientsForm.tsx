@@ -47,7 +47,7 @@ const RecipeIngredientsForm = ({
     <>
       <div
         ref={ingredientFormEndRef}
-        tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-1 overflow-y-auto lg:grid-cols-12'
+        tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-12 overflow-y-auto'
       >
         {ingredients.map((ingredientRow, ingredientRowKey) => {
           const hasErrorOnRow = !!errors.find(
@@ -57,7 +57,7 @@ const RecipeIngredientsForm = ({
 
           return (
             <React.Fragment key={ingredientRowKey}>
-              <div tw='col-span-full lg:col-span-2'>
+              <div tw='col-span-4 md:col-span-2'>
                 <InputLabel htmlFor={`ingredientQuantity-${ingredientRowKey}`}>
                   <DrillyTypography
                     $isDarkMode={isDarkMode}
@@ -81,6 +81,7 @@ const RecipeIngredientsForm = ({
                   }
                   placeholder='Enter quantity'
                   size='small'
+                  type='number'
                   value={ingredientRow.ingredientQuantity}
                   $bgColor={tw`bg-gray-D9D9D9`}
                   $bgColorDark={tw`bg-gray-3D3D3D`}
@@ -89,7 +90,7 @@ const RecipeIngredientsForm = ({
                   $isDarkMode={isDarkMode}
                 />
               </div>
-              <div tw='col-span-full lg:col-span-3'>
+              <div tw='col-span-8 md:col-span-3'>
                 <InputLabel htmlFor={`ingredientMeasurement-${ingredientRowKey}`}>
                   <DrillyTypography $isDarkMode={isDarkMode}>Measurement type</DrillyTypography>
                 </InputLabel>
@@ -121,7 +122,7 @@ const RecipeIngredientsForm = ({
                   ))}
                 </DrillyTextField>
               </div>
-              <div tw='col-span-full lg:col-span-3'>
+              <div tw='col-span-full md:col-span-3'>
                 <InputLabel htmlFor={`ingredient-${ingredientRowKey}`}>
                   <DrillyTypography
                     $isDarkMode={isDarkMode}
@@ -152,7 +153,7 @@ const RecipeIngredientsForm = ({
                   $isDarkMode={isDarkMode}
                 />
               </div>
-              <div tw='flex col-span-full gap-2 lg:col-span-3'>
+              <div tw='flex col-span-full gap-2 md:col-span-3'>
                 <DrillyButton
                   disabled={ingredients.length < 2}
                   onClick={() =>
@@ -166,7 +167,7 @@ const RecipeIngredientsForm = ({
                   $isDisabled={ingredients.length < 2}
                   $variant='error'
                 >
-                  <p tw='text-xl lg:hidden'>Delete</p>
+                  <p tw='text-xl md:hidden'>Delete</p>
                   <DeleteForeverIcon tw='mt-0.5' />
                 </DrillyButton>
                 <DrillyButton
@@ -186,7 +187,7 @@ const RecipeIngredientsForm = ({
                   $isDisabled={ingredients.length === 15 || hasIngredientRowsError}
                   $variant='primary'
                 >
-                  <p tw='text-xl lg:hidden'>Add</p>
+                  <p tw='text-xl md:hidden'>Add</p>
                   <AddIcon tw='mt-0.5' />
                 </DrillyButton>
               </div>

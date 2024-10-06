@@ -27,6 +27,7 @@ import {
 import { Cookbook } from '../../../../../types';
 import { DrillyButton, DrillyTypography } from '../../../../../styles/globals';
 import Image from 'next/image';
+import { CircularProgress } from '@mui/material';
 
 type RecipeAddFormProps = {
   cookbooks: Cookbook[];
@@ -47,6 +48,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     errors,
     ingredients,
     isRecipeDetailLoading,
+    isRecipeFormSubmitting,
     recipeAuthor,
     recipeAuthorImageUrl,
     recipeImageUrl,
@@ -220,14 +222,14 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
             <div tw='col-span-full flex justify-end'>
               <div tw='w-fit'>
                 <DrillyButton
-                  disabled={!!errors.length}
+                  disabled={!!errors.length || isRecipeFormSubmitting}
                   onClick={handleSubmit}
                   tw='py-2 mt-9 w-full md:w-fit'
-                  $isDisabled={!!errors.length}
+                  $isDisabled={!!errors.length || isRecipeFormSubmitting}
                   $styles={tw`lg:px-2`}
                   $variant='success'
                 >
-                  Submit
+                  {isRecipeFormSubmitting ? <CircularProgress /> : 'Submit'}
                 </DrillyButton>
                 {!!errors.length && (
                   <DrillyTypography component='p' variant='caption' $textColor={tw`text-error`}>

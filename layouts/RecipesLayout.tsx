@@ -66,6 +66,28 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
   const [recipesSearched, setRecipesSearched] = React.useState<Recipe[]>();
 
   React.useEffect(() => {
+    const newRecipeDataSession = sessionStorage.getItem('newRecipeData');
+    const hasNewRecipeDataSession = !!newRecipeDataSession;
+    const newRecipeData = hasNewRecipeDataSession && JSON.parse(newRecipeDataSession ?? '');
+    const hasNewRecipeData = !!newRecipeData;
+
+    if (hasNewRecipeData) {
+      dispatch({
+        type: GlobalReducerActionEnum.SET_ALERT_ITEM,
+        payload: {
+          alertItem: {
+            alertMessage: `${newRecipeData.title} was added to ${newRecipeData.cookbook}`,
+            alertSeverity: 'success',
+            isAlertOpen: true,
+          },
+        },
+      });
+
+      sessionStorage.removeItem('newRecipeData');
+    }
+  }, []);
+
+  React.useEffect(() => {
     const recipeRandomMetadataKeys = Object.keys(recipeRandom);
     const recipeRandomMetadataArr = recipeRandomMetadataKeys.map(recipeMetadataKey => ({
       [recipeMetadataKey]: recipeRandom[recipeMetadataKey],
