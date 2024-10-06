@@ -192,7 +192,7 @@ const RecipeDetailsForm = ({
                             New cookbook added!
                           </DrillyTypography>
                           <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
-                            You can add a recipe to this cook now
+                            You can add a recipe to this cookbook now
                           </DrillyTypography>
                         </>
                       ),
