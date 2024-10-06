@@ -63,7 +63,7 @@ const RecipeIngredientsForm = ({
                     $isDarkMode={isDarkMode}
                     $textColor={hasErrorOnRow ? tw`text-error` : undefined}
                   >
-                    Quantity (Numeric) *
+                    Quantity *
                   </DrillyTypography>
                 </InputLabel>
                 <DrillyTextField
