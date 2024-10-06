@@ -172,7 +172,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
               />
             )}
           </RecipeDetailsContainer>
-          <div tw='col-span-full flex mt-4 -translate-x-8 xl:col-span-4 xl:justify-center xl:translate-y-6 xl:-translate-x-4'>
+          <div tw='col-span-full flex mt-4 xl:col-span-4 xl:justify-center xl:translate-y-6'>
             <RecipeImageUpload shouldShowImageUpload={!hasRecipeId} />
           </div>
           <div tw='lg:col-span-3 xl:col-span-4'></div>

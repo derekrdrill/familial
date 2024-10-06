@@ -63,7 +63,7 @@ const RecipeStepsForm = ({
 
   return (
     <>
-      <div tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
+      <div tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-1 lg:grid-cols-12 overflow-y-auto'>
         {steps.map((stepRow, stepRowKey) => {
           const hasErrorOnRow = !!errors.find(
             error => error.id === 'steps' && error.multiRowErrorKeys?.includes(stepRowKey),
@@ -133,7 +133,7 @@ const RecipeStepsForm = ({
                         setRows: setStepRows,
                       })
                     }
-                    tw='h-8 mt-7'
+                    tw='hidden h-8 mt-7 md:flex'
                     $isDisabled={steps.length === 15 || hasStepRowsError}
                     $variant='primary'
                   >
@@ -146,6 +146,24 @@ const RecipeStepsForm = ({
           );
         })}
       </div>
+      <DrillyButton
+        disabled={steps.length === 15 || hasStepRowsError}
+        onClick={() =>
+          handleAddRowClick({
+            newRow: {
+              step: '',
+            },
+            rows: steps,
+            setRows: setStepRows,
+          })
+        }
+        tw='h-8 mt-7 w-full md:hidden'
+        $isDisabled={steps.length === 15 || hasStepRowsError}
+        $variant='primary'
+      >
+        <span tw='text-lg'>Add another step</span>
+        <AddIcon tw='mt-0.5' />
+      </DrillyButton>
       <div tw='col-span-full'>
         {hasStepRowsError && (
           <DrillyTypography $textColor={tw`text-error`} component='p' variant='caption'>

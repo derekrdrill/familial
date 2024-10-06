@@ -61,3 +61,13 @@ export const RecipeDetailSubmitButtonContainer = styled.div<{ $isDarkMode?: bool
     tw`sticky`,
   ],
 );
+
+export const RecipesFormDivider = styled.hr<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
+  !$isDarkMode && tw`border-black`,
+  !$isDarkMode && tw`border-t-[0.5px]`,
+  $isDarkMode && tw`border-gray-B6B6B6`,
+  $isDarkMode && tw`border-t-[1px]`,
+  tw`border-dashed`,
+  tw`pb-4`,
+  tw`md:hidden`,
+]);

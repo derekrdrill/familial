@@ -14,6 +14,7 @@ import {
   RecipeAddFormIngredient,
 } from '../types';
 import { FormError, Recipe } from '../../../../../../types';
+import { RecipesFormDivider } from '../styles';
 
 type RecipeIngredientsFormProps = {
   errors: FormError[];
@@ -32,6 +33,8 @@ const RecipeIngredientsForm = ({
   ingredients,
   setIngredients,
 }: RecipeIngredientsFormProps) => {
+  const ingredientFormEndRef = React.useRef<HTMLDivElement>(null);
+
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
@@ -42,7 +45,10 @@ const RecipeIngredientsForm = ({
 
   return (
     <>
-      <div tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-1 lg:grid-cols-12 max-h-80 overflow-y-auto'>
+      <div
+        ref={ingredientFormEndRef}
+        tw='col-span-full gap-x-2 gap-y-1 grid grid-cols-1 overflow-y-auto lg:grid-cols-12'
+      >
         {ingredients.map((ingredientRow, ingredientRowKey) => {
           const hasErrorOnRow = !!errors.find(
             error =>
@@ -156,7 +162,7 @@ const RecipeIngredientsForm = ({
                       setRows: setIngredients,
                     })
                   }
-                  tw='h-8 mt-7'
+                  tw='h-8 mt-2 md:mt-7'
                   $isDisabled={ingredients.length < 2}
                   $variant='error'
                 >
@@ -176,7 +182,7 @@ const RecipeIngredientsForm = ({
                       setRows: setIngredients,
                     })
                   }
-                  tw='h-8 mt-7'
+                  tw='hidden h-8 mt-7 md:flex'
                   $isDisabled={ingredients.length === 15 || hasIngredientRowsError}
                   $variant='primary'
                 >
@@ -184,10 +190,33 @@ const RecipeIngredientsForm = ({
                   <AddIcon tw='mt-0.5' />
                 </DrillyButton>
               </div>
+              {ingredientRowKey + 1 < ingredients.length && (
+                <RecipesFormDivider $isDarkMode={isDarkMode} />
+              )}
             </React.Fragment>
           );
         })}
       </div>
+      <DrillyButton
+        disabled={ingredients.length === 15 || hasIngredientRowsError}
+        onClick={() => {
+          handleAddRowClick({
+            newRow: {
+              ingredient: '',
+              ingredientMeasurement: 'Select measurement type...',
+              ingredientQuantity: '',
+            },
+            rows: ingredients,
+            setRows: setIngredients,
+          });
+        }}
+        tw='h-8 mt-auto w-full md:hidden'
+        $isDisabled={ingredients.length === 15 || hasIngredientRowsError}
+        $variant='primary'
+      >
+        <p tw='text-lg lg:hidden'>Add another ingredient</p>
+        <AddIcon tw='mb-0 mt-0.5' />
+      </DrillyButton>
       <div tw='col-span-full'>
         {hasIngredientRowsError && (
           <DrillyTypography $textColor={tw`text-error`} component='p' variant='caption'>
