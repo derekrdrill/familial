@@ -70,4 +70,5 @@ export const RecipesFormDivider = styled.hr<{ $isDarkMode?: boolean }>(({ $isDar
   tw`border-dashed`,
   tw`pb-4`,
   tw`md:hidden`,
+  tw`w-full`,
 ]);

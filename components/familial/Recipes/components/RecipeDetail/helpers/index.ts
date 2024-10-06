@@ -62,17 +62,16 @@ export const getRecipeFormErrors = ({ newRecipeData }: { newRecipeData: Recipe }
 
               if (!!requiedFieldItem.isNumber) {
                 const numbersOnlyRegex = /^\d+(\.\d{1,2})?$/;
-                if (!numbersOnlyRegex.test(multiRowField[requiedFieldItem.id])) {
-                  newErrorIndeces = [...newErrorIndeces, ...[multiRowFieldKey]];
-                  isNumericError = true;
+                if (!!multiRowField[requiedFieldItem.id]) {
+                  if (!numbersOnlyRegex.test(multiRowField[requiedFieldItem.id])) {
+                    newErrorIndeces = [...newErrorIndeces, ...[multiRowFieldKey]];
+                    isNumericError = true;
+                  }
                 }
               }
             });
 
-            error = isNumericError
-              ? `Numeric field(s) in the ${requiredField.title}s row must only contain numbers or decimals`
-              : `Please finish filling in your ${requiredField.title}s or delete unecessary rows`;
-            errorIndeces = [...new Set([...errorIndeces, ...newErrorIndeces])];
+            error = `There are errors in the ${requiredField.title}s rows that need to be addressed`;
           }
         });
       }

@@ -57,13 +57,13 @@ const RecipeIngredientsForm = ({
 
           return (
             <React.Fragment key={ingredientRowKey}>
-              <div tw='col-span-4 md:col-span-2'>
+              <div tw='col-span-4 md:col-span-3 lg:col-span-2'>
                 <InputLabel htmlFor={`ingredientQuantity-${ingredientRowKey}`}>
                   <DrillyTypography
                     $isDarkMode={isDarkMode}
                     $textColor={hasErrorOnRow ? tw`text-error` : undefined}
                   >
-                    Quantity *
+                    Quantity (Numeric) *
                   </DrillyTypography>
                 </InputLabel>
                 <DrillyTextField
@@ -90,7 +90,7 @@ const RecipeIngredientsForm = ({
                   $isDarkMode={isDarkMode}
                 />
               </div>
-              <div tw='col-span-8 md:col-span-3'>
+              <div tw='col-span-8 md:col-span-4 lg:col-span-3'>
                 <InputLabel htmlFor={`ingredientMeasurement-${ingredientRowKey}`}>
                   <DrillyTypography $isDarkMode={isDarkMode}>Measurement type</DrillyTypography>
                 </InputLabel>
@@ -122,7 +122,7 @@ const RecipeIngredientsForm = ({
                   ))}
                 </DrillyTextField>
               </div>
-              <div tw='col-span-full md:col-span-3'>
+              <div tw='col-span-full md:col-span-4 lg:col-span-3'>
                 <InputLabel htmlFor={`ingredient-${ingredientRowKey}`}>
                   <DrillyTypography
                     $isDarkMode={isDarkMode}
@@ -192,7 +192,9 @@ const RecipeIngredientsForm = ({
                 </DrillyButton>
               </div>
               {ingredientRowKey + 1 < ingredients.length && (
-                <RecipesFormDivider $isDarkMode={isDarkMode} />
+                <div tw='col-span-full'>
+                  <RecipesFormDivider $isDarkMode={isDarkMode} />
+                </div>
               )}
             </React.Fragment>
           );
