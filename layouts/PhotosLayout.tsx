@@ -109,6 +109,8 @@ const PhotosLayout = ({ albumsData, photosData, photosLayoutTitle }: PhotosLayou
             <PhotoUploader />
             <PhotoViewer
               isPhotoViewerOpen={!!router.query.p}
+              photoAuthorFirstName={photoCurrent?.authorName.split(' ')[0]}
+              photoAuthorId={photoCurrent?.authorId}
               photoComments={photoCurrent?.comments}
               photoId={photoCurrent?._id}
               photoLikes={photoCurrent?.likes}

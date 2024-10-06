@@ -1,17 +1,18 @@
 import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Grid } from '@mui/material';
+import { Badge, Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DiningTwoToneIcon from '@mui/icons-material/DiningTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import PhotoLibraryTwoToneIcon from '@mui/icons-material/PhotoLibraryTwoTone';
 // import SearchIcon from '@mui/icons-material/Search';
 
 import GlobalContext from '../../../context/GlobalContext';
-
 import DarkMode from '../DarkMode/DarkMode';
+import { Notification } from '../../../types';
 // import { DrillyTextField } from '../../../styles/globals';
 
 import {
@@ -25,11 +26,20 @@ import {
 } from './style';
 
 type HeaderType = {
+  isNotificationsSidebarOpen: boolean;
   isUserSidebarOpen: boolean;
+  notifications?: Notification[];
+  setIsNotificationsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsUserSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
+const Header = ({
+  isNotificationsSidebarOpen,
+  isUserSidebarOpen,
+  notifications,
+  setIsNotificationsSidebarOpen,
+  setIsUserSidebarOpen,
+}: HeaderType) => {
   const {
     state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
@@ -115,6 +125,14 @@ const Header = ({ isUserSidebarOpen, setIsUserSidebarOpen }: HeaderType) => {
         <Grid item xs={1} display={{ xs: 'none', md: 'inline-block' }} />
         <Grid item xs={4} md={3}>
           <Grid container justifyContent='flex-end'>
+            <HeaderProfileButton
+              onClick={() => setIsNotificationsSidebarOpen(!isNotificationsSidebarOpen)}
+              $isDarkMode={isDarkMode}
+            >
+              <Badge badgeContent={notifications?.length} color='error'>
+                <NotificationsIcon tw='h-8 w-8' />
+              </Badge>
+            </HeaderProfileButton>
             <DarkMode />
             <HeaderProfileButton
               onClick={() => setIsUserSidebarOpen(!isUserSidebarOpen)}

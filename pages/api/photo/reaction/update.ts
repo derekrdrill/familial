@@ -2,7 +2,7 @@ import { NextApiResponse, NextApiRequest } from 'next';
 import mongoose from 'mongoose';
 
 import conn from '../../../../data/connection';
-import { Photos } from '../../../../data/models';
+import { Notification, Photos } from '../../../../data/models';
 import { PhotoReaction } from '../../../../types';
 
 export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
@@ -14,6 +14,9 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
   const photoReactionType: 'comment' | 'like' | 'love' | 'smile' = JSON.parse(
     req.body,
   ).photoReactionType;
+  const photoReactionTo: string = JSON.parse(req.body).photoReactionTo;
+  const photoReactionToId: string = JSON.parse(req.body).photoReactionToId;
+  const photoReactionImageUrl: string = JSON.parse(req.body).photoReactionImageUrl;
   const photoReactionTypeField: string = `${photoReactionType}s`;
 
   const photo = await Photos.findById(photoID);
@@ -35,11 +38,35 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
     }
   }
 
-
   await Photos.updateOne(
     { _id: new mongoose.Types.ObjectId(photoID) },
     { $set: { [photoReactionTypeField]: photoReactionDataNew } },
   );
+
+  if (!hasUserReacted) {
+    await Notification.insertMany([
+      {
+        contentId: photoID,
+        contentImageUrl: photoReactionImageUrl,
+        contentType: 'photo',
+        from: photoReactionNew.authorName.split(' ')[0],
+        fromAvatarUrl: photoReactionNew.authorAvatarUrl,
+        fromId: photoReactionNew.authorId,
+        notification: `${photoReactionNew.authorName.split(' ')[0]} ${photoReactionType}${photoReactionType === 'comment' ? 'ed on' : photoReactionType === 'smile' ? 'd at' : 'd'} your image`,
+        notificationType: photoReactionType,
+        seen: false,
+        to: photoReactionTo,
+        toId: photoReactionToId,
+        uploadedAt: new Date().toLocaleDateString(),
+      },
+    ]);
+  } else {
+    await Notification.deleteOne({
+      contentId: photoID,
+      fromId: photoReactionNew.authorId,
+      notificationType: photoReactionType,
+    });
+  }
 
   res.json(await Photos.findById(photoID));
 }

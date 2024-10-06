@@ -14,6 +14,7 @@ import { Shimmer } from 'react-shimmer';
 type PhotoQuickProps = {
   photoAlbumID: string;
   photoAuthorFirstName: string;
+  photoAuthorId?: string;
   photoID: string;
   photoLikes?: PhotoReaction[];
   photoLoves?: PhotoReaction[];
@@ -24,7 +25,8 @@ type PhotoQuickProps = {
 
 const PhotoQuick = ({
   photoAlbumID,
-  photoAuthorFirstName = '',
+  photoAuthorFirstName,
+  photoAuthorId,
   photoID,
   photoLikes,
   photoLoves,
@@ -95,12 +97,16 @@ const PhotoQuick = ({
               e.stopPropagation();
 
               handleReactionClick({
+                authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLiked,
                 photoId: photoID,
+                photoUrl,
                 reactionType: 'like',
                 setHasUserReacted: setHasUserLiked,
+                to: photoAuthorFirstName,
+                toId: photoAuthorId,
               });
             }}
             hasUserLiked={hasUserLiked}
@@ -114,12 +120,16 @@ const PhotoQuick = ({
               e.stopPropagation();
 
               handleReactionClick({
+                authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLoved,
                 photoId: photoID,
+                photoUrl,
                 reactionType: 'love',
                 setHasUserReacted: setHasUserLoved,
+                to: photoAuthorFirstName,
+                toId: photoAuthorId,
               });
             }}
             hasUserLoved={hasUserLoved}
@@ -133,12 +143,16 @@ const PhotoQuick = ({
               e.stopPropagation();
 
               handleReactionClick({
+                authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserSmiled,
                 photoId: photoID,
+                photoUrl,
                 reactionType: 'smile',
                 setHasUserReacted: setHasUserSmiled,
+                to: photoAuthorFirstName,
+                toId: photoAuthorId,
               });
             }}
             hasUserSmiled={hasUserSmiled}

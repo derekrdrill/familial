@@ -80,7 +80,7 @@ export const PhotoReactionButton = ({
       }
     >
       <IconButton
-        color={reactionType === 'like' ? 'info' : reactionType === 'love' ? 'error' : 'secondary'}
+        color={reactionType === 'like' ? 'info' : reactionType === 'love' ? 'error' : 'warning'}
         onClick={handleReactionClick}
         size='small'
       >

@@ -16,6 +16,8 @@ import { PhotoReaction } from '../../../../types';
 
 type PhotoViewerTypes = {
   isPhotoViewerOpen: boolean;
+  photoAuthorFirstName?: string;
+  photoAuthorId?: string;
   photoComments?: PhotoReaction[];
   photoId?: string;
   photoLikes?: PhotoReaction[];
@@ -27,6 +29,8 @@ type PhotoViewerTypes = {
 
 export const PhotoViewer = ({
   isPhotoViewerOpen,
+  photoAuthorFirstName = '',
+  photoAuthorId,
   photoComments,
   photoId,
   photoLikes,
@@ -117,12 +121,16 @@ export const PhotoViewer = ({
                   <PhotoReactionButton
                     handleReactionClick={async () =>
                       handleReactionClick({
+                        authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserLiked,
+                        photoUrl: photoURL,
                         photoId: photoId,
                         reactionType: 'like',
                         setHasUserReacted: setHasUserLiked,
+                        to: photoAuthorFirstName,
+                        toId: photoAuthorId,
                       })
                     }
                     hasUserLiked={hasUserLiked}
@@ -132,12 +140,16 @@ export const PhotoViewer = ({
                   <PhotoReactionButton
                     handleReactionClick={async () =>
                       handleReactionClick({
+                        authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserLoved,
                         photoId: photoId,
+                        photoUrl: photoURL,
                         reactionType: 'love',
                         setHasUserReacted: setHasUserLoved,
+                        to: photoAuthorFirstName,
+                        toId: photoAuthorId,
                       })
                     }
                     hasUserLoved={hasUserLoved}
@@ -147,12 +159,16 @@ export const PhotoViewer = ({
                   <PhotoReactionButton
                     handleReactionClick={async () =>
                       handleReactionClick({
+                        authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserSmiled,
                         photoId: photoId,
+                        photoUrl: photoURL,
                         reactionType: 'smile',
                         setHasUserReacted: setHasUserSmiled,
+                        to: photoAuthorFirstName,
+                        toId: photoAuthorId,
                       })
                     }
                     hasUserSmiled={hasUserSmiled}
@@ -179,7 +195,10 @@ export const PhotoViewer = ({
                           authorName: `${user?.firstName} ${user?.lastName}`,
                           comment: { date: new Date().toString(), text: newPhotoComment },
                           photoId: photoId,
+                          photoUrl: photoURL,
                           reactionType: 'comment',
+                          to: photoAuthorFirstName,
+                          toId: photoAuthorId,
                         });
 
                         setNewPhotoComment('');

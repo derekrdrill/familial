@@ -89,6 +89,7 @@ const Home = ({ photosAllRandomized, photosQuick, recipesQuick }: HomeProps) => 
                   <PhotoQuick
                     photoAlbumID={photo.albumID}
                     photoAuthorFirstName={photo.authorName.split(' ')[0]}
+                    photoAuthorId={photo.authorId}
                     photoID={photo._id}
                     photoLikes={photo.likes}
                     photoLoves={photo.loves}
