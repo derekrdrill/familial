@@ -13,7 +13,9 @@ import { Shimmer } from 'react-shimmer';
 
 type PhotoQuickProps = {
   photoAlbumID: string;
+  photoAlbumName: string;
   photoAuthorFirstName: string;
+  photoAuthorId?: string;
   photoID: string;
   photoLikes?: PhotoReaction[];
   photoLoves?: PhotoReaction[];
@@ -24,7 +26,9 @@ type PhotoQuickProps = {
 
 const PhotoQuick = ({
   photoAlbumID,
-  photoAuthorFirstName = '',
+  photoAlbumName,
+  photoAuthorFirstName,
+  photoAuthorId,
   photoID,
   photoLikes,
   photoLoves,
@@ -94,13 +98,19 @@ const PhotoQuick = ({
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
-              handleReactionClick({
+              await handleReactionClick({
+                authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLiked,
+                photoAlbumId: photoAlbumID,
+                photoAlbumName,
                 photoId: photoID,
+                photoUrl,
                 reactionType: 'like',
                 setHasUserReacted: setHasUserLiked,
+                to: photoAuthorFirstName,
+                toId: photoAuthorId,
               });
             }}
             hasUserLiked={hasUserLiked}
@@ -113,13 +123,19 @@ const PhotoQuick = ({
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
-              handleReactionClick({
+              await handleReactionClick({
+                authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLoved,
+                photoAlbumId: photoAlbumID,
+                photoAlbumName,
                 photoId: photoID,
+                photoUrl,
                 reactionType: 'love',
                 setHasUserReacted: setHasUserLoved,
+                to: photoAuthorFirstName,
+                toId: photoAuthorId,
               });
             }}
             hasUserLoved={hasUserLoved}
@@ -132,13 +148,19 @@ const PhotoQuick = ({
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
-              handleReactionClick({
+              await handleReactionClick({
+                authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserSmiled,
+                photoAlbumId: photoAlbumID,
+                photoAlbumName,
                 photoId: photoID,
+                photoUrl,
                 reactionType: 'smile',
                 setHasUserReacted: setHasUserSmiled,
+                to: photoAuthorFirstName,
+                toId: photoAuthorId,
               });
             }}
             hasUserSmiled={hasUserSmiled}

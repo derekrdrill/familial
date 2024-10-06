@@ -44,32 +44,50 @@ const usePhotoReactions = ({
     });
 
   const handleReactionClick = async ({
+    authorAvatarUrl,
     authorId,
     authorName,
     comment,
     hasUserReacted,
+    photoAlbumId,
+    photoAlbumName,
     photoId,
+    photoUrl,
     reactionType,
     setHasUserReacted,
+    to,
+    toId,
   }: {
+    authorAvatarUrl?: string;
     authorId?: string;
     authorName: string;
     comment?: { date: string; text: string };
     hasUserReacted?: boolean;
+    photoAlbumId?: string;
+    photoAlbumName?: string;
     photoId?: string;
+    photoUrl?: string;
     reactionType: 'comment' | 'like' | 'love' | 'smile';
     setHasUserReacted?: React.Dispatch<React.SetStateAction<boolean>>;
+    to?: string;
+    toId?: string;
   }) => {
     await fetch('/api/photo/reaction/update', {
       method: 'PUT',
       body: JSON.stringify({
+        photoAlbumId,
+        photoAlbumName,
         photoID: photoId,
         photoReactionType: reactionType,
         photoReaction: {
           authorId,
           authorName,
+          authorAvatarUrl,
           ...(reactionType === 'comment' && { comment }),
         },
+        photoReactionTo: to,
+        photoReactionToId: toId,
+        photoReactionImageUrl: photoUrl,
       }),
     })
       .then(async res => {

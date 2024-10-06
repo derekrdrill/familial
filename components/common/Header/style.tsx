@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
 import { AppBar, Grid, IconButton } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import Link from 'next/link';
 
 export const HeaderRoot = styled(AppBar)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => ({
@@ -40,4 +41,8 @@ export const HeaderProfileButton = styled(IconButton)<{ $isDarkMode?: boolean }>
     $isDarkMode && tw`hover:bg-gray-900`,
     !$isDarkMode && tw`hover:bg-gray-100`,
   ],
+);
+
+export const HeaderNotificationIcon = styled(NotificationsIcon)<{ $isDarkMode?: boolean }>(
+  ({ $isDarkMode }) => [!$isDarkMode && tw`text-black`, $isDarkMode && tw`text-white`],
 );
