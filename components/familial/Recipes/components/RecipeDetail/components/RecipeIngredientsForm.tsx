@@ -69,6 +69,7 @@ const RecipeIngredientsForm = ({
                 <DrillyTextField
                   id={`ingredientQuantity-${ingredientRowKey}`}
                   fullWidth
+                  inputMode='numeric'
                   onBlur={() => {}}
                   onChange={e =>
                     handleRowChange({
