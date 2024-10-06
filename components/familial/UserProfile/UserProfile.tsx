@@ -33,7 +33,7 @@ export const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserPro
 
   return (
     <>
-      <Grid container justifyContent='space-between'>
+      <Grid container tw='justify-between p-2'>
         <Button
           color='secondary'
           onClick={() => setIsUserSidebarOpen(!isUserSidebarOpen)}
