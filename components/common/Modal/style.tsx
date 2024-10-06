@@ -14,7 +14,7 @@ export const ModalContainer = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDark
   tw`bg-amber-50`,
   tw`pb-4`,
   tw`p-8`,
-  $isDarkMode && tw`bg-gray-700`,
+  $isDarkMode && tw`bg-[#282c34]`,
   $isDarkMode && tw`text-gray-50`,
   !$isDarkMode && tw`bg-gray-50`,
 ]);

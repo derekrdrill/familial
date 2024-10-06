@@ -56,7 +56,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
 
   const {
     dispatch,
-    state: { isDarkMode },
+    state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
 
   const [isAddMenuOpen, setIsAddMenuOpen] = React.useState<boolean>(false);
@@ -97,7 +97,67 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
           Add new {isAddMenuOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </RecipeAddButton>
         <RecipeAddMenu onClose={() => setIsAddMenuOpen(false)} open={isAddMenuOpen}>
-          <MenuItem>Cookbook</MenuItem>
+          <MenuItem
+            onClick={() =>
+              dispatch({
+                type: GlobalReducerActionEnum.SET_MODAL_ITEM,
+                payload: {
+                  modalItem: {
+                    handleSubmit: async () => {
+                      const newCookbookName = (
+                        document.getElementById('cookbook') as HTMLInputElement
+                      )?.value;
+
+                      await fetch('/api/cookbook/add', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                          author: user?.firstName,
+                          authorId: user?.userID,
+                          lastUpdated: new Date(),
+                          title: newCookbookName,
+                          uploadedAt: new Date(),
+                        }),
+                      })
+                        .then(async res => {
+                          const response = await res.json();
+                        })
+                        .catch(e => {
+                          console.log(e);
+                        });
+                    },
+                    isExitHidden: true,
+                    isModalOpen: true,
+                    modalBody: (
+                      <DrillyTextField
+                        id='cookbook'
+                        fullWidth
+                        placeholder='Enter cookbook name'
+                        size='small'
+                        variant='outlined'
+                        $hasBorder
+                        $bgColor={tw`bg-gray-D9D9D9`}
+                        $bgColorDark={tw`bg-gray-3D3D3D`}
+                        $isDarkMode={isDarkMode}
+                      />
+                    ),
+                    modalTitle: 'Add new cookbook',
+                    submitSuccessMessage: (
+                      <>
+                        <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
+                          New cookbook added!
+                        </DrillyTypography>
+                        <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
+                          Cookbook will not appear here until recipes are added
+                        </DrillyTypography>
+                      </>
+                    ),
+                  },
+                },
+              })
+            }
+          >
+            Cookbook
+          </MenuItem>
           <MenuItem onClick={() => router.push('/recipes/add-new')}>Recipe</MenuItem>
         </RecipeAddMenu>
       </div>

@@ -1,12 +1,13 @@
 import React from 'react';
 import tw from 'twin.macro';
-import { InputLabel, MenuItem } from '@mui/material';
+import { InputLabel, MenuItem, Typography } from '@mui/material';
 
 import GlobalContext from '../../../../../../context/GlobalContext';
-import { DrillyTextField, DrillyTypography } from '../../../../../../styles/globals';
+import { GlobalReducerActionEnum } from '../../../../../../context/GlobalReducer';
 
+import { DrillyTextField, DrillyTypography } from '../../../../../../styles/globals';
 import { COOK_TYPES } from '../constants';
-import { Cookbook, FormError, Recipe } from '../../../../../../types';
+import { Cookbook, FormError } from '../../../../../../types';
 
 type RecipeDetailsFormProps = {
   allCookbooks: Cookbook[];
@@ -38,8 +39,11 @@ const RecipeDetailsForm = ({
   temperature,
 }: RecipeDetailsFormProps) => {
   const {
-    state: { isDarkMode },
+    dispatch,
+    state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
+
+  const [cookbooks, setCookbooks] = React.useState<Cookbook[]>(allCookbooks);
 
   const recipeNameError = errors.find(error => error.id === 'title')?.error;
   const recipeCookbookError = errors.find(error => error.id === 'cookbook')?.error;
@@ -123,7 +127,7 @@ const RecipeDetailsForm = ({
             $hasError={hasRecipeCookbookError}
             $isDarkMode={isDarkMode}
           >
-            {[...[{ _id: 'select', title: 'Select a cookbook...' }], ...allCookbooks]?.map(
+            {[...[{ _id: 'select', title: 'Select a cookbook...' }], ...cookbooks]?.map(
               cookbook => (
                 <MenuItem
                   key={cookbook._id}
@@ -137,6 +141,70 @@ const RecipeDetailsForm = ({
                 </MenuItem>
               ),
             )}
+            <MenuItem
+              onClick={() =>
+                dispatch({
+                  type: GlobalReducerActionEnum.SET_MODAL_ITEM,
+                  payload: {
+                    modalItem: {
+                      handleSubmit: async () => {
+                        const newCookbookName = (
+                          document.getElementById('newCookbook') as HTMLInputElement
+                        )?.value;
+
+                        await fetch('/api/cookbook/add', {
+                          method: 'POST',
+                          body: JSON.stringify({
+                            author: user?.firstName,
+                            authorId: user?.userID,
+                            lastUpdated: new Date(),
+                            title: newCookbookName,
+                            uploadedAt: new Date(),
+                          }),
+                        })
+                          .then(async res => {
+                            const newCookbooks = await res.json();
+                            setCookbooks(newCookbooks);
+                          })
+                          .catch(e => {
+                            console.log(e);
+                          });
+                      },
+                      isExitHidden: true,
+                      isModalOpen: true,
+                      modalBody: (
+                        <DrillyTextField
+                          id='newCookbook'
+                          fullWidth
+                          placeholder='Enter cookbook name'
+                          size='small'
+                          variant='outlined'
+                          $hasBorder
+                          $bgColor={tw`bg-gray-D9D9D9`}
+                          $bgColorDark={tw`bg-gray-3D3D3D`}
+                          $isDarkMode={isDarkMode}
+                        />
+                      ),
+                      modalTitle: 'Add new cookbook',
+                      submitSuccessMessage: (
+                        <>
+                          <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
+                            New cookbook added!
+                          </DrillyTypography>
+                          <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
+                            You can add a recipe to this cook now
+                          </DrillyTypography>
+                        </>
+                      ),
+                    },
+                  },
+                })
+              }
+            >
+              <Typography fontWeight='bold' variant='caption'>
+                Add cookbook +
+              </Typography>
+            </MenuItem>
           </DrillyTextField>
           {hasRecipeCookbookError && (
             <DrillyTypography component='p' variant='caption' $textColor={tw`text-error`}>
