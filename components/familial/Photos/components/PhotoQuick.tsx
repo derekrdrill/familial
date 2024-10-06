@@ -13,6 +13,7 @@ import { Shimmer } from 'react-shimmer';
 
 type PhotoQuickProps = {
   photoAlbumID: string;
+  photoAlbumName: string;
   photoAuthorFirstName: string;
   photoAuthorId?: string;
   photoID: string;
@@ -25,6 +26,7 @@ type PhotoQuickProps = {
 
 const PhotoQuick = ({
   photoAlbumID,
+  photoAlbumName,
   photoAuthorFirstName,
   photoAuthorId,
   photoID,
@@ -96,11 +98,13 @@ const PhotoQuick = ({
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
-              handleReactionClick({
+              await handleReactionClick({
                 authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLiked,
+                photoAlbumId: photoAlbumID,
+                photoAlbumName,
                 photoId: photoID,
                 photoUrl,
                 reactionType: 'like',
@@ -119,11 +123,13 @@ const PhotoQuick = ({
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
-              handleReactionClick({
+              await handleReactionClick({
                 authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLoved,
+                photoAlbumId: photoAlbumID,
+                photoAlbumName,
                 photoId: photoID,
                 photoUrl,
                 reactionType: 'love',
@@ -142,11 +148,13 @@ const PhotoQuick = ({
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
-              handleReactionClick({
+              await handleReactionClick({
                 authorAvatarUrl: user?.avatarURL,
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserSmiled,
+                photoAlbumId: photoAlbumID,
+                photoAlbumName,
                 photoId: photoID,
                 photoUrl,
                 reactionType: 'smile',

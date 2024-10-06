@@ -49,6 +49,8 @@ const usePhotoReactions = ({
     authorName,
     comment,
     hasUserReacted,
+    photoAlbumId,
+    photoAlbumName,
     photoId,
     photoUrl,
     reactionType,
@@ -61,6 +63,8 @@ const usePhotoReactions = ({
     authorName: string;
     comment?: { date: string; text: string };
     hasUserReacted?: boolean;
+    photoAlbumId?: string;
+    photoAlbumName?: string;
     photoId?: string;
     photoUrl?: string;
     reactionType: 'comment' | 'like' | 'love' | 'smile';
@@ -71,6 +75,8 @@ const usePhotoReactions = ({
     await fetch('/api/photo/reaction/update', {
       method: 'PUT',
       body: JSON.stringify({
+        photoAlbumId,
+        photoAlbumName,
         photoID: photoId,
         photoReactionType: reactionType,
         photoReaction: {

@@ -5,7 +5,6 @@ import tw, { TwStyle } from 'twin.macro';
 import styled from '@emotion/styled';
 import { Button, Modal, TextField } from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { DrillyTypography } from '../../../../styles/globals';
@@ -42,7 +41,7 @@ export const PhotoViewer = ({
   const router = useRouter();
 
   const {
-    state: { isDarkMode, isPhotoViewerBackBtnShown, user },
+    state: { isDarkMode, isPhotoViewerBackBtnShown, selectedPhotoAlbum, user },
   } = React.useContext(GlobalContext);
 
   const {
@@ -120,13 +119,15 @@ export const PhotoViewer = ({
                 <div tw='flex'>
                   <PhotoReactionButton
                     handleReactionClick={async () =>
-                      handleReactionClick({
+                      await handleReactionClick({
                         authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserLiked,
-                        photoUrl: photoURL,
+                        photoAlbumId: selectedPhotoAlbum?._id,
+                        photoAlbumName: selectedPhotoAlbum?.albumName,
                         photoId: photoId,
+                        photoUrl: photoURL,
                         reactionType: 'like',
                         setHasUserReacted: setHasUserLiked,
                         to: photoAuthorFirstName,
@@ -139,11 +140,13 @@ export const PhotoViewer = ({
                   />
                   <PhotoReactionButton
                     handleReactionClick={async () =>
-                      handleReactionClick({
+                      await handleReactionClick({
                         authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserLoved,
+                        photoAlbumId: selectedPhotoAlbum?._id,
+                        photoAlbumName: selectedPhotoAlbum?.albumName,
                         photoId: photoId,
                         photoUrl: photoURL,
                         reactionType: 'love',
@@ -158,11 +161,13 @@ export const PhotoViewer = ({
                   />
                   <PhotoReactionButton
                     handleReactionClick={async () =>
-                      handleReactionClick({
+                      await handleReactionClick({
                         authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserSmiled,
+                        photoAlbumId: selectedPhotoAlbum?._id,
+                        photoAlbumName: selectedPhotoAlbum?.albumName,
                         photoId: photoId,
                         photoUrl: photoURL,
                         reactionType: 'smile',
@@ -194,6 +199,8 @@ export const PhotoViewer = ({
                           authorId: user?.userID,
                           authorName: `${user?.firstName} ${user?.lastName}`,
                           comment: { date: new Date().toString(), text: newPhotoComment },
+                          photoAlbumId: selectedPhotoAlbum?._id,
+                          photoAlbumName: selectedPhotoAlbum?.albumName,
                           photoId: photoId,
                           photoUrl: photoURL,
                           reactionType: 'comment',

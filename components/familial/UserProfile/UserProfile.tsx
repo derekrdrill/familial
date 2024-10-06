@@ -12,6 +12,7 @@ import {
   UserProfileAvatarSave,
   UserProfileDetails,
 } from './';
+import DarkMode from '../../common/DarkMode/DarkMode';
 
 type UserProfileProps = {
   isUserSidebarOpen: boolean;
@@ -32,7 +33,7 @@ export const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserPro
 
   return (
     <>
-      <Grid container>
+      <Grid container justifyContent='space-between'>
         <Button
           color='secondary'
           onClick={() => setIsUserSidebarOpen(!isUserSidebarOpen)}
@@ -42,6 +43,7 @@ export const UserProfile = ({ isUserSidebarOpen, setIsUserSidebarOpen }: UserPro
         >
           <Typography variant='h5'>&#10539;</Typography>
         </Button>
+        <DarkMode />
       </Grid>
       <UserProfileDetails setIsUserSidebarOpen={setIsUserSidebarOpen} />
       <Grid container justifyContent='center' tw='mt-14'>

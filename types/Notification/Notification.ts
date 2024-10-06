@@ -2,6 +2,8 @@ export type Notification = {
   _id: string;
   contentId: string;
   contentImageUrl: string;
+  contentParentId: string;
+  contentParentName: string;
   contentType: string;
   from: string;
   fromAvatarUrl: string;

@@ -88,6 +88,7 @@ const Home = ({ photosAllRandomized, photosQuick, recipesQuick }: HomeProps) => 
                 <div tw='w-80 md:w-56'>
                   <PhotoQuick
                     photoAlbumID={photo.albumID}
+                    photoAlbumName={photo.albumName}
                     photoAuthorFirstName={photo.authorName.split(' ')[0]}
                     photoAuthorId={photo.authorId}
                     photoID={photo._id}

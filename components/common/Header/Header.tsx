@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import tw from 'twin.macro';
 import { Badge, Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -133,7 +134,7 @@ const Header = ({
                 <NotificationsIcon tw='h-8 w-8' />
               </Badge>
             </HeaderProfileButton>
-            <DarkMode />
+            <DarkMode darkModeContainerStyles={tw`hidden md:flex`} />
             <HeaderProfileButton
               onClick={() => setIsUserSidebarOpen(!isUserSidebarOpen)}
               $isDarkMode={isDarkMode}

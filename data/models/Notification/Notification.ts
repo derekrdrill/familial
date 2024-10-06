@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 export const NotificationSchema = new mongoose.Schema({
   contentId: String,
   contentImageUrl: String,
+  contentParentId: String,
+  contentParentName: String,
   contentType: String,
   from: String,
   fromAvatarUrl: String,
