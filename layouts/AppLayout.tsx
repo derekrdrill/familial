@@ -238,7 +238,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         side='right'
         zIndex={10}
       >
-        <div>
+        <div tw='max-h-[99%] overflow-auto'>
           <Button
             color='secondary'
             onClick={() => setIsNotificationsSidebarOpen(!isNotificationsSidebarOpen)}
@@ -270,7 +270,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
                 return (
                   <div
                     key={_id}
-                    tw='border-[1px] border-gray-DADADA flex flex-col gap-2 max-h-[90%] overflow-y-auto p-2 rounded-2xl'
+                    tw='border-[1px] border-gray-DADADA flex flex-col gap-2 p-2 rounded-2xl'
                   >
                     <div tw='flex justify-between'>
                       <div tw='flex'>
