@@ -8,7 +8,7 @@ export const HeaderRoot = styled(AppBar)<{ $isDarkMode?: boolean }>(({ $isDarkMo
   backgroundColor: `${$isDarkMode ? '#282c34' : 'white'} !important`,
   borderBottom: !$isDarkMode ? '1px solid #DFDFDF' : 'none',
   boxShadow: 'none !important',
-  zIndex: '3 !important',
+  zIndex: '2000 !important',
 }));
 
 export const HeaderTop = styled(Grid)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => ({

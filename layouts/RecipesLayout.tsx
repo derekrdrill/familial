@@ -127,6 +127,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
         </RecipeAddButton>
         <RecipeAddMenu
           anchorEl={recipesMenuAnchor}
+          disableScrollLock={true}
           onClose={() => setIsAddMenuOpen(false)}
           open={isAddMenuOpen}
         >

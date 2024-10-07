@@ -63,6 +63,7 @@ const HomeQuickSectionTitleBar = ({
         <Menu
           anchorEl={homeQuickSectionMenuAnchor}
           defaultValue={homeQuickSectionMenuValue}
+          disableScrollLock={true}
           onClose={() => setIsHomeQuickSectionMenuOpen(false)}
           open={isHomeQuickSectionMenuOpen}
         >

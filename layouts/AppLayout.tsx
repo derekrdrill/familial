@@ -159,7 +159,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
           isUserSidebarOpen
         }
         opacity={isRouteChangeLoading ? 0.9 : 0.6}
-        zIndex={isRouteChangeLoading ? 10 : 5}
+        zIndex={2001}
       />
       <FullPageLoader isLoading={isRouteChangeLoading || isUserInfoLoading} />
       <Header
@@ -220,7 +220,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         setIsSidebarOpen={setIsUserSidebarOpen}
         padding='0px'
         side='right'
-        zIndex={10}
+        zIndex={2001}
       >
         <UserProfile
           isUserSidebarOpen={isUserSidebarOpen}
@@ -231,7 +231,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         isSidebarOpen={isNotificationsSidebarOpen}
         setIsSidebarOpen={setIsNotificationsSidebarOpen}
         side='right'
-        zIndex={10}
+        zIndex={2001}
       >
         <div tw='max-h-[99%] overflow-auto'>
           <Button
