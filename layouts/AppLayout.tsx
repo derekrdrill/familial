@@ -220,7 +220,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         setIsSidebarOpen={setIsUserSidebarOpen}
         padding='0px'
         side='right'
-        zIndex={2001}
+        zIndex={2002}
       >
         <UserProfile
           isUserSidebarOpen={isUserSidebarOpen}
@@ -231,7 +231,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         isSidebarOpen={isNotificationsSidebarOpen}
         setIsSidebarOpen={setIsNotificationsSidebarOpen}
         side='right'
-        zIndex={2001}
+        zIndex={2002}
       >
         <div tw='max-h-[99%] overflow-auto'>
           <Button

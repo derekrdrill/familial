@@ -12,7 +12,7 @@ export const FullPageLoader = ({ isLoading }: FullPageLoaderProps) => {
 
   return (
     isLoading && (
-      <div tw='fixed top-1/3 w-full z-20'>
+      <div tw='fixed top-1/3 w-full z-[2003]'>
         <div tw='flex justify-center w-full'>
           <div tw='flex flex-col items-center'>
             <CircularProgress size={150} />
