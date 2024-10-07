@@ -1,8 +1,14 @@
 import React from 'react';
 import tw, { TwStyle } from 'twin.macro';
 import styled from '@emotion/styled';
+import { Menu, MenuItem } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import GlobalContext from '../../../../context/GlobalContext';
+
+const HOME_QUICK_SECTION_MENU_ITEMS: { id: 'recentlyAdded' | 'mostPopular'; text: string }[] = [
+  { id: 'recentlyAdded', text: 'Recently added' },
+  { id: 'mostPopular', text: 'Most popular' },
+];
 
 type HomeQuickSectionTitleBarProps = {
   homeQuickSectionTitleBarStyles?: TwStyle;
@@ -17,28 +23,61 @@ const HomeQuickSectionTitleBar = ({
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
+  const [isHomeQuickSectionMenuOpen, setIsHomeQuickSectionMenuOpen] =
+    React.useState<boolean>(false);
+
+  const [homeQuickSectionMenuAnchor, setHomeQuickSectionMenuAnchor] =
+    React.useState<HTMLButtonElement>();
+
+  const [homeQuickSectionMenuValue, setHomeQuickSectioMenuValue] = React.useState<
+    'recentlyAdded' | 'mostPopular'
+  >('recentlyAdded');
+
+  const homeQuickSectionMenuText = HOME_QUICK_SECTION_MENU_ITEMS.find(
+    homeQuickSectionMenuItem => homeQuickSectionMenuItem.id === homeQuickSectionMenuValue,
+  )?.text;
+
   return (
-    <HomeQuickSectionTitleColDiv $styles={homeQuickSectionTitleBarStyles}>
+    <HomeQuickSectionTitleColDiv $twStyles={homeQuickSectionTitleBarStyles}>
       <div tw='col-span-1'>
-        <HomeQuickSectionTitle
-          $isDarkMode={isDarkMode}
-          $styles={tw`flex md:hidden`}
-        >
+        <HomeQuickSectionTitle $isDarkMode={isDarkMode} $twStyles={tw`flex md:hidden`}>
           {title}
         </HomeQuickSectionTitle>
       </div>
       <div tw='col-span-1 hidden md:flex md:justify-center'>
-        <HomeQuickSectionTitle $isDarkMode={isDarkMode}>
-          {title}
-        </HomeQuickSectionTitle>
+        <HomeQuickSectionTitle $isDarkMode={isDarkMode}>{title}</HomeQuickSectionTitle>
       </div>
       <div tw='col-span-1 flex justify-end'>
-        <HomeQuickSectionFilterButton $isDarkMode={isDarkMode}>
+        <HomeQuickSectionFilterButton
+          onClick={e => {
+            setIsHomeQuickSectionMenuOpen(true);
+            setHomeQuickSectionMenuAnchor(e.currentTarget);
+          }}
+          $isDarkMode={isDarkMode}
+        >
           <div tw='flex items-center'>
-            Recently added
+            {homeQuickSectionMenuText}
             <KeyboardArrowDownIcon />
           </div>
         </HomeQuickSectionFilterButton>
+        <Menu
+          anchorEl={homeQuickSectionMenuAnchor}
+          defaultValue={homeQuickSectionMenuValue}
+          onClose={() => setIsHomeQuickSectionMenuOpen(false)}
+          open={isHomeQuickSectionMenuOpen}
+        >
+          {HOME_QUICK_SECTION_MENU_ITEMS.map(homeQuickSectionMenuItem => (
+            <MenuItem
+              key={homeQuickSectionMenuItem.id}
+              onClick={() => {
+                setHomeQuickSectioMenuValue(homeQuickSectionMenuItem.id);
+                setIsHomeQuickSectionMenuOpen(false);
+              }}
+            >
+              {homeQuickSectionMenuItem.text}
+            </MenuItem>
+          ))}
+        </Menu>
       </div>
     </HomeQuickSectionTitleColDiv>
   );
@@ -46,27 +85,25 @@ const HomeQuickSectionTitleBar = ({
 
 export default HomeQuickSectionTitleBar;
 
-const HomeQuickSectionTitleColDiv = styled.div<{ $styles?: TwStyle }>(
-  ({ $styles }) => [
-    tw`flex`,
-    tw`justify-between`,
-    tw`md:col-span-1`,
-    tw`md:gap-0`,
-    tw`md:grid`,
-    tw`md:grid-cols-3`,
-    $styles,
-  ],
-);
+const HomeQuickSectionTitleColDiv = styled.div<{ $twStyles?: TwStyle }>(({ $twStyles }) => [
+  tw`flex`,
+  tw`justify-between`,
+  tw`md:col-span-1`,
+  tw`md:gap-0`,
+  tw`md:grid`,
+  tw`md:grid-cols-3`,
+  $twStyles,
+]);
 
 const HomeQuickSectionTitle = styled.div<{
   $isDarkMode?: boolean;
-  $styles?: TwStyle;
-}>(({ $isDarkMode, $styles }) => [
+  $twStyles?: TwStyle;
+}>(({ $isDarkMode, $twStyles }) => [
   $isDarkMode && tw`text-white`,
   !$isDarkMode && tw`text-black`,
   tw`text-2xl`,
   tw`mb-2`,
-  $styles,
+  $twStyles,
 ]);
 
 const HomeQuickSectionFilterButton = styled.button<{ $isDarkMode }>(

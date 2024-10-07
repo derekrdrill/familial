@@ -64,6 +64,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
   const [isRecipeSearchLoading, setIsRecipeSearchLoading] = React.useState<boolean>(false);
   const [recipeSearchValue, setRecipeSearchValue] = React.useState<string>();
   const [recipesSearched, setRecipesSearched] = React.useState<Recipe[]>();
+  const [recipesMenuAnchor, setRecipesMenuAnchor] = React.useState<HTMLButtonElement>();
 
   React.useEffect(() => {
     const newRecipeDataSession = sessionStorage.getItem('newRecipeData');
@@ -115,10 +116,20 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
   return (
     <div tw='px-8 w-full lg:pt-9'>
       <div tw='flex justify-end'>
-        <RecipeAddButton onClick={() => setIsAddMenuOpen(!isAddMenuOpen)} $isDarkMode={isDarkMode}>
+        <RecipeAddButton
+          onClick={e => {
+            setIsAddMenuOpen(!isAddMenuOpen);
+            setRecipesMenuAnchor(e.currentTarget);
+          }}
+          $isDarkMode={isDarkMode}
+        >
           Add new {isAddMenuOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </RecipeAddButton>
-        <RecipeAddMenu onClose={() => setIsAddMenuOpen(false)} open={isAddMenuOpen}>
+        <RecipeAddMenu
+          anchorEl={recipesMenuAnchor}
+          onClose={() => setIsAddMenuOpen(false)}
+          open={isAddMenuOpen}
+        >
           <MenuItem
             onClick={() =>
               dispatch({
@@ -276,14 +287,7 @@ const RecipeAddButton = styled.button<{ $isDarkMode?: boolean }>(({ $isDarkMode 
 ]);
 
 const RecipeAddMenu = styled(Menu)({
-  '.MuiPaper-root': [
-    tw`absolute`,
-    tw`!left-auto`,
-    tw`!right-10`,
-    tw`!top-[148px]`,
-    tw`w-[124px]`,
-    tw`lg:!top-[136px]`,
-  ],
+  '.MuiPaper-root': [tw`w-[124px]`],
 });
 
 const RecipeSearch = styled(DrillyTextField)<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [
