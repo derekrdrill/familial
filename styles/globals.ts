@@ -6,8 +6,8 @@ import { Checkbox, TextField, Typography, TypographyProps } from '@mui/material'
 export const DrillyButton = styled.button<{
   $isDisabled?: boolean;
   $variant?: 'error' | 'primary' | 'success';
-  $styles?: TwStyle;
-}>(({ $isDisabled, $variant, $styles }) => [
+  $twStyles?: TwStyle;
+}>(({ $isDisabled, $variant, $twStyles }) => [
   $variant === 'error' && tw`bg-error border-error text-error`,
   $variant === 'primary' && tw`bg-primary border-primary text-primary`,
   $variant === 'success' && tw`bg-success border-success text-success`,
@@ -24,7 +24,7 @@ export const DrillyButton = styled.button<{
   tw`text-lg`,
   tw`lg:px-0.5`,
   tw`w-fit`,
-  $styles,
+  $twStyles,
 ]);
 
 export const DrillyTypography = styled(Typography)<

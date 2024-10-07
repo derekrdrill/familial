@@ -83,7 +83,7 @@ const Modal = () => {
                         /* istanbul ignore next */
                         () => dispatch(setModalItem(null, false, null, ''))
                       }
-                      $styles={tw`lg:px-4`}
+                      $twStyles={tw`lg:px-4`}
                       $variant='primary'
                     >
                       {cancelButtonText ?? 'Cancel'}
@@ -121,7 +121,7 @@ const Modal = () => {
                           }, submitButtonLoadingDelay ?? 0);
                         }
                       }
-                      $styles={tw`lg:px-4`}
+                      $twStyles={tw`lg:px-4`}
                       $variant='success'
                     >
                       {isModalLoading ? (

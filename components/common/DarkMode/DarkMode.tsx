@@ -33,7 +33,7 @@ const DarkMode = ({ darkModeContainerStyles }: DarkModeProps) => {
         });
       }}
       $isDarkMode={isDarkMode}
-      $styles={darkModeContainerStyles}
+      $twStyles={darkModeContainerStyles}
     >
       {isDarkMode ? <LightModeIcon tw='h-8 w-8' /> : <DarkModeIcon tw='h-8 w-8' />}
     </DarkModeRoot>
@@ -42,12 +42,12 @@ const DarkMode = ({ darkModeContainerStyles }: DarkModeProps) => {
 
 export default DarkMode;
 
-export const DarkModeRoot = styled(IconButton)<{ $isDarkMode?: boolean; $styles?: TwStyle }>(
-  ({ $isDarkMode, $styles }) => [
+export const DarkModeRoot = styled(IconButton)<{ $isDarkMode?: boolean; $twStyles?: TwStyle }>(
+  ({ $isDarkMode, $twStyles }) => [
     !$isDarkMode && tw`text-purple-300`,
     $isDarkMode && tw`text-yellow-200`,
     $isDarkMode && tw`hover:bg-gray-900`,
     !$isDarkMode && tw`hover:bg-gray-100`,
-    $styles,
+    $twStyles,
   ],
 );

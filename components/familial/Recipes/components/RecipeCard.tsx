@@ -40,7 +40,7 @@ const RecipeCard = ({
   return (
     <RecipeCardRootDiv
       onClick={() => router.push(`/recipes/${recipeId}`)}
-      $styles={recipeCardContainerStyles}
+      $twStyles={recipeCardContainerStyles}
     >
       <RecipeCardHeaderDiv $isDarkMode={isDarkMode}>
         <div>
@@ -120,13 +120,13 @@ const RecipeCardImage = styled.img([
   tw`w-full`,
 ]);
 
-const RecipeCardRootDiv = styled.div<{ $styles?: TwStyle }>(({ $styles }) => [
+const RecipeCardRootDiv = styled.div<{ $twStyles?: TwStyle }>(({ $twStyles }) => [
   tw`h-60`,
   tw`rounded-xl`,
   tw`md:h-48`,
   tw`hover:cursor-pointer`,
   tw`hover:opacity-90`,
-  $styles,
+  $twStyles,
 ]);
 
 const RecipeCardBodyDiv = styled.div<{ $isDarkMode?: boolean }>(({ $isDarkMode }) => [

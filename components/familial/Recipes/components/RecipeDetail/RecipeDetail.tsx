@@ -226,7 +226,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
                   onClick={handleSubmit}
                   tw='py-2 mt-9 w-full md:w-fit'
                   $isDisabled={!!errors.length || isRecipeFormSubmitting}
-                  $styles={tw`lg:px-2`}
+                  $twStyles={tw`lg:px-2`}
                   $variant='success'
                 >
                   {isRecipeFormSubmitting ? <CircularProgress /> : 'Submit'}

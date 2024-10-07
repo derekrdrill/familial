@@ -45,7 +45,7 @@ export const PhotoCoverModal = ({
             <DrillyButton
               onClick={() => setIsModalOpen(undefined)}
               $variant='error'
-              $styles={tw`rounded-md w-full`}
+              $twStyles={tw`rounded-md w-full`}
             >
               x
             </DrillyButton>
