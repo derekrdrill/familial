@@ -64,7 +64,11 @@ export const PhotoViewer = ({
   const [newPhotoComment, setNewPhotoComment] = React.useState<string>('');
 
   return (
-    <PhotoViewerRoot open={isPhotoViewerOpen} $isDarkMode={isDarkMode}>
+    <PhotoViewerRoot
+      open={isPhotoViewerOpen}
+      slotProps={{ root: { style: { zIndex: 2003 } } }}
+      $isDarkMode={isDarkMode}
+    >
       <>
         {photoURL && (
           <PhotoViewerContentContainer $isDarkMode={isDarkMode}>
