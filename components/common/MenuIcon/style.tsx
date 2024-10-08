@@ -24,18 +24,14 @@ export const MenuIconContainer = styled(Grid)<{
     transition: 'all 150ms linear',
   },
   '.menu-icon-line-top': {
-    transform: $isMenuIconActive
-      ? 'rotate(-28deg) translate(-5px, 7px)'
-      : 'none',
+    transform: $isMenuIconActive ? 'rotate(-28deg) translate(-5px, 7px)' : 'none',
     width: $isMenuIconActive ? 30 : 58,
   },
   '.menu-icon-line-middle': {
     width: 58,
   },
   '.menu-icon-line-bottom': {
-    transform: $isMenuIconActive
-      ? 'rotate(28deg) translate(-5px, -7px)'
-      : 'none',
+    transform: $isMenuIconActive ? 'rotate(28deg) translate(-5px, -7px)' : 'none',
     width: $isMenuIconActive ? 30 : 58,
   },
   cursor: 'pointer',
@@ -44,7 +40,7 @@ export const MenuIconContainer = styled(Grid)<{
   top: 22,
   transition: 'all 150ms linear',
   width: '58px !important',
-  zIndex: 6,
+  zIndex: 2003,
 }));
 
 export const MenuIconLine = styled(Grid)<{

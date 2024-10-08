@@ -175,6 +175,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         padding='150px 30px'
         setIsSidebarOpen={setIsSidebarOpen}
         side='left'
+        zIndex={2002}
       >
         <Grid container rowSpacing={6}>
           <TextField
@@ -220,7 +221,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         setIsSidebarOpen={setIsUserSidebarOpen}
         padding='0px'
         side='right'
-        zIndex={2002}
+        zIndex={2004}
       >
         <UserProfile
           isUserSidebarOpen={isUserSidebarOpen}
@@ -231,7 +232,7 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
         isSidebarOpen={isNotificationsSidebarOpen}
         setIsSidebarOpen={setIsNotificationsSidebarOpen}
         side='right'
-        zIndex={2002}
+        zIndex={2004}
       >
         <div tw='max-h-[99%] overflow-auto'>
           <Button

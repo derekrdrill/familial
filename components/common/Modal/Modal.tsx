@@ -37,7 +37,7 @@ const Modal = () => {
   const [isModalLoading, setIsModalLoading] = React.useState<boolean>(false);
 
   return (
-    <ModalComponent open={isModalOpen} slotProps={{ root: { style: { zIndex: 2003 } } }}>
+    <ModalComponent open={isModalOpen} slotProps={{ root: { style: { zIndex: 2005 } } }}>
       <ModalRootContainer container>
         <Grid item xs={1} md={3} lg={4} />
         <Grid item xs={10} md={6} lg={4}>
