@@ -67,17 +67,17 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
   const [recipesMenuAnchor, setRecipesMenuAnchor] = React.useState<HTMLButtonElement>();
 
   React.useEffect(() => {
-    const newRecipeDataSession = sessionStorage.getItem('newRecipeData');
-    const hasNewRecipeDataSession = !!newRecipeDataSession;
-    const newRecipeData = hasNewRecipeDataSession && JSON.parse(newRecipeDataSession ?? '');
-    const hasNewRecipeData = !!newRecipeData;
+    const recipeDataSession = sessionStorage.getItem('newRecipeData');
+    const recipeData = !!recipeDataSession && JSON.parse(recipeDataSession ?? '');
+    const hasNewRecipeData = !!recipeData;
+    const recipeChangeMessage = `${recipeData.title} was ${recipeData.isEditing ? 'updated' : `added to ${recipeData.cookbook}`}`;
 
     if (hasNewRecipeData) {
       dispatch({
         type: GlobalReducerActionEnum.SET_ALERT_ITEM,
         payload: {
           alertItem: {
-            alertMessage: `${newRecipeData.title} was added to ${newRecipeData.cookbook}`,
+            alertMessage: recipeChangeMessage,
             alertSeverity: 'success',
             isAlertOpen: true,
           },
@@ -239,6 +239,7 @@ const RecipesLayout = ({ children, recipeRandom, recipes }: RecipesLayoutProps) 
                     component: (
                       <RecipeCard
                         recipeAuthor={recipe.author ?? ''}
+                        recipeAuthorId={recipe.authorId}
                         recipeCardContainerStyles={tw`w-96 md:w-80`}
                         recipeCookbook={recipe.cookbook}
                         recipeId={recipe._id}

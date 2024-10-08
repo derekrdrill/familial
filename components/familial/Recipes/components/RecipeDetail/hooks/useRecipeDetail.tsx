@@ -6,12 +6,6 @@ import GlobalContext from '../../../../../../context/GlobalContext';
 import { Cookbook, FormError, Recipe } from '../../../../../../types';
 import { RecipeAddFormIngredient, RecipeAddFormStep } from '../types';
 
-import {
-  RECIPE_FORM_DEFAULTS,
-  RECIPE_INGREDIENTS_DEFAULTS,
-  RECIPE_STEPS_DEFAULTS,
-} from '../constants';
-
 import { getRecipeFormErrors } from '../helpers';
 import { RecipeIngredient } from '../../../../../../types/Recipe/Recipe';
 
@@ -49,10 +43,12 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     type: '',
   });
   const [recipeAuthor, setRecipeAuthor] = React.useState<string>();
+  const [recipeAuthorId, setRecipeAuthorId] = React.useState<string>();
   const [recipeAuthorImageUrl, setRecipeAuthorImageUrl] = React.useState<string>();
   const [recipeImage, setRecipeImage] = React.useState<ImageListType>();
   const [recipeImageUrl, setRecipeImageUrl] = React.useState<string>();
   const [recipeName, setRecipeName] = React.useState<string>('');
+  const [recipeUploadedAt, setRecipeUploadedAt] = React.useState<string>('');
   const [steps, setStepRows] = React.useState<RecipeAddFormStep[]>([{ step: '' }]);
   const [temperature, setTemperature] = React.useState('');
 
@@ -87,6 +83,8 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
       const recipe = await res.json();
 
       setRecipeAuthor(recipe.author);
+      setRecipeAuthorId(recipe.authorId);
+      setRecipeUploadedAt(recipe.uploadedAt.toString());
       setCookbook(recipe.cookbook);
       setIngredients(
         (recipe.ingredients as RecipeIngredient[]).map(ingredient => ({
@@ -127,7 +125,46 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     setRows(newRows);
   };
 
-  const handleSubmit = async () => {
+  const handleEditRecipe = async () => {
+    const updatedRecipe = {
+      ...newRecipeData,
+      ...{
+        _id: recipeId,
+        authorId: recipeAuthorId,
+        imageUrl: recipeImageUrl,
+        uploadedAt: new Date(recipeUploadedAt),
+      },
+    };
+
+    await fetch(`/api/recipe/update`, {
+      method: 'PUT',
+      body: JSON.stringify(updatedRecipe),
+    }).then(async res => {
+      await res.json();
+
+      sessionStorage.setItem(
+        'newRecipeData',
+        JSON.stringify({
+          cookbook: newRecipeData.cookbook,
+          isEditing: true,
+          title: newRecipeData.title,
+        }),
+      );
+
+      setIngredients([
+        {
+          ingredient: '',
+          ingredientMeasurement: 'Select measurement type...',
+          ingredientQuantity: '',
+        },
+      ]);
+      setStepRows([{ step: '' }]);
+      setIsRecipeFormSubmiting(false);
+      router.push('/recipes');
+    });
+  };
+
+  const handleAddRecipe = async () => {
     const currentErrors = getRecipeFormErrors({ newRecipeData });
 
     if (!!currentErrors.length) {
@@ -205,6 +242,14 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
           router.push('/recipes');
         });
       }
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (Boolean(router.query.isEditing)) {
+      handleEditRecipe();
+    } else {
+      handleAddRecipe();
     }
   };
 

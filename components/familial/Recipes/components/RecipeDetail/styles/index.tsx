@@ -25,6 +25,7 @@ export const RecipeDetailActionButtonsContainer = styled.div<{ $isDarkMode?: boo
     tw`flex`,
     tw`justify-between`,
     tw`py-3`,
+    tw`mt-2`,
     tw`sticky`,
     tw`top-[93px]`,
     tw`z-50`,

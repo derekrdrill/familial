@@ -1,14 +1,13 @@
 import React from 'react';
-import Link from 'next/link';
-import tw from 'twin.macro';
-import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-import PrintIcon from '@mui/icons-material/Print';
+import { useRouter } from 'next/router';
 
 import GlobalContext from '../../../../../context/GlobalContext';
 
+import RecipeDetailHeader from './components/RecipeDetailHeader';
 import RecipeDetails from './components/RecipeDetails';
 import RecipeDetailsForm from './components/RecipeDetailsForm';
 import RecipeDetailShimmer from './components/RecipeDetailShimmer';
+import RecipeDetailSubmit from './components/RecipeDetailSubmit';
 import RecipeImageUpload from './components/RecipeImageUpload';
 import RecipeIngredientsForm from './components/RecipeIngredientsForm';
 import RecipeIngredientsList from './components/RecipeIngredientsList';
@@ -17,17 +16,13 @@ import RecipeStepsList from './components/RecipeStepsList';
 
 import { useRecipeDetail } from './hooks/useRecipeDetail';
 import {
-  RecipeDetailActionButtonsContainer,
   RecipeDetailsContainer,
-  RecipeDetailPrintButton,
   RecipeDetailTypography,
   RecipeIngredientsOrStepsContainer,
 } from './styles';
 
 import { Cookbook } from '../../../../../types';
-import { DrillyButton, DrillyTypography } from '../../../../../styles/globals';
-import Image from 'next/image';
-import { CircularProgress } from '@mui/material';
+import { DrillyTypography } from '../../../../../styles/globals';
 
 type RecipeAddFormProps = {
   cookbooks: Cookbook[];
@@ -35,11 +30,14 @@ type RecipeAddFormProps = {
 };
 
 export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
+  const router = useRouter();
   const {
     state: { isDarkMode, photoList },
   } = React.useContext(GlobalContext);
 
   const hasRecipeId = !!recipeId;
+  const isEditingRecipe = Boolean(router.query.isEditing);
+  const isEditingOrAddingRecipe = !hasRecipeId || isEditingRecipe;
 
   const {
     cookbook,
@@ -91,55 +89,16 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
       {isRecipeDetailLoading && <RecipeDetailShimmer />}
       {!isRecipeDetailLoading && (
         <>
-          <RecipeDetailActionButtonsContainer $isDarkMode={isDarkMode}>
-            <Link href='/recipes' tw='flex gap-1 text-primary hover:underline'>
-              <KeyboardDoubleArrowLeftIcon />
-              Go back to all recipes
-            </Link>
-            {hasRecipeId && (
-              <RecipeDetailPrintButton onClick={() => window.print()}>
-                Print
-                <PrintIcon />
-              </RecipeDetailPrintButton>
-            )}
-          </RecipeDetailActionButtonsContainer>
-          <RecipeDetailsContainer
-            tw='col-span-full grid grid-cols-12'
-            $isEditingOrAddingRecipe={!hasRecipeId}
-          >
-            <RecipeDetailTypography
-              tw='col-span-full font-main text-3xl'
-              variant='h1'
-              $isCentered={false}
-              $isDarkMode={isDarkMode}
-            >
-              {hasRecipeId ? recipeName : 'New recipe'}
-            </RecipeDetailTypography>
-            <div tw='col-span-full flex gap-2'>
-              {recipeId && (
-                <RecipeDetailTypography
-                  tw='col-span-full'
-                  $isCentered={false}
-                  $isDarkMode={isDarkMode}
-                >
-                  added by {recipeAuthor}
-                </RecipeDetailTypography>
-              )}
-              {recipeAuthorImageUrl && (
-                <Image
-                  alt=''
-                  height={0}
-                  src={recipeAuthorImageUrl ?? ''}
-                  width={0}
-                  sizes='100vw'
-                  tw='rounded-3xl h-6 object-cover w-6'
-                />
-              )}
-            </div>
-          </RecipeDetailsContainer>
+          <RecipeDetailHeader
+            isEditingRecipe={isEditingRecipe}
+            isEditingOrAddingRecipe={isEditingOrAddingRecipe}
+            recipeAuthor={recipeAuthor}
+            recipeAuthorImageUrl={recipeAuthorImageUrl}
+            recipeName={recipeName}
+          />
           <RecipeDetailsContainer
             tw='col-span-full gap-2 grid'
-            $isEditingOrAddingRecipe={!hasRecipeId}
+            $isEditingOrAddingRecipe={isEditingOrAddingRecipe}
           >
             <RecipeDetailTypography
               tw='font-main mt-5 text-2xl'
@@ -149,7 +108,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
             >
               Details
             </RecipeDetailTypography>
-            {hasRecipeId ? (
+            {!isEditingOrAddingRecipe ? (
               <RecipeDetails
                 cookbook={cookbook}
                 cookType={cookType}
@@ -175,17 +134,20 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
             )}
           </RecipeDetailsContainer>
           <div tw='col-span-full flex mt-4 xl:col-span-4 xl:justify-center xl:translate-y-6'>
-            <RecipeImageUpload shouldShowImageUpload={!hasRecipeId} />
+            <RecipeImageUpload
+              recipeImageUrl={recipeImageUrl}
+              shouldShowImageUpload={isEditingOrAddingRecipe}
+            />
           </div>
           <div tw='lg:col-span-3 xl:col-span-4'></div>
           <RecipeIngredientsOrStepsContainer
             tw='col-span-full gap-2 grid'
-            $isEditingOrAddingRecipe={!hasRecipeId}
+            $isEditingOrAddingRecipe={isEditingOrAddingRecipe}
           >
             <DrillyTypography tw='font-main mt-5 text-2xl' variant='h2' $isDarkMode={isDarkMode}>
               Ingredients
             </DrillyTypography>
-            {hasRecipeId ? (
+            {!isEditingOrAddingRecipe ? (
               <RecipeIngredientsList ingredients={ingredients} />
             ) : (
               <RecipeIngredientsForm
@@ -200,12 +162,12 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
           </RecipeIngredientsOrStepsContainer>
           <RecipeIngredientsOrStepsContainer
             tw='col-span-full gap-2 grid'
-            $isEditingOrAddingRecipe={!hasRecipeId}
+            $isEditingOrAddingRecipe={isEditingOrAddingRecipe}
           >
             <DrillyTypography tw='font-main mt-5 text-2xl' variant='h2' $isDarkMode={isDarkMode}>
               Steps
             </DrillyTypography>
-            {hasRecipeId ? (
+            {!isEditingOrAddingRecipe ? (
               <RecipeStepsList steps={steps} />
             ) : (
               <RecipeStepsForm
@@ -218,27 +180,12 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
               />
             )}
           </RecipeIngredientsOrStepsContainer>
-          {!hasRecipeId && (
-            <div tw='col-span-full flex justify-end'>
-              <div tw='w-fit'>
-                <DrillyButton
-                  disabled={!!errors.length || isRecipeFormSubmitting}
-                  onClick={handleSubmit}
-                  tw='py-2 mt-9 w-full md:w-fit'
-                  $isDisabled={!!errors.length || isRecipeFormSubmitting}
-                  $twStyles={tw`lg:px-2`}
-                  $variant='success'
-                >
-                  {isRecipeFormSubmitting ? <CircularProgress /> : 'Submit'}
-                </DrillyButton>
-                {!!errors.length && (
-                  <DrillyTypography component='p' variant='caption' $textColor={tw`text-error`}>
-                    Please fix errors
-                  </DrillyTypography>
-                )}
-              </div>
-            </div>
-          )}
+          <RecipeDetailSubmit
+            errors={errors}
+            handleSubmit={handleSubmit}
+            isEditingOrAddingRecipe={isEditingOrAddingRecipe}
+            isRecipeFormSubmitting={isRecipeFormSubmitting}
+          />
         </>
       )}
     </div>

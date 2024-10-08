@@ -63,6 +63,7 @@ const RecipeSearchResults = ({
             <div tw='col-span-1'>
               <RecipeCard
                 recipeAuthor={recipe.author ?? ''}
+                recipeAuthorId={recipe.authorId}
                 recipeCardContainerStyles={tw`mb-16`}
                 recipeCookbook={recipe.cookbook}
                 recipeId={recipe._id}

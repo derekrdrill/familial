@@ -127,6 +127,7 @@ const Home = ({ photosRandomizedData, photosQuickData, recipesQuickData }: HomeP
                 component: (
                   <RecipeCard
                     recipeAuthor={recipe.author ?? ''}
+                    recipeAuthorId={recipe.authorId}
                     recipeCardContainerStyles={tw`w-96 md:w-80`}
                     recipeCookbook={recipe.cookbook}
                     recipeIngredients={getRecipeIngredientStringArray({

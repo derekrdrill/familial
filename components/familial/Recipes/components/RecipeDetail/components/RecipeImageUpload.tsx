@@ -6,24 +6,25 @@ import { GlobalReducerActionEnum } from '../../../../../../context/GlobalReducer
 import PhotoUploader from '../../../../../common/PhotoUploader';
 
 type RecipeImageProps = {
+  recipeImageUrl?: string;
   shouldShowImageUpload: boolean;
 };
 
-const RecipeImageUpload = ({ shouldShowImageUpload }: RecipeImageProps) => {
+const RecipeImageUpload = ({ recipeImageUrl, shouldShowImageUpload }: RecipeImageProps) => {
   const {
     dispatch,
     state: { photoList },
   } = React.useContext(GlobalContext);
   return (
     shouldShowImageUpload &&
-    (!!photoList?.length ? (
+    (!!photoList?.length || recipeImageUrl ? (
       <div tw='flex flex-col'>
         <Image
-          alt={photoList ? photoList[0].dataURL ?? '' : ''}
+          alt=''
           height={0}
           loading='lazy'
           sizes='100vw'
-          src={photoList ? photoList[0].dataURL ?? '' : ''}
+          src={(!!photoList?.length ? photoList[0].dataURL : recipeImageUrl) ?? ''}
           tw='h-40 w-full object-contain ml-8'
           width={0}
         />

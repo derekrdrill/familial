@@ -10,5 +10,5 @@ export const AlertContainer = styled(Grid)<{
   position: 'fixed',
   top: 50,
   transition: 'all 350ms ease-in',
-  zIndex: 6,
+  zIndex: 2005,
 }));

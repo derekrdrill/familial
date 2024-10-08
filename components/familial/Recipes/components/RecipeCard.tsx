@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
 import { IconButton } from '@mui/material';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
 import GlobalContext from '../../../../context/GlobalContext';
@@ -9,6 +10,7 @@ import { useRouter } from 'next/router';
 
 type RecipeCardType = {
   recipeAuthor: string;
+  recipeAuthorId?: string;
   recipeCardContainerStyles?: TwStyle;
   recipeCookbook: string;
   recipeId?: string;
@@ -22,6 +24,7 @@ type RecipeCardType = {
 
 const RecipeCard = ({
   recipeAuthor,
+  recipeAuthorId,
   recipeCardContainerStyles,
   recipeCookbook,
   recipeId,
@@ -34,8 +37,10 @@ const RecipeCard = ({
 }: RecipeCardType) => {
   const router = useRouter();
   const {
-    state: { isDarkMode },
+    state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
+
+  const isUserAuthorOfRecipe = recipeAuthorId === user?.userID;
 
   return (
     <RecipeCardRootDiv
@@ -49,9 +54,27 @@ const RecipeCard = ({
             by {recipeAuthor}
           </RecipeCardHeaderAddedBySpan>
         </div>
-        <IconButton color='error' tw='p-0'>
-          <FavoriteBorder />
-        </IconButton>
+        <div>
+          {isUserAuthorOfRecipe && (
+            <IconButton
+              color='primary'
+              onClick={e => {
+                e.stopPropagation();
+
+                router.push({
+                  pathname: `/recipes/${recipeId}`,
+                  query: { isEditing: true },
+                });
+              }}
+              tw='p-1'
+            >
+              <EditTwoToneIcon />
+            </IconButton>
+          )}
+          <IconButton color='error' tw='p-1'>
+            <FavoriteBorder />
+          </IconButton>
+        </div>
       </RecipeCardHeaderDiv>
       <RecipeCardBodyDiv $isDarkMode={isDarkMode}>
         <RecipeCardInfoColDiv hasRecipePhotoSrc={!!recipePhotoSrc}>
