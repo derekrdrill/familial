@@ -1,11 +1,11 @@
 import React from 'react';
-import { PhotoReaction, Photos, User } from '../../types';
+import { Reaction, Photos, User } from '../../types';
 
 type usePhotoReactionsProps = {
-  photoComments?: PhotoReaction[];
-  photoLikes?: PhotoReaction[];
-  photoLoves?: PhotoReaction[];
-  photoSmiles?: PhotoReaction[];
+  photoComments?: Reaction[];
+  photoLikes?: Reaction[];
+  photoLoves?: Reaction[];
+  photoSmiles?: Reaction[];
   user?: User;
 };
 
@@ -19,7 +19,7 @@ const usePhotoReactions = ({
   const [hasUserLiked, setHasUserLiked] = React.useState<boolean>(false);
   const [hasUserLoved, setHasUserLoved] = React.useState<boolean>(false);
   const [hasUserSmiled, setHasUserSmiled] = React.useState<boolean>(false);
-  const [photoCommentsState, setPhotoCommentsState] = React.useState<PhotoReaction[] | undefined>(
+  const [photoCommentsState, setPhotoCommentsState] = React.useState<Reaction[] | undefined>(
     photoComments,
   );
 
@@ -35,7 +35,7 @@ const usePhotoReactions = ({
     );
   }, [photoComments, photoLikes, photoLoves, photoSmiles, user]);
 
-  const getSortedComments = ({ photoComments }: { photoComments: PhotoReaction[] }) =>
+  const getSortedComments = ({ photoComments }: { photoComments: Reaction[] }) =>
     photoComments?.sort((a, b) => {
       if (a.comment && b.comment) {
         return b.comment.date > a.comment.date ? 1 : a.comment.date > b.comment.date ? -1 : 0;
@@ -92,7 +92,7 @@ const usePhotoReactions = ({
     })
       .then(async res => {
         const photoData: Photos = await res.json();
-        const photoComments: PhotoReaction[] | undefined = photoData.comments;
+        const photoComments: Reaction[] | undefined = photoData.comments;
 
         if (!!photoComments?.length) {
           setPhotoCommentsState(getSortedComments({ photoComments }));

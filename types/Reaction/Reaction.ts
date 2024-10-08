@@ -1,4 +1,4 @@
-export type PhotoReaction = {
+export type Reaction = {
   authorId: string;
   authorName: string;
   authorAvatarUrl?: string;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Home from '../components/familial/Home';
-import { Photos, PhotoReaction, Recipe, User } from '../types';
+import { Photos, Reaction, Recipe, User } from '../types';
 
 import conn from '../data/connection';
 import { Photos as PhotosData, Recipe as RecipeData, Users } from '../data/models';
@@ -14,9 +14,9 @@ type IndexProps = {
 const Index = ({ photosAllRandomized, photosQuick, recipesQuick }: IndexProps) => {
   return (
     <Home
-      photosAllRandomized={photosAllRandomized}
-      photosQuick={photosQuick}
-      recipesQuick={recipesQuick}
+      photosRandomizedData={photosAllRandomized}
+      photosQuickData={photosQuick}
+      recipesQuickData={recipesQuick}
     />
   );
 };
@@ -39,7 +39,7 @@ export const getServerSideProps = async () => {
     const users: User[] = await Users.find();
 
     const photosQuickWithReactionUpdates = photosQuick.map(photo => {
-      const getAvatarUrl = ({ reactions }: { reactions?: PhotoReaction[] }) =>
+      const getAvatarUrl = ({ reactions }: { reactions?: Reaction[] }) =>
         reactions
           ?.map(reaction => ({
             ...reaction,

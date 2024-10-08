@@ -12,6 +12,14 @@ export const RecipeSchema = new mongoose.Schema({
     },
   ],
   imageUrl: String,
+  likes: [
+    {
+      authorId: String,
+      authorName: String,
+      authorAvatarUrl: String,
+      comment: { date: String, text: String },
+    },
+  ],
   steps: [{ step: String }],
   temperature: String,
   time: String,

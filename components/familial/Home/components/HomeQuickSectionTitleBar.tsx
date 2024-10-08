@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { Menu, MenuItem } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import GlobalContext from '../../../../context/GlobalContext';
+import { Photos, Recipe } from '../../../../types';
 
 const HOME_QUICK_SECTION_MENU_ITEMS: { id: 'recentlyAdded' | 'mostPopular'; text: string }[] = [
   { id: 'recentlyAdded', text: 'Recently added' },
@@ -12,11 +13,17 @@ const HOME_QUICK_SECTION_MENU_ITEMS: { id: 'recentlyAdded' | 'mostPopular'; text
 
 type HomeQuickSectionTitleBarProps = {
   homeQuickSectionTitleBarStyles?: TwStyle;
+  isRecipes?: boolean;
+  setContentQuick:
+    | React.Dispatch<React.SetStateAction<Photos[]>>
+    | React.Dispatch<React.SetStateAction<Recipe[]>>;
   title: string;
 };
 
 const HomeQuickSectionTitleBar = ({
   homeQuickSectionTitleBarStyles,
+  isRecipes,
+  setContentQuick,
   title,
 }: HomeQuickSectionTitleBarProps) => {
   const {
@@ -70,9 +77,16 @@ const HomeQuickSectionTitleBar = ({
           {HOME_QUICK_SECTION_MENU_ITEMS.map(homeQuickSectionMenuItem => (
             <MenuItem
               key={homeQuickSectionMenuItem.id}
-              onClick={() => {
+              onClick={async () => {
                 setHomeQuickSectioMenuValue(homeQuickSectionMenuItem.id);
                 setIsHomeQuickSectionMenuOpen(false);
+
+                await fetch(
+                  `/api/photo/get?filterType=${homeQuickSectionMenuItem.id}&quickSectionType=${isRecipes ? 'recipes' : 'photos'}`,
+                ).then(async res => {
+                  const conentQuickFiltered = await res.json();
+                  setContentQuick(conentQuickFiltered);
+                });
               }}
             >
               {homeQuickSectionMenuItem.text}

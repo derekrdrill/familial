@@ -7,9 +7,9 @@ import { Tooltip } from '@mui/material';
 import GlobalContext from '../../../../context/GlobalContext';
 import { DrillyTypography } from '../../../../styles/globals';
 import { getUserInitials } from '../../../../helpers';
-import { PhotoReaction } from '../../../../types';
+import { Reaction } from '../../../../types';
 
-type PhotoCommentProps = { isUserCommentAuthor: boolean; photoComment: PhotoReaction };
+type PhotoCommentProps = { isUserCommentAuthor: boolean; photoComment: Reaction };
 
 export const PhotoComment = ({
   isUserCommentAuthor,

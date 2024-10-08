@@ -7,9 +7,30 @@ export const PhotosSchema = new mongoose.Schema({
   authorName: String,
   comments: [{ authorId: String, authorName: String, comment: { date: String, text: String } }],
   description: String,
-  likes: [{ authorId: String, authorName: String }],
-  loves: [{ authorId: String, authorName: String }],
-  smiles: [{ authorId: String, authorName: String }],
+  likes: [
+    {
+      authorId: String,
+      authorName: String,
+      authorAvatarUrl: String,
+      comment: { date: String, text: String },
+    },
+  ],
+  loves: [
+    {
+      authorId: String,
+      authorName: String,
+      authorAvatarUrl: String,
+      comment: { date: String, text: String },
+    },
+  ],
+  smiles: [
+    {
+      authorId: String,
+      authorName: String,
+      authorAvatarUrl: String,
+      comment: { date: String, text: String },
+    },
+  ],
   title: String,
   // uploadedByID: Number,
   // uploadedByString: String,

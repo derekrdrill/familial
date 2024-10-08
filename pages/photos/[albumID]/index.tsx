@@ -9,7 +9,7 @@ import {
 } from '../../../data/models';
 
 import PhotosLayout from '../../../layouts/PhotosLayout';
-import { Albums, PhotoReaction, Photos as PhotosType, User } from '../../../types';
+import { Albums, Reaction, Photos as PhotosType, User } from '../../../types';
 
 type AlbumIDIndexProps = {
   albumsData: Albums[];
@@ -44,7 +44,7 @@ export const getServerSideProps = async context => {
     const users: User[] = await UsersData.find();
 
     const photosWithReactionUpdates = photos.map(photo => {
-      const getAvatarUrl = ({ reactions }: { reactions?: PhotoReaction[] }) =>
+      const getAvatarUrl = ({ reactions }: { reactions?: Reaction[] }) =>
         reactions
           ?.map(reaction => ({
             ...reaction,

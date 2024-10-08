@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
-import { PhotoReaction } from '../../../../types';
+import { Reaction } from '../../../../types';
 import { PhotoReactionButton } from './PhotoReactionButton';
 import { Shimmer } from 'react-shimmer';
 
@@ -17,9 +17,9 @@ type PhotoQuickProps = {
   photoAuthorFirstName: string;
   photoAuthorId?: string;
   photoID: string;
-  photoLikes?: PhotoReaction[];
-  photoLoves?: PhotoReaction[];
-  photoSmiles?: PhotoReaction[];
+  photoLikes?: Reaction[];
+  photoLoves?: Reaction[];
+  photoSmiles?: Reaction[];
   photoTitle: string;
   photoUrl: string;
 };

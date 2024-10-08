@@ -22,18 +22,21 @@ import { Photos, Recipe } from '../../../types';
 import { getRecipeIngredientStringArray, getRecipeStepsStringArray } from '../Recipes/helpers';
 
 type HomeProps = {
-  photosAllRandomized: Photos[];
-  photosQuick: Photos[];
-  recipesQuick: Recipe[];
+  photosRandomizedData: Photos[];
+  photosQuickData: Photos[];
+  recipesQuickData: Recipe[];
 };
 
-const Home = ({ photosAllRandomized, photosQuick, recipesQuick }: HomeProps) => {
+const Home = ({ photosRandomizedData, photosQuickData, recipesQuickData }: HomeProps) => {
   const theme = useTheme();
   const isSM = useMediaQuery(theme.breakpoints.up('sm'));
 
   const {
     state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
+
+  const [photosQuick, setPhotosQuick] = React.useState<Photos[]>([]);
+  const [recipesQuick, setRecipesQuick] = React.useState<Recipe[]>([]);
 
   return (
     <HomeRoot>
@@ -53,7 +56,7 @@ const Home = ({ photosAllRandomized, photosQuick, recipesQuick }: HomeProps) => 
         </HomeTitleColDiv>
         <HomeSlideshowColDiv>
           <Carousel
-            carouselContent={photosAllRandomized.map(photo => ({
+            carouselContent={photosRandomizedData.map(photo => ({
               id: photo._id,
               component: (
                 <div tw='flex justify-center min-w-full'>
@@ -79,17 +82,21 @@ const Home = ({ photosAllRandomized, photosQuick, recipesQuick }: HomeProps) => 
         </HomeSlideshowColDiv>
       </HomeTitleAndSlideshowDiv>
       <HomeQuickSectionDiv>
-        <HomeQuickSectionTitleBar homeQuickSectionTitleBarStyles={tw`mb-1`} title='Quick photos' />
+        <HomeQuickSectionTitleBar
+          homeQuickSectionTitleBarStyles={tw`mb-1`}
+          setContentQuick={setPhotosQuick}
+          title='Quick photos'
+        />
         <div tw='col-span-1 flex justify-center lg:p-2'>
           <Carousel
-            carouselContent={photosQuick.map(photo => ({
+            carouselContent={(!!photosQuick.length ? photosQuick : photosQuickData)?.map(photo => ({
               id: photo._id,
               component: (
                 <div tw='w-80 md:w-56'>
                   <PhotoQuick
                     photoAlbumID={photo.albumID}
                     photoAlbumName={photo.albumName}
-                    photoAuthorFirstName={photo.authorName.split(' ')[0]}
+                    photoAuthorFirstName={photo.authorName?.split(' ')[0]}
                     photoAuthorId={photo.authorId}
                     photoID={photo._id}
                     photoLikes={photo.likes}
@@ -105,31 +112,38 @@ const Home = ({ photosAllRandomized, photosQuick, recipesQuick }: HomeProps) => 
         </div>
       </HomeQuickSectionDiv>
       <HomeQuickSectionDiv>
-        <HomeQuickSectionTitleBar homeQuickSectionTitleBarStyles={tw`mb-3`} title='Quick recipes' />
+        <HomeQuickSectionTitleBar
+          homeQuickSectionTitleBarStyles={tw`mb-3`}
+          isRecipes
+          setContentQuick={setRecipesQuick}
+          title='Quick recipes'
+        />
         <div tw='col-span-1 flex justify-center'>
           <Carousel
             carouselHeight={isSM ? 240 : 300}
-            carouselContent={recipesQuick.map(recipe => ({
-              id: recipe._id ?? '',
-              component: (
-                <RecipeCard
-                  recipeAuthor={recipe.author ?? ''}
-                  recipeCardContainerStyles={tw`w-96 md:w-80`}
-                  recipeCookbook={recipe.cookbook}
-                  recipeIngredients={getRecipeIngredientStringArray({
-                    recipeIngredientData: recipe.ingredients,
-                  }).join(', ')}
-                  recipeId={recipe._id}
-                  recipePhotoSrc={recipe.imageUrl}
-                  recipeSteps={getRecipeStepsStringArray({
-                    recipeSteps: recipe.steps,
-                  }).join(', ')}
-                  recipeTitle={recipe.title}
-                  recipeTemp={recipe.temperature}
-                  recipeTime={recipe.time}
-                />
-              ),
-            }))}
+            carouselContent={(!!recipesQuick.length ? recipesQuick : recipesQuickData).map(
+              recipe => ({
+                id: recipe._id ?? '',
+                component: (
+                  <RecipeCard
+                    recipeAuthor={recipe.author ?? ''}
+                    recipeCardContainerStyles={tw`w-96 md:w-80`}
+                    recipeCookbook={recipe.cookbook}
+                    recipeIngredients={getRecipeIngredientStringArray({
+                      recipeIngredientData: recipe.ingredients,
+                    }).join(', ')}
+                    recipeId={recipe._id}
+                    recipePhotoSrc={recipe.imageUrl}
+                    recipeSteps={getRecipeStepsStringArray({
+                      recipeSteps: recipe.steps,
+                    }).join(', ')}
+                    recipeTitle={recipe.title}
+                    recipeTemp={recipe.temperature}
+                    recipeTime={recipe.time}
+                  />
+                ),
+              }),
+            )}
           />
         </div>
       </HomeQuickSectionDiv>

@@ -11,17 +11,17 @@ import { DrillyTypography } from '../../../../styles/globals';
 import { PhotoComment, PhotoReactionButton } from '../../Photos';
 import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
 
-import { PhotoReaction } from '../../../../types';
+import { Reaction } from '../../../../types';
 
 type PhotoViewerTypes = {
   isPhotoViewerOpen: boolean;
   photoAuthorFirstName?: string;
   photoAuthorId?: string;
-  photoComments?: PhotoReaction[];
+  photoComments?: Reaction[];
   photoId?: string;
-  photoLikes?: PhotoReaction[];
-  photoLoves?: PhotoReaction[];
-  photoSmiles?: PhotoReaction[];
+  photoLikes?: Reaction[];
+  photoLoves?: Reaction[];
+  photoSmiles?: Reaction[];
   photoTitle?: string;
   photoURL?: string;
 };

@@ -1,3 +1,5 @@
+import { Reaction } from '../../types';
+
 export type RecipeIngredient = {
   ingredient: string;
   ingredientMeasurement: string;
@@ -18,6 +20,7 @@ export type Recipe = {
   cookbook: string;
   imageUrl?: string;
   ingredients: RecipeIngredient[];
+  likes?: Reaction[];
   steps: RecipeStep[];
   temperature?: string;
   time?: string;

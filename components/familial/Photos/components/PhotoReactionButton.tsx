@@ -13,7 +13,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
 import { DrillyTypography } from '../../../../styles/globals';
 import { getUserInitials } from '../../../../helpers';
-import { PhotoReaction } from '../../../../types';
+import { Reaction } from '../../../../types';
 import GlobalContext from '../../../../context/GlobalContext';
 
 type PhotoReactionButtonProps = {
@@ -21,7 +21,7 @@ type PhotoReactionButtonProps = {
   hasUserLiked?: boolean;
   hasUserLoved?: boolean;
   hasUserSmiled?: boolean;
-  reactions?: PhotoReaction[];
+  reactions?: Reaction[];
   reactionType: 'like' | 'love' | 'smile';
 };
 

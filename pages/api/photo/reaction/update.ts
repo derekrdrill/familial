@@ -3,19 +3,19 @@ import mongoose from 'mongoose';
 
 import conn from '../../../../data/connection';
 import { Notification, Photos } from '../../../../data/models';
-import { PhotoReaction } from '../../../../types';
+import { Reaction } from '../../../../types';
 
 export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
   await conn();
 
-  let photoReactionDataNew: PhotoReaction[];
+  let photoReactionDataNew: Reaction[];
 
   const photoAlbum = {
     id: JSON.parse(req.body).photoAlbumId,
     name: JSON.parse(req.body).photoAlbumName,
   };
   const photoID: string = JSON.parse(req.body).photoID;
-  const photoReactionNew: PhotoReaction = JSON.parse(req.body).photoReaction;
+  const photoReactionNew: Reaction = JSON.parse(req.body).photoReaction;
   const photoReactionType: 'comment' | 'like' | 'love' | 'smile' = JSON.parse(
     req.body,
   ).photoReactionType;
@@ -26,7 +26,7 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
   const photoReactionTypeField: string = `${photoReactionType}s`;
 
   const photo = await Photos.findById(photoID);
-  const photoReactionsCurrent: PhotoReaction[] = photo[photoReactionTypeField];
+  const photoReactionsCurrent: Reaction[] = photo[photoReactionTypeField];
 
   const hasUserReacted = !!photoReactionsCurrent.find(
     photoReaction => photoReaction.authorId === photoReactionNew.authorId,

@@ -6,7 +6,7 @@ import { ModalItem } from '../types/ModalItem/ModalItem';
 import { Notification } from './Notification/Notification';
 import { PhotoUploadData } from './PhotoUploadData/PhotoUploadData';
 import { Photos } from '../types/Photos/Photos';
-import { PhotoReaction } from '../types/Photos/PhotoReaction';
+import { Reaction } from '../types/Reaction/Reaction';
 import {
   Recipe,
   RecipeIngredient,
@@ -25,7 +25,7 @@ export {
   Notification,
   PhotoUploadData,
   Photos,
-  PhotoReaction,
+  Reaction,
   Recipe,
   RecipeIngredient,
   RecipeIngredientOrStep,
