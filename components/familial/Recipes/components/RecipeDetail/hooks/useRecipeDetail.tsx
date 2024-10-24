@@ -265,6 +265,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
         ...newRecipeData,
         ...{
           author: recipeAuthor ?? user?.firstName,
+          authorId: recipeAuthorId ?? user?.userID,
           cookbook: cookbook,
           ingredients: ingredients,
           steps: steps,
@@ -298,6 +299,7 @@ export const useRecipeDetail = ({ recipeId }: useRecipeDetailProps) => {
     isRecipeFormSubmitting,
     newRecipeData,
     recipeAuthor,
+    recipeAuthorId,
     recipeAuthorImageUrl,
     recipeImage,
     recipeImageUrl,

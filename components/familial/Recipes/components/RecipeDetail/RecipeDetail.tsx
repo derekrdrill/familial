@@ -48,6 +48,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
     isRecipeDetailLoading,
     isRecipeFormSubmitting,
     recipeAuthor,
+    recipeAuthorId,
     recipeAuthorImageUrl,
     recipeImageUrl,
     recipeName,
@@ -93,6 +94,7 @@ export const RecipeDetail = ({ cookbooks, recipeId }: RecipeAddFormProps) => {
             isEditingRecipe={isEditingRecipe}
             isEditingOrAddingRecipe={isEditingOrAddingRecipe}
             recipeAuthor={recipeAuthor}
+            recipeAuthorId={recipeAuthorId}
             recipeAuthorImageUrl={recipeAuthorImageUrl}
             recipeName={recipeName}
           />
