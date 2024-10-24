@@ -19,6 +19,7 @@ type RecipeDetailHeaderProps = {
   isEditingRecipe: boolean;
   isEditingOrAddingRecipe: boolean;
   recipeAuthor?: string;
+  recipeAuthorId?: string;
   recipeAuthorImageUrl?: string;
   recipeName: string;
 };
@@ -27,14 +28,17 @@ const RecipeDetailHeader = ({
   isEditingRecipe,
   isEditingOrAddingRecipe,
   recipeAuthor,
+  recipeAuthorId,
   recipeAuthorImageUrl,
   recipeName,
 }: RecipeDetailHeaderProps) => {
   const router = useRouter();
 
   const {
-    state: { isDarkMode },
+    state: { isDarkMode, user },
   } = React.useContext(GlobalContext);
+
+  const isAuthor = recipeAuthorId === user?.userID;
 
   return (
     <>
@@ -69,7 +73,7 @@ const RecipeDetailHeader = ({
               {!isEditingOrAddingRecipe || isEditingRecipe ? recipeName : 'New recipe'}
             </span>
           </RecipeDetailTypography>
-          {!isEditingOrAddingRecipe && (
+          {isAuthor && !isEditingOrAddingRecipe && (
             <IconButton
               color='primary'
               onClick={() => {
