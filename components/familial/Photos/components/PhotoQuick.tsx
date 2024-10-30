@@ -1,15 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
-import { useRouter } from 'next/router';
+import { Shimmer } from 'react-shimmer';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
-import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
+import useReactions from '../../ReactionButton/hooks/useReactions';
+import { ReactionButton } from '../../ReactionButton/ReactionButton';
 import { Reaction } from '../../../../types';
-import { PhotoReactionButton } from './PhotoReactionButton';
-import { Shimmer } from 'react-shimmer';
 
 type PhotoQuickProps = {
   photoAlbumID: string;
@@ -52,7 +52,7 @@ const PhotoQuick = ({
     setHasUserLiked,
     setHasUserLoved,
     setHasUserSmiled,
-  } = usePhotoReactions({
+  } = useReactions({
     photoLikes,
     photoLoves,
     photoSmiles,
@@ -94,7 +94,7 @@ const PhotoQuick = ({
       </PhotoQuickTitleText>
       <div tw='gap-0 grid grid-cols-3 mx-14'>
         <div tw='col-span-1 flex justify-center'>
-          <PhotoReactionButton
+          <ReactionButton
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
@@ -103,6 +103,7 @@ const PhotoQuick = ({
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLiked,
+                isPhoto: true,
                 photoAlbumId: photoAlbumID,
                 photoAlbumName,
                 photoId: photoID,
@@ -119,7 +120,7 @@ const PhotoQuick = ({
           />
         </div>
         <div tw='col-span-1 flex justify-center'>
-          <PhotoReactionButton
+          <ReactionButton
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
@@ -128,6 +129,7 @@ const PhotoQuick = ({
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserLoved,
+                isPhoto: true,
                 photoAlbumId: photoAlbumID,
                 photoAlbumName,
                 photoId: photoID,
@@ -144,7 +146,7 @@ const PhotoQuick = ({
           />
         </div>
         <div tw='col-span-1 flex justify-center'>
-          <PhotoReactionButton
+          <ReactionButton
             handleReactionClick={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.stopPropagation();
 
@@ -153,6 +155,7 @@ const PhotoQuick = ({
                 authorId: user?.userID,
                 authorName: `${user?.firstName} ${user?.lastName}`,
                 hasUserReacted: hasUserSmiled,
+                isPhoto: true,
                 photoAlbumId: photoAlbumID,
                 photoAlbumName,
                 photoId: photoID,

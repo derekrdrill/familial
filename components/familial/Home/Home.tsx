@@ -134,6 +134,7 @@ const Home = ({ photosRandomizedData, photosQuickData, recipesQuickData }: HomeP
                       recipeIngredientData: recipe.ingredients,
                     }).join(', ')}
                     recipeId={recipe._id}
+                    recipeLoves={recipe.loves}
                     recipePhotoSrc={recipe.imageUrl}
                     recipeSteps={getRecipeStepsStringArray({
                       recipeSteps: recipe.steps,

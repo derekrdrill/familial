@@ -28,6 +28,8 @@ export default function Notifications({
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
+  console.log(notifications);
+
   return (
     <>
       <DrillyTypography component='h1' tw='mt-2 text-center' variant='h5' $isDarkMode={isDarkMode}>
@@ -50,7 +52,11 @@ export default function Notifications({
               return (
                 <Link
                   key={_id}
-                  href={`/photos/${contentParentId}?p=${contentId}`}
+                  href={
+                    contentType === 'recipe'
+                      ? `/recipes/${contentId}`
+                      : `/photos/${contentParentId}?p=${contentId}`
+                  }
                   onClick={async () => {
                     await fetch('/api/notifications/delete', {
                       method: 'PUT',
@@ -108,16 +114,14 @@ export default function Notifications({
                   <DrillyTypography variant='subtitle2' $isDarkMode={isDarkMode}>
                     {notification}{' '}
                   </DrillyTypography>
-                  {contentType === 'photo' && (
-                    <Image
-                      alt=''
-                      height={0}
-                      sizes='100vw'
-                      src={contentImageUrl}
-                      tw='h-28 object-cover w-16'
-                      width={0}
-                    />
-                  )}
+                  <Image
+                    alt=''
+                    height={0}
+                    sizes='100vw'
+                    src={contentImageUrl}
+                    tw='h-28 object-cover w-16'
+                    width={0}
+                  />
                 </Link>
               );
             },

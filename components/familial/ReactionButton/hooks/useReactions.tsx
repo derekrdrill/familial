@@ -1,19 +1,21 @@
 import React from 'react';
-import { Reaction, Photos, User } from '../../types';
+import { Reaction, Photos, User } from '../../../../types';
 
 type usePhotoReactionsProps = {
   photoComments?: Reaction[];
   photoLikes?: Reaction[];
   photoLoves?: Reaction[];
   photoSmiles?: Reaction[];
+  recipeLoves?: Reaction[];
   user?: User;
 };
 
-const usePhotoReactions = ({
+const useReactions = ({
   photoComments,
   photoLikes,
   photoLoves,
   photoSmiles,
+  recipeLoves,
   user,
 }: usePhotoReactionsProps) => {
   const [hasUserLiked, setHasUserLiked] = React.useState<boolean>(false);
@@ -23,17 +25,38 @@ const usePhotoReactions = ({
     photoComments,
   );
 
+  console.log(photoLoves);
+
   React.useEffect(() => {
     if (user) {
       setHasUserLiked(!!photoLikes?.find(photoLike => photoLike.authorId === user.userID));
-      setHasUserLoved(!!photoLoves?.find(photoLove => photoLove.authorId === user.userID));
       setHasUserSmiled(!!photoSmiles?.find(photoSmile => photoSmile.authorId === user.userID));
+
+      if (!!recipeLoves) {
+        setHasUserLoved(
+          !!recipeLoves?.find(
+            photoLove =>
+              photoLove.authorId === user.userID ||
+              recipeLoves?.find(recipeLove => recipeLove.authorId === user.userID),
+          ),
+        );
+      }
+
+      if (!!photoLoves) {
+        setHasUserLoved(
+          !!photoLoves?.find(
+            photoLove =>
+              photoLove.authorId === user.userID ||
+              recipeLoves?.find(recipeLove => recipeLove.authorId === user.userID),
+          ),
+        );
+      }
     }
 
     setPhotoCommentsState(
       !!photoComments?.length ? getSortedComments({ photoComments }) : photoComments,
     );
-  }, [photoComments, photoLikes, photoLoves, photoSmiles, user]);
+  }, [photoComments, photoLikes, photoLoves, photoSmiles, recipeLoves, user]);
 
   const getSortedComments = ({ photoComments }: { photoComments: Reaction[] }) =>
     photoComments?.sort((a, b) => {
@@ -49,11 +72,15 @@ const usePhotoReactions = ({
     authorName,
     comment,
     hasUserReacted,
+    isPhoto,
+    isRecipe,
     photoAlbumId,
     photoAlbumName,
     photoId,
     photoUrl,
     reactionType,
+    recipeId,
+    recipePhotoUrl,
     setHasUserReacted,
     to,
     toId,
@@ -62,32 +89,40 @@ const usePhotoReactions = ({
     authorId?: string;
     authorName: string;
     comment?: { date: string; text: string };
+    cookbookId?: string;
     hasUserReacted?: boolean;
+    isPhoto?: boolean;
+    isRecipe?: boolean;
     photoAlbumId?: string;
     photoAlbumName?: string;
     photoId?: string;
     photoUrl?: string;
     reactionType: 'comment' | 'like' | 'love' | 'smile';
+    recipeId?: string;
+    recipePhotoUrl?: string;
     setHasUserReacted?: React.Dispatch<React.SetStateAction<boolean>>;
     to?: string;
     toId?: string;
   }) => {
-    await fetch('/api/photo/reaction/update', {
+    await fetch('/api/reaction/update', {
       method: 'PUT',
       body: JSON.stringify({
-        photoAlbumId,
-        photoAlbumName,
-        photoID: photoId,
-        photoReactionType: reactionType,
-        photoReaction: {
+        contentId: isRecipe ? recipeId : photoId,
+        isPhoto,
+        isRecipe,
+        parentId: photoAlbumId,
+        parentName: photoAlbumName,
+        reaction: {
           authorId,
           authorName,
           authorAvatarUrl,
           ...(reactionType === 'comment' && { comment }),
         },
-        photoReactionTo: to,
-        photoReactionToId: toId,
-        photoReactionImageUrl: photoUrl,
+        reactionType,
+        reactionTo: to,
+        reactionToId: toId,
+        ...(isPhoto && { reactionImageUrl: photoUrl }),
+        ...(isRecipe && { reactionImageUrl: recipePhotoUrl }),
       }),
     })
       .then(async res => {
@@ -119,4 +154,4 @@ const usePhotoReactions = ({
   };
 };
 
-export default usePhotoReactions;
+export default useReactions;

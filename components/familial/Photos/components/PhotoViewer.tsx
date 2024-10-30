@@ -8,8 +8,9 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { DrillyTypography } from '../../../../styles/globals';
-import { PhotoComment, PhotoReactionButton } from '../../Photos';
-import usePhotoReactions from '../../../../hooks/photos/usePhotoReactions';
+import { PhotoComment } from '../../Photos';
+import { ReactionButton } from '../../ReactionButton/ReactionButton';
+import useReactions from '../../ReactionButton/hooks/useReactions';
 
 import { Reaction } from '../../../../types';
 
@@ -53,7 +54,7 @@ export const PhotoViewer = ({
     setHasUserLiked,
     setHasUserLoved,
     setHasUserSmiled,
-  } = usePhotoReactions({
+  } = useReactions({
     photoLikes,
     photoLoves,
     photoSmiles,
@@ -121,13 +122,14 @@ export const PhotoViewer = ({
                   {photoTitle}
                 </DrillyTypography>
                 <div tw='flex'>
-                  <PhotoReactionButton
+                  <ReactionButton
                     handleReactionClick={async () =>
                       await handleReactionClick({
                         authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserLiked,
+                        isPhoto: true,
                         photoAlbumId: selectedPhotoAlbum?._id,
                         photoAlbumName: selectedPhotoAlbum?.albumName,
                         photoId: photoId,
@@ -142,13 +144,14 @@ export const PhotoViewer = ({
                     reactions={photoLikes}
                     reactionType='like'
                   />
-                  <PhotoReactionButton
+                  <ReactionButton
                     handleReactionClick={async () =>
                       await handleReactionClick({
                         authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserLoved,
+                        isPhoto: true,
                         photoAlbumId: selectedPhotoAlbum?._id,
                         photoAlbumName: selectedPhotoAlbum?.albumName,
                         photoId: photoId,
@@ -163,13 +166,14 @@ export const PhotoViewer = ({
                     reactions={photoLoves}
                     reactionType='love'
                   />
-                  <PhotoReactionButton
+                  <ReactionButton
                     handleReactionClick={async () =>
                       await handleReactionClick({
                         authorAvatarUrl: user?.avatarURL,
                         authorId: user?.userID,
                         authorName: `${user?.firstName} ${user?.lastName}`,
                         hasUserReacted: hasUserSmiled,
+                        isPhoto: true,
                         photoAlbumId: selectedPhotoAlbum?._id,
                         photoAlbumName: selectedPhotoAlbum?.albumName,
                         photoId: photoId,
@@ -203,6 +207,7 @@ export const PhotoViewer = ({
                           authorId: user?.userID,
                           authorName: `${user?.firstName} ${user?.lastName}`,
                           comment: { date: new Date().toString(), text: newPhotoComment },
+                          isPhoto: true,
                           photoAlbumId: selectedPhotoAlbum?._id,
                           photoAlbumName: selectedPhotoAlbum?.albumName,
                           photoId: photoId,

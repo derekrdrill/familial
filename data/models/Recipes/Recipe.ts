@@ -12,7 +12,7 @@ export const RecipeSchema = new mongoose.Schema({
     },
   ],
   imageUrl: String,
-  likes: [
+  loves: [
     {
       authorId: String,
       authorName: String,

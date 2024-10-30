@@ -21,6 +21,7 @@ export type Recipe = {
   imageUrl?: string;
   ingredients: RecipeIngredient[];
   likes?: Reaction[];
+  loves?: Reaction[];
   steps: RecipeStep[];
   temperature?: string;
   time?: string;

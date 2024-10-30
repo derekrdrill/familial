@@ -1,12 +1,14 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
 import { IconButton } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
 import GlobalContext from '../../../../context/GlobalContext';
-import { useRouter } from 'next/router';
+import { ReactionButton } from '../../ReactionButton/ReactionButton';
+import useReactions from '../../ReactionButton/hooks/useReactions';
+import { Reaction } from '../../../../types';
 
 type RecipeCardType = {
   recipeAuthor: string;
@@ -15,6 +17,7 @@ type RecipeCardType = {
   recipeCookbook: string;
   recipeId?: string;
   recipeIngredients: string;
+  recipeLoves?: Reaction[];
   recipePhotoSrc?: string;
   recipeSteps: string;
   recipeTemp?: string;
@@ -29,6 +32,7 @@ const RecipeCard = ({
   recipeCookbook,
   recipeId,
   recipeIngredients,
+  recipeLoves,
   recipePhotoSrc,
   recipeSteps,
   recipeTemp,
@@ -41,6 +45,11 @@ const RecipeCard = ({
   } = React.useContext(GlobalContext);
 
   const isUserAuthorOfRecipe = recipeAuthorId === user?.userID;
+
+  const { handleReactionClick, hasUserLoved, setHasUserLoved } = useReactions({
+    recipeLoves,
+    user,
+  });
 
   return (
     <RecipeCardRootDiv
@@ -71,9 +80,27 @@ const RecipeCard = ({
               <EditTwoToneIcon />
             </IconButton>
           )}
-          <IconButton color='error' tw='p-1'>
-            <FavoriteBorder />
-          </IconButton>
+          <ReactionButton
+            handleReactionClick={async e => {
+              e.stopPropagation();
+
+              await handleReactionClick({
+                authorAvatarUrl: user?.avatarURL,
+                authorId: user?.userID,
+                authorName: `${user?.firstName} ${user?.lastName}`,
+                hasUserReacted: hasUserLoved,
+                isRecipe: true,
+                reactionType: 'love',
+                recipeId,
+                recipePhotoUrl: recipePhotoSrc,
+                setHasUserReacted: setHasUserLoved,
+                to: recipeAuthor,
+                toId: recipeAuthorId,
+              });
+            }}
+            hasUserLoved={hasUserLoved}
+            reactionType='love'
+          />
         </div>
       </RecipeCardHeaderDiv>
       <RecipeCardBodyDiv $isDarkMode={isDarkMode}>

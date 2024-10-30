@@ -11,12 +11,12 @@ import TagFacesIcon from '@mui/icons-material/TagFaces';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
-import { DrillyTypography } from '../../../../styles/globals';
-import { getUserInitials } from '../../../../helpers';
-import { Reaction } from '../../../../types';
-import GlobalContext from '../../../../context/GlobalContext';
+import { DrillyTypography } from '../../../styles/globals';
+import { getUserInitials } from '../../../helpers';
+import { Reaction } from '../../../types';
+import GlobalContext from '../../../context/GlobalContext';
 
-type PhotoReactionButtonProps = {
+type ReactionButtonProps = {
   handleReactionClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   hasUserLiked?: boolean;
   hasUserLoved?: boolean;
@@ -25,14 +25,14 @@ type PhotoReactionButtonProps = {
   reactionType: 'like' | 'love' | 'smile';
 };
 
-export const PhotoReactionButton = ({
+export const ReactionButton = ({
   handleReactionClick,
   hasUserLiked,
   hasUserLoved,
   hasUserSmiled,
   reactions,
   reactionType,
-}: PhotoReactionButtonProps) => {
+}: ReactionButtonProps) => {
   const {
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
@@ -65,9 +65,9 @@ export const PhotoReactionButton = ({
                       width={0}
                     />
                   ) : (
-                    <PhotoReationTooltipInitials>
+                    <ReactionTooltipInitials>
                       {getUserInitials({ name: reaction.authorName })}
-                    </PhotoReationTooltipInitials>
+                    </ReactionTooltipInitials>
                   )}
                   <DrillyTypography component='p' variant='subtitle1' $isDarkMode={isDarkMode}>
                     {reaction.authorName}
@@ -106,7 +106,7 @@ export const PhotoReactionButton = ({
   );
 };
 
-const PhotoReationTooltipInitials = styled(DrillyTypography)([
+const ReactionTooltipInitials = styled(DrillyTypography)([
   tw`bg-secondary`,
   tw`h-8`,
   tw`pl-1`,
