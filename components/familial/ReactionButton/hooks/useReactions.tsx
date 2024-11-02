@@ -25,8 +25,6 @@ const useReactions = ({
     photoComments,
   );
 
-  console.log(photoLoves);
-
   React.useEffect(() => {
     if (user) {
       setHasUserLiked(!!photoLikes?.find(photoLike => photoLike.authorId === user.userID));

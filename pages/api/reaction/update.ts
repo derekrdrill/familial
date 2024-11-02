@@ -76,7 +76,7 @@ export default async function PUT(req: NextApiRequest, res: NextApiResponse) {
         contentImageUrl: reactionImageUrl,
         contentParentId: parent.id,
         contentParentName: parent.name,
-        contentType: 'recipe',
+        contentType: isPhoto ? 'photo' : 'recipe',
         from: reactionNew.authorName.split(' ')[0],
         fromAvatarUrl: reactionNew.authorAvatarUrl,
         fromId: reactionFromId,

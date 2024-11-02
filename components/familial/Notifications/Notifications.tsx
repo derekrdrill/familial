@@ -28,8 +28,6 @@ export default function Notifications({
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
-  console.log(notifications);
-
   return (
     <>
       <DrillyTypography component='h1' tw='mt-2 text-center' variant='h5' $isDarkMode={isDarkMode}>
