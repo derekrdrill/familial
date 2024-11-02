@@ -4,9 +4,10 @@ import conn from '../../../data/connection';
 import { Photos as PhotosData } from '../../../data/models';
 
 import PhotosSlideshow from '../../../components/familial/Photos/components/PhotosSlideshow';
+import { Photos } from '../../../types';
 
 type Props = {
-  photosAllRandomized: any;
+  photosAllRandomized: Photos[];
 };
 
 const PhotosSlideshowIndex = ({ photosAllRandomized }: Props) => {

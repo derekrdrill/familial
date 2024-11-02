@@ -5,10 +5,11 @@ import tw from 'twin.macro';
 import { useRouter } from 'next/router';
 
 import Carousel from '../../common/Carousel/Carousel';
+import { Photos } from '../../../types';
 
 type SlideshowProps = {
   isFullSlideShow?: boolean;
-  slideshowPhotos: any;
+  slideshowPhotos: Photos[];
 };
 
 const Slideshow = ({ slideshowPhotos, isFullSlideShow }: SlideshowProps) => {
