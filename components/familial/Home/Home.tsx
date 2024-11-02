@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 import tw from 'twin.macro';
@@ -15,6 +14,7 @@ import GlobalContext from '../../../context/GlobalContext';
 import { HomeQuickSectionTitleBar } from './';
 
 import Carousel from '../../common/Carousel/Carousel';
+import Slideshow from '../Slideshow/Slideshow';
 import { PhotoQuick } from '../Photos';
 import { RecipeCard } from '../Recipes';
 
@@ -54,32 +54,7 @@ const Home = ({ photosRandomizedData, photosQuickData, recipesQuickData }: HomeP
             </HomeActionLink>
           </div>
         </HomeTitleColDiv>
-        <HomeSlideshowColDiv>
-          <Carousel
-            carouselContent={photosRandomizedData.map(photo => ({
-              id: photo._id,
-              component: (
-                <div tw='flex justify-center min-w-full'>
-                  <Image
-                    alt='slideshow'
-                    height={0}
-                    sizes='100vw'
-                    src={photo.url}
-                    style={{
-                      overflowClipMargin: 'unset',
-                    }}
-                    tw='h-96 object-contain w-full'
-                    width={0}
-                  />
-                </div>
-              ),
-            }))}
-            hasButtons={false}
-            hasDots={false}
-            isSlideshow
-            shouldAutoPlay
-          />
-        </HomeSlideshowColDiv>
+        <Slideshow slideshowPhotos={photosRandomizedData} />
       </HomeTitleAndSlideshowDiv>
       <HomeQuickSectionDiv>
         <HomeQuickSectionTitleBar
@@ -154,7 +129,6 @@ const Home = ({ photosRandomizedData, photosQuickData, recipesQuickData }: HomeP
 };
 
 const HomeRoot = styled.div([tw`px-4 md:px-12`]);
-const HomeSlideshowColDiv = styled.div([tw`col-span-5`, tw`mt-6`, tw`md:col-span-2`]);
 const HomeTitleAndSlideshowDiv = styled.div([tw`gap-3 grid grid-cols-5`]);
 const HomeTitleColDiv = styled.div([tw`col-span-3`, tw`hidden`, tw`pt-20`, tw`md:block`]);
 
