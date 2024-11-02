@@ -2,16 +2,29 @@ import React from 'react';
 
 import GlobalContext from '../../../../context/GlobalContext';
 import { TextInput } from '../../../common/TextInput/TextInput';
+import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 import { DrillyTypography } from '../../../../styles/globals';
 import { FormError } from '../../../../types';
 
 type AddNewMemberProps = {};
 
 export const AddNewMember = ({}: AddNewMemberProps) => {
-  const handleAddNewUserSubmit = async () => {
+  const handleAddNewUserSubmit = async ({
+    dispatch,
+    setEmailAddress,
+    setFirstName,
+    setLastName,
+    setPhoneNumber,
+  }: {
+    dispatch: React.Dispatch<GlobalReducerAction>;
+    setEmailAddress?: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setFirstName?: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setLastName?: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setPhoneNumber?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  }) => {
     if (emailAddress !== '' && phoneNumber !== '' && firstName !== '' && lastName !== '') {
       try {
-        await fetch('/api/user/auth/add', {
+        await fetch('/api/user/add', {
           method: 'POST',
           body: JSON.stringify({
             emailAddress,
@@ -19,8 +32,39 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
             lastName,
             phoneNumber,
           }),
-        }).then(async res => console.log(await res.json()));
+        }).then(async res => {
+          const newUser = await res.json();
+
+          if (setEmailAddress && setFirstName && setLastName && setPhoneNumber) {
+            setEmailAddress('');
+            setFirstName('');
+            setLastName('');
+            setPhoneNumber('');
+          }
+
+          dispatch({
+            type: GlobalReducerActionEnum.SET_ALERT_ITEM,
+            payload: {
+              alertItem: {
+                alertMessage: `${newUser.firstName} ${newUser.lastName} has been added to Familial!`,
+                alertSeverity: 'success',
+                isAlertOpen: true,
+              },
+            },
+          });
+        });
       } catch (error) {
+        dispatch({
+          type: GlobalReducerActionEnum.SET_ALERT_ITEM,
+          payload: {
+            alertItem: {
+              alertMessage: 'There was an error trying to add a new user!',
+              alertSeverity: 'error',
+              isAlertOpen: true,
+            },
+          },
+        });
+
         console.log(error);
       }
     } else {
@@ -47,6 +91,7 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
   };
 
   const {
+    dispatch,
     state: { isDarkMode },
   } = React.useContext(GlobalContext);
 
@@ -110,7 +155,15 @@ export const AddNewMember = ({}: AddNewMemberProps) => {
       </div>
       <div tw='flex justify-end'>
         <button
-          onClick={handleAddNewUserSubmit}
+          onClick={() => {
+            handleAddNewUserSubmit({
+              dispatch,
+              setEmailAddress,
+              setFirstName,
+              setLastName,
+              setPhoneNumber,
+            });
+          }}
           tw='bg-opacity-60 bg-success px-4 rounded hover:bg-opacity-100'
         >
           <DrillyTypography variant='subtitle1' $isDarkMode={isDarkMode}>
