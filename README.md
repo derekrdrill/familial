@@ -1,6 +1,7 @@
-# Drill-y
+# Familial
 
-### A one-stop-shop for the extended Drill family
+### A one-stop-shop to stay social with family (prototyping with extended Drill family)
+#### (switch to `staging` to see current state)
 
 <ul>
   <li>
