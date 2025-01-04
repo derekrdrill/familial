@@ -34,7 +34,7 @@ const EventViewer = () => {
         </div>
         <div>
           <DrillyTypography $isDarkMode={isDarkMode} tw='font-semibold'>
-            Photo Album
+            Photos
           </DrillyTypography>
           <DrillyTypography $isDarkMode={isDarkMode}>
             {selectedEvent?.photoAlbum || 'No photos yet.'}
