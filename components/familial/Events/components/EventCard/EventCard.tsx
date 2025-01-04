@@ -18,7 +18,7 @@ type EventCardProps = {
 
 const EventCard = ({ eventIndex }: EventCardProps) => {
   const {
-    state: { eventList, isDarkMode },
+    state: { eventList, isDarkMode, selectedEvent },
   } = React.useContext(GlobalContext);
 
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
@@ -72,7 +72,7 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
         {eventDescription}
       </DrillyTypography>
       <DrillyTypography $isDarkMode={isDarkMode} tw='text-sm mb-2'>
-        <strong>Date:</strong> {getDateString({ date: eventDate })}
+        <strong>Date:</strong> {getDateString({ date: eventDate ?? [] })}
       </DrillyTypography>
       {!!eventTime?.length && (
         <DrillyTypography $isDarkMode={isDarkMode} tw='text-sm mb-2'>
