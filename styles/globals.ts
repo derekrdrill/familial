@@ -8,6 +8,7 @@ export const DrillyButton = styled.button<{
   $variant?: 'error' | 'primary' | 'success';
   $twStyles?: TwStyle;
 }>(({ $isDisabled, $variant, $twStyles }) => [
+  !$variant && tw`bg-gray-B6B6B6 border-gray-B6B6B6`,
   $variant === 'error' && tw`bg-error border-error text-error`,
   $variant === 'primary' && tw`bg-primary border-primary text-primary`,
   $variant === 'success' && tw`bg-success border-success text-success`,

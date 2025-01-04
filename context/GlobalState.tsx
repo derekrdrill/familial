@@ -2,6 +2,7 @@ import { ImageListType as PhotoListType } from 'react-images-uploading';
 import {
   Albums,
   AlertItem,
+  Event,
   ModalItem,
   PhotoUploadData,
   Photos,
@@ -14,6 +15,7 @@ export type GlobalStateType = {
   albums?: Albums[];
   alertItem?: AlertItem;
   authenticatedUser?: object | null;
+  eventList?: Event[];
   isDarkMode?: boolean;
   isPhotoViewerBackBtnShown?: boolean;
   modalItem?: ModalItem;
@@ -22,6 +24,7 @@ export type GlobalStateType = {
   photos?: Photos[];
   photosView?: 'grid' | 'list';
   recipeRandom?: Recipe;
+  selectedEvent?: Event;
   selectedPhotoAlbum?: SelectedPhotoAlbum;
   selectedPhoto?: {
     _id?: string;

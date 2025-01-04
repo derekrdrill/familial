@@ -4,6 +4,7 @@ export enum GlobalReducerActionEnum {
   SET_ALBUMS = 'SET_ALBUMS',
   SET_ALERT_ITEM = 'SET_ALERT_ITEM',
   SET_DARK_MODE = 'SET_DARK_MODE',
+  SET_EVENT_LIST = 'SET_EVENT_LIST',
   SET_MODAL_ITEM = 'SET_MODAL_ITEM',
   SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN = 'SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN',
   SET_PHOTOS = 'SET_PHOTOS',
@@ -11,6 +12,7 @@ export enum GlobalReducerActionEnum {
   SET_PHOTO_LIST = 'SET_PHOTO_LIST',
   SET_PHOTO_UPLOAD_DATA = 'SET_PHOTO_UPLOAD_DATA',
   SET_RECIPE_RANDOM = 'SET_RECIPE_RANDOM',
+  SET_SELECTED_EVENT = 'SET_SELECTED_EVENT',
   SET_SELECTED_PHOTO_ALBUM = 'SET_SELECTED_PHOTO_ALBUM',
   SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO',
   SET_USER = 'SET_USER',
@@ -27,6 +29,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
     payload: {
       albums,
       alertItem,
+      eventList,
       isDarkMode,
       isPhotoViewerBackBtnShown,
       modalItem,
@@ -35,6 +38,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       photosView,
       photoUploadData,
       recipeRandom,
+      selectedEvent,
       selectedPhotoAlbum,
       selectedPhoto,
       user,
@@ -62,6 +66,11 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         isDarkMode: isDarkMode,
+      };
+    case GlobalReducerActionEnum.SET_EVENT_LIST:
+      return {
+        ...state,
+        eventList: eventList,
       };
     case GlobalReducerActionEnum.SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN:
       return {
@@ -97,6 +106,11 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         recipeRandom: recipeRandom,
+      };
+    case GlobalReducerActionEnum.SET_SELECTED_EVENT:
+      return {
+        ...state,
+        selectedEvent: selectedEvent,
       };
     case GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM:
       return {
