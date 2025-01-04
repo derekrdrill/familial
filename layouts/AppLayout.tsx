@@ -11,6 +11,7 @@ import tw, { GlobalStyles as GlobalStylesTwinMacro } from 'twin.macro';
 
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import DiningTwoToneIcon from '@mui/icons-material/DiningTwoTone';
+import EventTwoToneIcon from '@mui/icons-material/EventTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import PhotoSizeSelectActualTwoToneIcon from '@mui/icons-material/PhotoSizeSelectActualTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
@@ -200,6 +201,16 @@ const AppLayout = ({ Component, pageProps }: AppProps) => {
                 <Grid container justifyContent='space-between'>
                   Photos
                   <PhotoSizeSelectActualTwoToneIcon />
+                </Grid>
+              </SidebarMenuText>
+            </SidebarMenuLink>
+          </Grid>
+          <Grid item xs={12}>
+            <SidebarMenuLink href='/events'>
+              <SidebarMenuText variant='h4' $isDarkMode={isDarkMode}>
+                <Grid container justifyContent='space-between'>
+                  Events
+                  <EventTwoToneIcon />
                 </Grid>
               </SidebarMenuText>
             </SidebarMenuLink>
