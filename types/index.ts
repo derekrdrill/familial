@@ -1,6 +1,7 @@
 import { Albums } from '../types/Albums/Albums';
 import { AlertItem } from '../types/AlertItem/AlertItem';
 import { Cookbook } from './Cookbook/Cookbook';
+import { Event } from './Event/Event';
 import { FormError } from './FormError/FomrError';
 import { ModalItem } from '../types/ModalItem/ModalItem';
 import { Notification } from './Notification/Notification';
@@ -20,6 +21,7 @@ export {
   Albums,
   AlertItem,
   Cookbook,
+  Event,
   FormError,
   ModalItem,
   Notification,

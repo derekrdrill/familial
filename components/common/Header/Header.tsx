@@ -7,6 +7,7 @@ import { Badge, Grid } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DiningTwoToneIcon from '@mui/icons-material/DiningTwoTone';
+import EventTwoToneIcon from '@mui/icons-material/EventTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PhotoLibraryTwoToneIcon from '@mui/icons-material/PhotoLibraryTwoTone';
@@ -56,7 +57,7 @@ const Header = ({
       <HeaderRoot $isDarkMode={isDarkMode}>
         <HeaderTop container $isDarkMode={isDarkMode}>
           <Grid item xs={4} display={{ xs: 'inline-block', md: 'none' }} />
-          <Grid item xs={4} lg={3}>
+          <Grid item xs={4} md={3} lg={2}>
             <Grid container>
               <Grid
                 item
@@ -110,7 +111,7 @@ const Header = ({
             </Grid>
           </Grid>
           <Grid item xs={1} display={{ xs: 'none', lg: 'inline-block' }} />
-          <Grid item xs={4} display={{ xs: 'none', md: 'inline-block' }}>
+          <Grid item xs={6} display={{ xs: 'none', md: 'inline-block' }}>
             <Grid container justifyContent='space-around'>
               <HeaderMenuLink href='/' $isDarkMode={isDarkMode}>
                 <HeaderMenuButton $isDarkMode={isDarkMode}>
@@ -122,6 +123,11 @@ const Header = ({
                   <PhotoLibraryTwoToneIcon />
                 </HeaderMenuButton>
               </HeaderMenuLink>
+              <HeaderMenuLink href='/events' $isDarkMode={isDarkMode}>
+                <HeaderMenuButton $isDarkMode={isDarkMode}>
+                  <EventTwoToneIcon />
+                </HeaderMenuButton>
+              </HeaderMenuLink>
               <HeaderMenuLink href='/recipes' $isDarkMode={isDarkMode}>
                 <HeaderMenuButton $isDarkMode={isDarkMode}>
                   <DiningTwoToneIcon />
@@ -130,7 +136,7 @@ const Header = ({
             </Grid>
           </Grid>
           <Grid item xs={1} display={{ xs: 'none', md: 'inline-block' }} />
-          <Grid item xs={4} md={3}>
+          <Grid item xs={4} md={2}>
             <Grid container justifyContent='flex-end'>
               <HeaderProfileButton
                 onClick={() => setIsNotificationsSidebarOpen(!isNotificationsSidebarOpen)}
