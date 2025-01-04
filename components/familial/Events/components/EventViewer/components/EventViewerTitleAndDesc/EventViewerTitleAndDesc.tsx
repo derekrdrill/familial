@@ -2,9 +2,7 @@ import React from 'react';
 import { DrillyTypography } from '../../../../../../../styles/globals';
 import GlobalContext from '../../../../../../../context/GlobalContext';
 
-type Props = {};
-
-const EventViewerTitleAndDesc = (props: Props) => {
+const EventViewerTitleAndDesc = () => {
   const {
     state: { isDarkMode, selectedEvent },
   } = React.useContext(GlobalContext);
