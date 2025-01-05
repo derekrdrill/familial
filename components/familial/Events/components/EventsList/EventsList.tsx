@@ -7,13 +7,21 @@ import { EventCard } from '../../../Events';
 import { DrillyTypography } from '../../../../../styles/globals';
 import { Event } from '../../../../../types';
 import { EVENTS_TO_SHOW_OPTIONS } from './constants';
+import { getFilteredEventsList } from '../../helpers';
 
 const EventsList = () => {
   const {
-    state: { eventList, isDarkMode },
+    state: { eventList, isDarkMode, user },
   } = React.useContext(GlobalContext);
 
   const [eventsToShow, setEventsToShow] = React.useState<string>('All');
+  const [filteredEvents, setFilteredEvents] = React.useState<Event[] | undefined>(eventList);
+
+  React.useEffect(() => {
+    setFilteredEvents(
+      getFilteredEventsList({ eventList, eventsToShow, userId: user?.userID ?? '' }),
+    );
+  }, [eventsToShow]);
 
   return (
     <div tw='mt-4 p-4 w-full'>
@@ -32,8 +40,8 @@ const EventsList = () => {
         />
       </div>
       <div tw='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
-        {eventList?.length ? (
-          eventList.map((event: Event) => <EventCard eventIndex={event._id} />)
+        {filteredEvents?.length ? (
+          filteredEvents.map((event: Event) => <EventCard eventIndex={event._id} />)
         ) : (
           <p>No events available.</p>
         )}

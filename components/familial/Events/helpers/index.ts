@@ -1,13 +1,34 @@
 import { User } from '../../../../types';
 
 const getDateString = ({ date }: { date?: string[] }) => {
-  if (date?.length === 1) {
-    return new Date(date[0]).toLocaleDateString();
-  } else if (date?.length === 2) {
-    return `${new Date(date[0]).toLocaleDateString()} - ${new Date(date[1]).toLocaleDateString()}`;
-  }
 
-  return '';
+const getFilteredEventsList = ({
+  eventList,
+  eventsToShow,
+  userId,
+}: {
+  eventList?: Event[];
+  eventsToShow: string;
+  userId: string;
+}) => {
+  switch (eventsToShow) {
+    case 'Yours':
+      return eventList?.filter(event => event.createdBy.userID === userId);
+    case 'Invited':
+      return eventList?.filter(event =>
+        event.invitedUsers?.map(invitedUser => invitedUser.userID).includes(userId),
+      );
+    case 'Attending':
+      return eventList?.filter(event =>
+        event.attendingUsers?.map(attendingUser => attendingUser.userID).includes(userId),
+      );
+    case 'Declined':
+      return eventList?.filter(event =>
+        event.declinedUsers?.map(declinedUser => declinedUser.userID).includes(userId),
+      );
+    default:
+      return eventList;
+  }
 };
 
 const getTimeString = ({ time }: { time: string[] }) => {
