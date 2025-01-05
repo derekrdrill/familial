@@ -1,6 +1,15 @@
-import { User } from '../../../../types';
+import { Event, User } from '../../../../types';
 
 const getDateString = ({ date }: { date?: string[] }) => {
+  switch (date?.length) {
+    case 1:
+      return new Date(date[0]).toLocaleDateString();
+    case 2:
+      return `${new Date(date[0]).toLocaleDateString()} - ${new Date(date[1]).toLocaleDateString()}`;
+    default:
+      return;
+  }
+};
 
 const getFilteredEventsList = ({
   eventList,
@@ -32,13 +41,14 @@ const getFilteredEventsList = ({
 };
 
 const getTimeString = ({ time }: { time: string[] }) => {
-  if (time.length === 1) {
-    return time[0];
-  } else if (time.length === 2) {
-    return `${time[0]} - ${time[1]}`;
+  switch (time.length) {
+    case 1:
+      return time[0];
+    case 2:
+      return `${time[0]} - ${time[1]}`;
+    default:
+      return;
   }
-
-  return;
 };
 
 const hasUserAcceptedEvent = ({
@@ -81,6 +91,7 @@ const hasUserBeenInvitedAndNotResponded = ({
 
 export {
   getDateString,
+  getFilteredEventsList,
   getTimeString,
   hasUserAcceptedEvent,
   hasUserBeenInvitedAndNotResponded,
