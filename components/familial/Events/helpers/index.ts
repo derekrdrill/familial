@@ -1,3 +1,4 @@
+import { GlobalReducerActionEnum } from '../../../../context/GlobalReducer';
 import { Event, User } from '../../../../types';
 
 const getDateString = ({ date }: { date?: string[] }) => {
@@ -21,6 +22,8 @@ const getFilteredEventsList = ({
   userId: string;
 }) => {
   switch (eventsToShow) {
+    case 'All':
+      return eventList;
     case 'Yours':
       return eventList?.filter(event => event.createdBy.userID === userId);
     case 'Invited':

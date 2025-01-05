@@ -10,7 +10,7 @@ import Tooltip from '../../../../common/Tooltip/Tooltip';
 import { DrillyTypography } from '../../../../../styles/globals';
 
 import { EventCardRSVP, EventCardTooltipContent } from './components';
-import { getDateString, hasUserAcceptedEvent, hasUserDeclinedEvent } from '../../helpers';
+import { getDateString } from '../../helpers';
 import { getCreatedByUserName } from '../../../../../helpers';
 
 type EventCardProps = {
@@ -25,6 +25,9 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
 
   const eventTooltipRef = React.useRef<HTMLButtonElement>(null);
+  const toolTipButtonRefUndecided = React.useRef<HTMLButtonElement>(null);
+  const tooltipButtonRefAccepting = React.useRef<HTMLButtonElement>(null);
+  const tooltipButtonRefDeclining = React.useRef<HTMLButtonElement>(null);
   const event = eventList?.find(event => event._id === eventIndex);
 
   const eventCreatedByName = getCreatedByUserName({
@@ -39,8 +42,14 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
 
   React.useEffect(() => {
     const handleClickOutside = event => {
-      if (eventTooltipRef.current && !eventTooltipRef.current.contains(event.target)) {
-        setIsTooltipOpen(false);
+      if (
+        !toolTipButtonRefUndecided.current?.contains(event.target) &&
+        !tooltipButtonRefAccepting.current?.contains(event.target) &&
+        !tooltipButtonRefDeclining.current?.contains(event.target)
+      ) {
+        if (eventTooltipRef.current && !eventTooltipRef.current.contains(event.target)) {
+          setIsTooltipOpen(false);
+        }
       }
     };
 
@@ -59,7 +68,15 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
         <Tooltip
           isOpen={isTooltipOpen}
           shouldOpenOnClick
-          tooltipTitle={<EventCardTooltipContent eventIndex={eventIndex} />}
+          tooltipTitle={
+            <EventCardTooltipContent
+              eventIndex={eventIndex}
+              setIsTooltipOpen={setIsTooltipOpen}
+              toolTipButtonRefUndecided={toolTipButtonRefUndecided}
+              tooltipButtonRefAccepting={tooltipButtonRefAccepting}
+              tooltipButtonRefDeclining={tooltipButtonRefDeclining}
+            />
+          }
         >
           <button
             onClick={e => {

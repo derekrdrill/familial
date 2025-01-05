@@ -21,7 +21,7 @@ const EventsList = () => {
     setFilteredEvents(
       getFilteredEventsList({ eventList, eventsToShow, userId: user?.userID ?? '' }),
     );
-  }, [eventsToShow]);
+  }, [eventList, eventsToShow]);
 
   return (
     <div tw='mt-4 p-4 w-full'>
@@ -34,7 +34,7 @@ const EventsList = () => {
           id='events-to-show-dropdown'
           options={EVENTS_TO_SHOW_OPTIONS}
           setValue={setEventsToShow}
-          styles={tw`w-full md:w-1/2 lg:w-1/4`}
+          styles={tw`w-full md:w-1/3 lg:w-1/6`}
           title='Events to show'
           value={eventsToShow}
         />
@@ -43,7 +43,7 @@ const EventsList = () => {
         {filteredEvents?.length ? (
           filteredEvents.map((event: Event) => <EventCard eventIndex={event._id} />)
         ) : (
-          <p>No events available.</p>
+          <p>No events to show.</p>
         )}
       </div>
     </div>

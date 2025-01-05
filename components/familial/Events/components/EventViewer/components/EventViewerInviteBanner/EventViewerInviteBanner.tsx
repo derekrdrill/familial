@@ -4,8 +4,9 @@ import tw from 'twin.macro';
 
 import GlobalContext from '../../../../../../../context/GlobalContext';
 import { GlobalReducerActionEnum } from '../../../../../../../context/GlobalReducer';
-import { EventViewerRSVPButton } from '../EventViewerRSVPButton/EventViewerRSVPButton';
+import { EventRSVPButton } from '../../../../index';
 import { DrillyTypography } from '../../../../../../../styles/globals';
+import { updateSelectedEvent } from '../../../../actions';
 
 const EventViewerInviteBanner = () => {
   const {
@@ -25,65 +26,32 @@ const EventViewerInviteBanner = () => {
     declinedUser => declinedUser._id === user?._id,
   );
 
-  const handleInviteAcceptOrDecline = async ({
-    isAccepting,
-    isDeclining,
-    userId,
-  }: {
-    isAccepting?: boolean;
-    isDeclining?: boolean;
-    isUndecided?: boolean;
-    userId?: string;
-  }) => {
-    const updatedEvent = {
-      ...selectedEvent,
-      ...{
-        attendingUsers: isAccepting
-          ? [...(selectedEvent?.attendingUsers?.map(user => user._id) || []), userId]
-          : selectedEvent?.attendingUsers?.filter(user => user._id !== userId),
-        declinedUsers: isDeclining
-          ? [...(selectedEvent?.declinedUsers?.map(user => user._id) || []), userId]
-          : selectedEvent?.declinedUsers?.filter(user => user._id !== userId),
-      },
-    };
-
-    await fetch('/api/event/update', {
-      method: 'PUT',
-      body: JSON.stringify(updatedEvent),
-    })
-      .then(res => res.json())
-      .then(event => {
-        dispatch({
-          type: GlobalReducerActionEnum.SET_SELECTED_EVENT,
-          payload: { selectedEvent: event },
-        });
-      });
-  };
-
   return (
     selectedEvent?.createdBy.userID !== user?.userID && (
       <EventInviteBanner $hasRSVPd={!!(hasAcceptedInvitation || hasDeclinedInvitation)}>
         {hasBeenInvited && !hasAcceptedInvitation && !hasDeclinedInvitation && (
           <>
-            <EventViewerRSVPButton
+            <EventRSVPButton
               handleClick={async () => {
-                await handleInviteAcceptOrDecline({
+                await updateSelectedEvent({
+                  dispatch,
                   isDeclining: true,
+                  selectedEvent,
                   userId: user?._id,
                 });
               }}
               isDecline
-              variant='error'
             />
-            <EventViewerRSVPButton
+            <EventRSVPButton
               handleClick={async () => {
-                await handleInviteAcceptOrDecline({
+                await updateSelectedEvent({
+                  dispatch,
                   isAccepting: true,
+                  selectedEvent,
                   userId: user?._id,
                 });
               }}
               isAccept
-              variant='success'
             />
           </>
         )}
@@ -108,9 +76,11 @@ const EventViewerInviteBanner = () => {
                             Change your RSVP to <span tw='font-bold'>{selectedEvent?.title}</span>
                           </DrillyTypography>
                           <div tw='flex flex-col gap-2 items-center justify-center mt-6'>
-                            <EventViewerRSVPButton
+                            <EventRSVPButton
                               handleClick={async () => {
-                                await handleInviteAcceptOrDecline({
+                                await updateSelectedEvent({
+                                  dispatch,
+                                  selectedEvent,
                                   userId: user?._id,
                                 });
 
@@ -122,10 +92,12 @@ const EventViewerInviteBanner = () => {
                               isNeutral
                             />
                             {hasAcceptedInvitation && (
-                              <EventViewerRSVPButton
+                              <EventRSVPButton
                                 handleClick={async () => {
-                                  await handleInviteAcceptOrDecline({
+                                  await updateSelectedEvent({
+                                    dispatch,
                                     isDeclining: true,
+                                    selectedEvent,
                                     userId: user?._id,
                                   });
 
@@ -138,10 +110,12 @@ const EventViewerInviteBanner = () => {
                               />
                             )}
                             {hasDeclinedInvitation && (
-                              <EventViewerRSVPButton
+                              <EventRSVPButton
                                 handleClick={async () => {
-                                  await handleInviteAcceptOrDecline({
+                                  await updateSelectedEvent({
+                                    dispatch,
                                     isAccepting: true,
+                                    selectedEvent,
                                     userId: user?._id,
                                   });
 

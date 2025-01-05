@@ -7,7 +7,7 @@ import { getCreatedByUserName } from '../../../../../../../helpers';
 
 const EventViewerLogistics = () => {
   const {
-    state: { isDarkMode, selectedEvent },
+    state: { isDarkMode, selectedEvent, user },
   } = React.useContext(GlobalContext);
 
   return (
@@ -28,7 +28,7 @@ const EventViewerLogistics = () => {
           <strong>Created By: </strong>
           {getCreatedByUserName({
             createdByUser: selectedEvent?.createdBy,
-            loggedInUser: selectedEvent?.createdBy,
+            loggedInUser: user,
           })}
         </DrillyTypography>
         {selectedEvent?.createdBy.avatarURL && (
