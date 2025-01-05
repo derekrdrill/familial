@@ -1,7 +1,7 @@
 import React from 'react';
-import GlobalContext from '../../../../../../context/GlobalContext';
-import { DrillyTypography } from '../../../../../../styles/globals';
-import { getDateString } from '../../../helpers';
+import GlobalContext from '../../../../../../../context/GlobalContext';
+import { DrillyTypography } from '../../../../../../../styles/globals';
+import { getDateString } from '../../../../helpers';
 
 type EventCardTooltipContentProps = {
   eventIndex: string;

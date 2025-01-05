@@ -12,18 +12,13 @@ type EventsIndexProps = {
 };
 
 export default function EventsIndex({ eventListData }: EventsIndexProps) {
-  const {
-    dispatch,
-    state: { eventList },
-  } = React.useContext(GlobalContext);
+  const { dispatch } = React.useContext(GlobalContext);
 
   React.useEffect(() => {
-    if (!eventList) {
-      dispatch({
-        type: GlobalReducerActionEnum.SET_EVENT_LIST,
-        payload: { eventList: eventListData },
-      });
-    }
+    dispatch({
+      type: GlobalReducerActionEnum.SET_EVENT_LIST,
+      payload: { eventList: eventListData },
+    });
   }, [eventListData]);
 
   return <EventsList />;

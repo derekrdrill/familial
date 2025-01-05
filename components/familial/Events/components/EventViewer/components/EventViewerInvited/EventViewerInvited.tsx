@@ -41,6 +41,7 @@ const EventViewerInvited = () => {
               attendingUsers={selectedEvent?.attendingUsers}
               declinedUsers={selectedEvent?.declinedUsers}
               invitedUser={user}
+              styles={tw`-translate-x-3 translate-y-4`}
             />
           </div>
         ))}

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import tw, { TwStyle } from 'twin.macro';
 import Image from 'next/image';
-import { Checkbox, TextField, Typography, TypographyProps } from '@mui/material';
+import { Checkbox, TextField, Input, Typography, TypographyProps } from '@mui/material';
 
 export const DrillyButton = styled.button<{
   $isDisabled?: boolean;

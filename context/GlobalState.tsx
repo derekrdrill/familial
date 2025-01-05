@@ -47,7 +47,6 @@ const GlobalState: GlobalStateType = {
   isDarkMode: false,
   isPhotoViewerBackBtnShown: false,
   modalItem: {
-    handleSubmit: null,
     isModalOpen: false,
     modalBody: null,
     modalTitle: '',

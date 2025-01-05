@@ -1,7 +1,9 @@
-const getDateString = ({ date }: { date: string[] }) => {
-  if (date.length === 1) {
+import { User } from '../../../../types';
+
+const getDateString = ({ date }: { date?: string[] }) => {
+  if (date?.length === 1) {
     return new Date(date[0]).toLocaleDateString();
-  } else if (date.length === 2) {
+  } else if (date?.length === 2) {
     return `${new Date(date[0]).toLocaleDateString()} - ${new Date(date[1]).toLocaleDateString()}`;
   }
 
@@ -18,4 +20,48 @@ const getTimeString = ({ time }: { time: string[] }) => {
   return;
 };
 
-export { getDateString, getTimeString };
+const hasUserAcceptedEvent = ({
+  attendingUsers,
+  invitedUser,
+}: {
+  attendingUsers?: User[];
+  invitedUser?: User;
+}) => {
+  return attendingUsers?.some(user => user.userID === invitedUser?.userID);
+};
+
+const hasUserDeclinedEvent = ({
+  declinedUsers,
+  invitedUser,
+}: {
+  declinedUsers?: User[];
+  invitedUser?: User;
+}) => {
+  return declinedUsers?.some(user => user.userID === invitedUser?.userID);
+};
+
+const hasUserBeenInvitedAndNotResponded = ({
+  attendingUsers,
+  declinedUsers,
+  invitedUser,
+  invitedUsers,
+}: {
+  attendingUsers?: User[];
+  declinedUsers?: User[];
+  invitedUser?: User;
+  invitedUsers?: User[];
+}) => {
+  return (
+    !attendingUsers?.some(user => user.userID === invitedUser?.userID) &&
+    !declinedUsers?.some(user => user.userID === invitedUser?.userID) &&
+    invitedUsers?.some(user => user.userID === invitedUser?.userID)
+  );
+};
+
+export {
+  getDateString,
+  getTimeString,
+  hasUserAcceptedEvent,
+  hasUserBeenInvitedAndNotResponded,
+  hasUserDeclinedEvent,
+};
