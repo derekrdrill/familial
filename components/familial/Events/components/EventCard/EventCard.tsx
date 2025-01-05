@@ -9,8 +9,9 @@ import GlobalContext from '../../../../../context/GlobalContext';
 import Tooltip from '../../../../common/Tooltip/Tooltip';
 import { DrillyTypography } from '../../../../../styles/globals';
 
-import { EventCardTooltipContent } from './components/EventCardTooltipContent';
+import { EventCardRSVP, EventCardTooltipContent } from './components';
 import { getDateString } from '../../helpers';
+import { getCreatedByUserName } from '../../../../../helpers';
 
 type EventCardProps = {
   eventIndex: string;
@@ -18,15 +19,21 @@ type EventCardProps = {
 
 const EventCard = ({ eventIndex }: EventCardProps) => {
   const {
-    state: { eventList, isDarkMode, selectedEvent },
+    state: { eventList, isDarkMode, user },
   } = React.useContext(GlobalContext);
 
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
 
   const eventTooltipRef = React.useRef<HTMLButtonElement>(null);
+  const toolTipButtonRefUndecided = React.useRef<HTMLButtonElement>(null);
+  const tooltipButtonRefAccepting = React.useRef<HTMLButtonElement>(null);
+  const tooltipButtonRefDeclining = React.useRef<HTMLButtonElement>(null);
   const event = eventList?.find(event => event._id === eventIndex);
 
-  const eventCreatedByFirstName = event?.createdBy.firstName;
+  const eventCreatedByName = getCreatedByUserName({
+    createdByUser: event?.createdBy,
+    loggedInUser: user,
+  });
   const eventCreatedByImageURL = event?.createdBy.avatarURL;
   const eventDate = event?.date;
   const eventDescription = event?.description;
@@ -35,8 +42,14 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
 
   React.useEffect(() => {
     const handleClickOutside = event => {
-      if (eventTooltipRef.current && !eventTooltipRef.current.contains(event.target)) {
-        setIsTooltipOpen(false);
+      if (
+        !toolTipButtonRefUndecided.current?.contains(event.target) &&
+        !tooltipButtonRefAccepting.current?.contains(event.target) &&
+        !tooltipButtonRefDeclining.current?.contains(event.target)
+      ) {
+        if (eventTooltipRef.current && !eventTooltipRef.current.contains(event.target)) {
+          setIsTooltipOpen(false);
+        }
       }
     };
 
@@ -49,13 +62,21 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
   return (
     <EventCardRoot key={eventIndex} href={`/events/${eventIndex}`} $isDarkMode={isDarkMode}>
       <div tw='flex items-center justify-between mb-2'>
-        <DrillyTypography $isDarkMode={isDarkMode} tw='text-xl font-semibold'>
+        <DrillyTypography $isDarkMode={isDarkMode} tw='font-semibold text-xl'>
           {eventTitle}
         </DrillyTypography>
         <Tooltip
           isOpen={isTooltipOpen}
           shouldOpenOnClick
-          tooltipTitle={<EventCardTooltipContent eventIndex={eventIndex} />}
+          tooltipTitle={
+            <EventCardTooltipContent
+              eventIndex={eventIndex}
+              setIsTooltipOpen={setIsTooltipOpen}
+              toolTipButtonRefUndecided={toolTipButtonRefUndecided}
+              tooltipButtonRefAccepting={tooltipButtonRefAccepting}
+              tooltipButtonRefDeclining={tooltipButtonRefDeclining}
+            />
+          }
         >
           <button
             onClick={e => {
@@ -64,7 +85,7 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
             }}
             ref={eventTooltipRef}
           >
-            <InfoTwoToneIcon tw='h-5 w-5 text-gray-777777' />
+            <InfoTwoToneIcon tw='h-5 text-gray-777777 w-5' />
           </button>
         </Tooltip>
       </div>
@@ -75,13 +96,13 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
         <strong>Date:</strong> {getDateString({ date: eventDate ?? [] })}
       </DrillyTypography>
       {!!eventTime?.length && (
-        <DrillyTypography $isDarkMode={isDarkMode} tw='text-sm mb-2'>
+        <DrillyTypography $isDarkMode={isDarkMode} tw='mb-2 text-sm'>
           <strong>Time:</strong> {eventTime[0]} - {eventTime[1]}
         </DrillyTypography>
       )}
       <div tw='flex gap-1'>
         <DrillyTypography $isDarkMode={isDarkMode} tw='text-sm'>
-          <strong>Created By:</strong> {eventCreatedByFirstName}
+          <strong>Created By:</strong> {eventCreatedByName}
         </DrillyTypography>
         {eventCreatedByImageURL && (
           <Image
@@ -90,10 +111,11 @@ const EventCard = ({ eventIndex }: EventCardProps) => {
             src={eventCreatedByImageURL}
             width={0}
             sizes='100vw'
-            tw='rounded-3xl h-5 object-cover w-5'
+            tw='h-5 object-cover rounded-3xl  w-5'
           />
         )}
       </div>
+      <EventCardRSVP eventIndex={eventIndex} />
     </EventCardRoot>
   );
 };

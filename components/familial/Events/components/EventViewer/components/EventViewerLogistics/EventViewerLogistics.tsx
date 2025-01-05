@@ -3,10 +3,11 @@ import Image from 'next/image';
 import { DrillyTypography } from '../../../../../../../styles/globals';
 import GlobalContext from '../../../../../../../context/GlobalContext';
 import { getDateString, getTimeString } from '../../../../helpers';
+import { getCreatedByUserName } from '../../../../../../../helpers';
 
 const EventViewerLogistics = () => {
   const {
-    state: { isDarkMode, selectedEvent },
+    state: { isDarkMode, selectedEvent, user },
   } = React.useContext(GlobalContext);
 
   return (
@@ -25,7 +26,10 @@ const EventViewerLogistics = () => {
       <div tw='flex items-center justify-center gap-2'>
         <DrillyTypography $isDarkMode={isDarkMode} tw='text-center'>
           <strong>Created By: </strong>
-          {selectedEvent?.createdBy.firstName}
+          {getCreatedByUserName({
+            createdByUser: selectedEvent?.createdBy,
+            loggedInUser: user,
+          })}
         </DrillyTypography>
         {selectedEvent?.createdBy.avatarURL && (
           <Image
