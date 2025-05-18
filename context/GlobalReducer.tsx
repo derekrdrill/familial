@@ -17,6 +17,8 @@ export enum GlobalReducerActionEnum {
   SET_SELECTED_PHOTO = 'SET_SELECTED_PHOTO',
   SET_USER = 'SET_USER',
   RESET_MODAL_ITEM = 'RESET_MODAL_ITEM',
+  SET_UPLOAD_PROGRESS = 'SET_UPLOAD_PROGRESS',
+  SET_NOTIFICATION = 'SET_NOTIFICATION',
 }
 
 export type GlobalReducerAction = {
@@ -33,6 +35,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       isDarkMode,
       isPhotoViewerBackBtnShown,
       modalItem,
+      notification,
       photoList,
       photos,
       photosView,
@@ -41,6 +44,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       selectedEvent,
       selectedPhotoAlbum,
       selectedPhoto,
+      uploadProgress,
       user,
     },
     type,
@@ -126,6 +130,16 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return {
         ...state,
         user: user,
+      };
+    case GlobalReducerActionEnum.SET_UPLOAD_PROGRESS:
+      return {
+        ...state,
+        uploadProgress: uploadProgress,
+      };
+    case GlobalReducerActionEnum.SET_NOTIFICATION:
+      return {
+        ...state,
+        notification: notification,
       };
     default:
       return state;
