@@ -10,51 +10,155 @@ import { GlobalReducerAction, GlobalReducerActionEnum } from '../../../../contex
 import { DrillyCheckbox, DrillyTypography } from '../../../../styles/globals';
 import { PhotoUploadData } from '../types/PhotoUploaderData';
 
-export const handlePhotoUpload = async (
-  photoList: PhotoListType,
-  photoUploadData: PhotoUploadData[] | undefined,
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000; // 1 second
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const uploadPhotoWithRetry = async (
+  photo: PhotoListType[0],
+  photoUploadData: PhotoUploadData | undefined,
   dispatch: React.Dispatch<GlobalReducerAction>,
-) => {
-  photoList.forEach(async (photo, photoKey) => {
-    await fetch('/api/photo-uploader/blob', {
+  retryCount = 0,
+): Promise<boolean> => {
+  try {
+    // Upload to blob storage
+    const blobResponse = await fetch('/api/photo-uploader/blob', {
       method: 'POST',
       headers: {
         'content-type': photo.file?.type ?? 'application/octet-stream',
       },
       body: photo.file,
-    }).then(async res => {
-      if (res.status === 200) {
-        const { url } = await res.json();
+    });
 
-        if (photoUploadData) {
-          await fetch('/api/photo-uploader', {
-            method: 'POST',
-            body: JSON.stringify({
-              ...photoUploadData[photoKey],
-              ...{ url: url },
-            }),
-          }).then(async res => {
-            const photos = await res.json();
+    if (!blobResponse.ok) {
+      throw new Error(`Blob upload failed with status ${blobResponse.status}`);
+    }
 
-            if (res.status === 200) {
-              dispatch({
-                type: GlobalReducerActionEnum.SET_PHOTO_LIST,
-                payload: { photoList: [] },
-              });
-              dispatch({
-                type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
-                payload: { photoUploadData: [] },
-              });
-              dispatch({
-                type: GlobalReducerActionEnum.SET_PHOTOS,
-                payload: { photos: photos },
-              });
-            }
-          });
-        }
-      }
+    const { url } = await blobResponse.json();
+
+    if (!photoUploadData) {
+      return true;
+    }
+
+    // Upload metadata to database
+    const metadataResponse = await fetch('/api/photo-uploader', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...photoUploadData,
+        ...{ url: url },
+      }),
+    });
+
+    if (!metadataResponse.ok) {
+      throw new Error(`Metadata upload failed with status ${metadataResponse.status}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`Upload attempt ${retryCount + 1} failed:`, error);
+
+    if (retryCount < MAX_RETRIES) {
+      await sleep(RETRY_DELAY * (retryCount + 1)); // Exponential backoff
+      return uploadPhotoWithRetry(photo, photoUploadData, dispatch, retryCount + 1);
+    }
+
+    return false;
+  }
+};
+
+export const handlePhotoUpload = async (
+  photoList: PhotoListType,
+  photoUploadData: PhotoUploadData[] | undefined,
+  dispatch: React.Dispatch<GlobalReducerAction>,
+) => {
+  const totalPhotos = photoList.length;
+  let successfulUploads = 0;
+  let failedUploads = 0;
+
+  // Process photos in parallel with a concurrency limit
+  const uploadPromises = photoList.map(async (photo, photoKey) => {
+    const success = await uploadPhotoWithRetry(photo, photoUploadData?.[photoKey], dispatch);
+
+    if (success) {
+      successfulUploads++;
+    } else {
+      failedUploads++;
+    }
+
+    // Update progress
+    dispatch({
+      type: GlobalReducerActionEnum.SET_UPLOAD_PROGRESS,
+      payload: {
+        uploadProgress: {
+          progress: ((successfulUploads + failedUploads) / totalPhotos) * 100,
+          successfulUploads,
+          failedUploads,
+        },
+      },
     });
   });
+
+  try {
+    await Promise.all(uploadPromises);
+
+    if (successfulUploads > 0) {
+      // Only clear the photo list if we had some successful uploads
+      dispatch({
+        type: GlobalReducerActionEnum.SET_PHOTO_LIST,
+        payload: { photoList: [] },
+      });
+      dispatch({
+        type: GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA,
+        payload: { photoUploadData: [] },
+      });
+
+      // Fetch updated photos list
+      const response = await fetch('/api/photo-uploader', {
+        method: 'GET',
+      });
+      const photos = await response.json();
+
+      dispatch({
+        type: GlobalReducerActionEnum.SET_PHOTOS,
+        payload: { photos },
+      });
+    }
+
+    // Show appropriate message based on results
+    if (failedUploads > 0) {
+      dispatch({
+        type: GlobalReducerActionEnum.SET_NOTIFICATION,
+        payload: {
+          notification: {
+            message: `Uploaded ${successfulUploads} photos successfully. ${failedUploads} photos failed to upload.`,
+            severity: 'warning',
+          },
+        },
+      });
+    } else {
+      dispatch({
+        type: GlobalReducerActionEnum.SET_NOTIFICATION,
+        payload: {
+          notification: {
+            message: `Successfully uploaded ${successfulUploads} photos!`,
+            severity: 'success',
+          },
+        },
+      });
+    }
+  } catch (error) {
+    console.error('Upload process failed:', error);
+    dispatch({
+      type: GlobalReducerActionEnum.SET_NOTIFICATION,
+      payload: {
+        notification: {
+          message: 'Failed to upload photos. Please try again.',
+          severity: 'error',
+        },
+      },
+    });
+  }
 };
 
 type PhotoUploaderActionButtonsProps = {

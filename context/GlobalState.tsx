@@ -34,6 +34,15 @@ export type GlobalStateType = {
     url?: string;
   };
   user?: User;
+  uploadProgress?: {
+    progress: number;
+    successfulUploads: number;
+    failedUploads: number;
+  };
+  notification?: {
+    message: string;
+    severity: 'success' | 'warning' | 'error' | 'info';
+  };
 };
 
 const GlobalState: GlobalStateType = {
