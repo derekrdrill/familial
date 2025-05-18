@@ -1,4 +1,4 @@
-import { GlobalStateType } from './GlobalState';
+import GlobalState, { GlobalStateType } from './GlobalState';
 
 export enum GlobalReducerActionEnum {
   SET_ALBUMS = 'SET_ALBUMS',
@@ -35,6 +35,7 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       isDarkMode,
       isPhotoViewerBackBtnShown,
       modalItem,
+      notification,
       photoList,
       photos,
       photosView,
@@ -43,15 +44,93 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       selectedEvent,
       selectedPhotoAlbum,
       selectedPhoto,
-      user,
       uploadProgress,
-      notification,
+      user,
     },
     type,
   } = action;
 
   switch (type) {
-    // ... existing cases ...
+    case GlobalReducerActionEnum.RESET_MODAL_ITEM:
+      return {
+        ...state,
+        modalItem: GlobalState.modalItem,
+      };
+    case GlobalReducerActionEnum.SET_ALBUMS:
+      return {
+        ...state,
+        albums: albums,
+      };
+    case GlobalReducerActionEnum.SET_ALERT_ITEM:
+      return {
+        ...state,
+        alertItem: alertItem,
+      };
+    case GlobalReducerActionEnum.SET_DARK_MODE:
+      return {
+        ...state,
+        isDarkMode: isDarkMode,
+      };
+    case GlobalReducerActionEnum.SET_EVENT_LIST:
+      return {
+        ...state,
+        eventList: eventList,
+      };
+    case GlobalReducerActionEnum.SET_IS_PHOTO_VIEWER_BACK_BTN_SHOWN:
+      return {
+        ...state,
+        isPhotoViewerBackBtnShown: isPhotoViewerBackBtnShown,
+      };
+    case GlobalReducerActionEnum.SET_MODAL_ITEM:
+      return {
+        ...state,
+        modalItem: modalItem,
+      };
+    case GlobalReducerActionEnum.SET_PHOTO_LIST:
+      return {
+        ...state,
+        photoList: photoList,
+      };
+    case GlobalReducerActionEnum.SET_PHOTOS:
+      return {
+        ...state,
+        photos: photos,
+      };
+    case GlobalReducerActionEnum.SET_PHOTOS_VIEW:
+      return {
+        ...state,
+        photosView: photosView,
+      };
+    case GlobalReducerActionEnum.SET_PHOTO_UPLOAD_DATA:
+      return {
+        ...state,
+        photoUploadData: photoUploadData,
+      };
+    case GlobalReducerActionEnum.SET_RECIPE_RANDOM:
+      return {
+        ...state,
+        recipeRandom: recipeRandom,
+      };
+    case GlobalReducerActionEnum.SET_SELECTED_EVENT:
+      return {
+        ...state,
+        selectedEvent: selectedEvent,
+      };
+    case GlobalReducerActionEnum.SET_SELECTED_PHOTO_ALBUM:
+      return {
+        ...state,
+        selectedPhotoAlbum: selectedPhotoAlbum,
+      };
+    case GlobalReducerActionEnum.SET_SELECTED_PHOTO:
+      return {
+        ...state,
+        selectedPhoto: selectedPhoto,
+      };
+    case GlobalReducerActionEnum.SET_USER:
+      return {
+        ...state,
+        user: user,
+      };
     case GlobalReducerActionEnum.SET_UPLOAD_PROGRESS:
       return {
         ...state,
@@ -66,3 +145,5 @@ const GlobalReducer = (state: GlobalStateType, action: GlobalReducerAction) => {
       return state;
   }
 };
+
+export default GlobalReducer;
